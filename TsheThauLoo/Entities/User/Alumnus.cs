@@ -39,6 +39,13 @@ namespace TsheThauLoo.Entities.User
         [Required]
         [MaxLength(20)]
         public string Department { get; set; }
+        
+        /// <summary>
+        /// 畢業班級
+        /// </summary>
+        [Required]
+        [MaxLength(20)]
+        public string Class { get; set; }
 
         public AlumnusVerify AlumnusVerify { get; set; }
         
