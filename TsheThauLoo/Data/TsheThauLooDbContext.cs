@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TsheThauLoo.Data.EntityConfigurations;
 using TsheThauLoo.Entities.Activity;
+using TsheThauLoo.Entities.Resume;
 using TsheThauLoo.Entities.User;
 
 namespace TsheThauLoo.Data
@@ -50,11 +51,19 @@ namespace TsheThauLoo.Data
 
         #endregion
 
+        #region Resume
+
+        public DbSet<FileResume> FileResumes { get; set; }
+
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             
             UserConfigurations.UserRelation(builder);
+            ActivityConfigurations.ActivityRelation(builder);
+            ResumeConfigurations.ResumeRelation(builder);
         }
     }
 }
