@@ -21,6 +21,8 @@ namespace TsheThauLoo.Entities.Resume
         [Required]
         public bool IsArchive { get; set; } = false;
 
+        public RecruitmentCampaignResume RecruitmentCampaignResume { get; set; }
+
         public string ApplicationUserId { get; set; }
         
         public ApplicationUser ApplicationUser { get; set; }

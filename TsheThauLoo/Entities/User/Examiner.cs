@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TsheThauLoo.Entities.Resume;
 
 namespace TsheThauLoo.Entities.User
 {
@@ -31,6 +33,8 @@ namespace TsheThauLoo.Entities.User
         /// </summary>
         [MaxLength(30)]
         public string JobTitle { get; set; }
+
+        public ICollection<RecruitmentCampaignResume> RecruitmentCampaignResumes { get; set; }
         
         public string ApplicationUserId { get; set; }
         

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TsheThauLoo.Data.EntityConfigurations;
 using TsheThauLoo.Entities.Activity;
 using TsheThauLoo.Entities.Business;
+using TsheThauLoo.Entities.Job;
 using TsheThauLoo.Entities.Resume;
 using TsheThauLoo.Entities.User;
 
@@ -68,6 +69,15 @@ namespace TsheThauLoo.Data
 
         #endregion
 
+        #region Job
+
+        public DbSet<RecruitmentCampaignOpening> RecruitmentCampaignOpenings { get; set; }
+        public DbSet<Qualification> Qualifications { get; set; }
+        public DbSet<Faculty> Faculties { get; set; }
+        public DbSet<RecruitmentCampaignResume> RecruitmentCampaignResumes { get; set; }
+
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -76,6 +86,7 @@ namespace TsheThauLoo.Data
             ActivityConfigurations.ActivityRelation(builder);
             ResumeConfigurations.ResumeRelation(builder);
             CompanyConfigurations.CompanyRelation(builder);
+            JobConfigurations.JobRelation(builder);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TsheThauLoo.Entities.Business;
+using TsheThauLoo.Entities.Job;
 
 namespace TsheThauLoo.Entities.Activity
 {
@@ -41,14 +42,20 @@ namespace TsheThauLoo.Entities.Activity
         [Required]
         public DateTime EndTime { get; set; }
 
+        /// <summary>
+        /// 啟用審查
+        /// </summary>
+        [Required]
+        public bool EnableReview { get; set; } = false;
+
         public ICollection<RecruitmentCampaignFile> RecruitmentCampaignFiles { get; set; }
+        
+        public ICollection<RecruitmentCampaignOpening> RecruitmentCampaignOpenings { get; set; }
 
         public string CompanyId { get; set; }
 
         public Company Company { get; set; }
-        
-        // TODO: 職缺
-        
+
         public string CampaignId { get; set; }
 
         public Campaign Campaign { get; set; }
