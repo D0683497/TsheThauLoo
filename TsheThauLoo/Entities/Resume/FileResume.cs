@@ -14,7 +14,13 @@ namespace TsheThauLoo.Entities.Resume
         /// </summary>
         [Key]
         public string FileResumeId { get; set; } = Guid.NewGuid().ToString();
-        
+
+        /// <summary>
+        /// 封存
+        /// </summary>
+        [Required]
+        public bool IsArchive { get; set; } = false;
+
         public string ApplicationUserId { get; set; }
         
         public ApplicationUser ApplicationUser { get; set; }
