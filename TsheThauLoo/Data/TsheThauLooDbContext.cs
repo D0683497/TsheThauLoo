@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TsheThauLoo.Data.EntityConfigurations;
 using TsheThauLoo.Entities.Activity;
+using TsheThauLoo.Entities.Business;
 using TsheThauLoo.Entities.Resume;
 using TsheThauLoo.Entities.User;
 
@@ -57,6 +58,16 @@ namespace TsheThauLoo.Data
 
         #endregion
 
+        #region Company
+
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<CompanyLogo> CompanyLogos { get; set; }
+        public DbSet<IndustrialClassification> IndustrialClassifications { get; set; }
+        public DbSet<CompanyVerify> CompanyVerifies { get; set; }
+        public DbSet<CompanyVerifyFile> CompanyVerifyFiles { get; set; }
+
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -64,6 +75,7 @@ namespace TsheThauLoo.Data
             UserConfigurations.UserRelation(builder);
             ActivityConfigurations.ActivityRelation(builder);
             ResumeConfigurations.ResumeRelation(builder);
+            CompanyConfigurations.CompanyRelation(builder);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TsheThauLoo.Entities.Business;
 
 namespace TsheThauLoo.Entities.Activity
 {
@@ -85,8 +86,10 @@ namespace TsheThauLoo.Entities.Activity
 
         public ICollection<GeneralCampaignParticipant> GeneralCampaignParticipants { get; set; }
         
-        // TODO: 企業
-        
+        public string CompanyId { get; set; }
+
+        public Company Company { get; set; }
+
         public string CampaignId { get; set; }
 
         public Campaign Campaign { get; set; }

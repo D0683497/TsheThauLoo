@@ -3,7 +3,7 @@ using TsheThauLoo.Entities.Resume;
 
 namespace TsheThauLoo.Data.EntityConfigurations
 {
-    public class ResumeConfigurations
+    public static class ResumeConfigurations
     {
         public static void ResumeRelation(ModelBuilder builder)
         {

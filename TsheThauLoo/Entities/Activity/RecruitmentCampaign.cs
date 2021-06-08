@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TsheThauLoo.Entities.Business;
 
 namespace TsheThauLoo.Entities.Activity
 {
@@ -41,8 +42,10 @@ namespace TsheThauLoo.Entities.Activity
         public DateTime EndTime { get; set; }
 
         public ICollection<RecruitmentCampaignFile> RecruitmentCampaignFiles { get; set; }
-        
-        // TODO: 企業
+
+        public string CompanyId { get; set; }
+
+        public Company Company { get; set; }
         
         // TODO: 職缺
         

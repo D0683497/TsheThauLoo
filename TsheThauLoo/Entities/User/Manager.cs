@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using TsheThauLoo.Entities.Business;
 
 namespace TsheThauLoo.Entities.User
 {
@@ -56,6 +57,10 @@ namespace TsheThauLoo.Entities.User
         public string ContactAddress { get; set; }
 
         public Substitute Substitute { get; set; }
+        
+        public string CompanyId { get; set; }
+
+        public Company Company { get; set; }
         
         public string ApplicationUserId { get; set; }
         
