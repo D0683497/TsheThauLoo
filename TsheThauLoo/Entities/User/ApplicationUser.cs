@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using TsheThauLoo.Entities.Activity;
 using TsheThauLoo.Enums;
 
 namespace TsheThauLoo.Entities.User
@@ -174,5 +176,9 @@ namespace TsheThauLoo.Entities.User
         public Manager Manager { get; set; }
 
         public Student Student { get; set; }
+
+        public ICollection<EventAttendee> EventAttendees { get; set; }
+
+        public ICollection<GeneralCampaignAttendee> GeneralCampaignAttendees { get; set; }
     }
 }

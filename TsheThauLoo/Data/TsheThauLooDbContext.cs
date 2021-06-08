@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TsheThauLoo.Data.EntityConfigurations;
+using TsheThauLoo.Entities.Activity;
 using TsheThauLoo.Entities.User;
 
 namespace TsheThauLoo.Data
@@ -29,6 +30,23 @@ namespace TsheThauLoo.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<StudentVerify> StudentVerifies { get; set; }
         public DbSet<StudentVerifyFile> StudentVerifyFiles { get; set; }
+
+        #endregion
+
+        #region Activity
+
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventFile> EventFiles { get; set; }
+        public DbSet<EventAttendee> EventAttendees { get; set; }
+        public DbSet<EventParticipant> EventParticipants { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<CampaignFile> CampaignFiles { get; set; }
+        public DbSet<GeneralCampaign> GeneralCampaigns { get; set; }
+        public DbSet<GeneralCampaignFile> GeneralCampaignFiles { get; set; }
+        public DbSet<GeneralCampaignAttendee> GeneralCampaignAttendees { get; set; }
+        public DbSet<GeneralCampaignParticipant> GeneralCampaignParticipants { get; set; }
+        public DbSet<RecruitmentCampaign> RecruitmentCampaigns { get; set; }
+        public DbSet<RecruitmentCampaignFile> RecruitmentCampaignFiles { get; set; }
 
         #endregion
 
