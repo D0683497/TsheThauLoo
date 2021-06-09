@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using TsheThauLoo.Data;
 using TsheThauLoo.Entities.User;
 
@@ -13,12 +14,14 @@ namespace TsheThauLoo
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -60,11 +63,31 @@ namespace TsheThauLoo
             services.AddControllers()
                 .AddFluentValidation();
             
+            #region CORS
+
+            if (Environment.IsDevelopment())
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("api", policy =>
+                    {
+                        // URL 不 能包含尾端斜線 (/)
+                        policy.WithOrigins(Configuration["FrontendUrl"])
+                            .AllowAnyHeader()
+                            .WithExposedHeaders("X-Pagination")
+                            .WithExposedHeaders("Location")
+                            .AllowAnyMethod();
+                    });
+                });
+            }
+
+            #endregion
+            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             // if (env.IsDevelopment())
             // {
@@ -75,13 +98,26 @@ namespace TsheThauLoo
 
             app.UseStaticFiles();
             app.UseRouting();
+            
+            if (Environment.IsDevelopment())
+            {
+                app.UseCors("api");
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                if (Environment.IsDevelopment())
+                {
+                    endpoints.MapControllers().RequireCors("api");
+                }
+                else
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapFallbackToFile("index.html");
+                }
             });
         }
     }
