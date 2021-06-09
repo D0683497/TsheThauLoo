@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MustMatch } from '../../../validators/must-match.validator';
-import { PhoneNumberValidator } from '../../../validators/phone.validator';
-import { NationalIdValidator } from '../../../validators/taiwan-id.validator';
 import { ModalService } from '../../../services/modal/modal.service';
-import { IAdministratorRegister } from '../../../models/account/register/administrator-register.model';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AdministratorService } from '../../../services/account/administrator/administrator.service';
-import { IFormError } from '../../../models/error/form-error.model';
-import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
+import { AlumnusService } from '../../../services/account/alumnus/alumnus.service';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../services/notification/notification.service';
 import { LoadingService } from '../../../services/loading/loading.service';
+import { PhoneNumberValidator } from '../../../validators/phone.validator';
+import { NationalIdValidator } from '../../../validators/taiwan-id.validator';
+import { MustMatch } from '../../../validators/must-match.validator';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
+import { IFormError } from '../../../models/error/form-error.model';
+import { IAlumnusRegister } from '../../../models/account/register/alumnus-register.model';
 
 @Component({
-  selector: 'app-administrator-register',
-  templateUrl: './administrator-register.component.html',
-  styleUrls: ['./administrator-register.component.scss'],
+  selector: 'app-alumnus-register',
+  templateUrl: './alumnus-register.component.html',
+  styleUrls: ['./alumnus-register.component.scss'],
 })
-export class AdministratorRegisterComponent implements OnInit {
+export class AlumnusRegisterComponent implements OnInit {
 
   date = new Date().toISOString();
   registerForm: FormGroup;
@@ -26,7 +26,7 @@ export class AdministratorRegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: ModalService,
-    private administratorService: AdministratorService,
+    private alumnusService: AlumnusService,
     private router: Router,
     private notificationService: NotificationService,
     private loadingService: LoadingService) { }
@@ -67,20 +67,18 @@ export class AdministratorRegisterComponent implements OnInit {
       gender: [null],
       dateOfBirth: [null],
       currentAddress: [null, [Validators.maxLength(200)]],
-      // 管理員資料
-      networkId: [null, [Validators.required, Validators.maxLength(10)]],
-      dept: [null, [Validators.required, Validators.maxLength(20)]],
-      unit: [null, [Validators.maxLength(20)]],
-      jobTitle: [null, [Validators.maxLength(20)]],
-      extension: [null, [Validators.maxLength(10), Validators.pattern('^[0123456789]+$')]],
-      contactEmail: [null, [Validators.email, Validators.maxLength(320)]]
+      // 校友資料
+      dateOfGraduation: [null, [Validators.maxLength(10)]],
+      college: [null, [Validators.required, Validators.maxLength(20)]],
+      department: [null, [Validators.required, Validators.maxLength(20)]],
+      class: [null, [Validators.required, Validators.maxLength(20)]]
     },{ validators: MustMatch('password', 'passwordConfirm') });
   }
 
-  async onSubmit(data: IAdministratorRegister): Promise<void> {
+  async onSubmit(data: IAlumnusRegister): Promise<void> {
     if (await this.modalService.registerTerms()) {
       await this.loadingService.start('註冊中...');
-      this.administratorService.register(data).subscribe(
+      this.alumnusService.register(data).subscribe(
         () => { this.registerSuccess(); },
         (err: HttpErrorResponse) => { this.registerFail(err); }
       );

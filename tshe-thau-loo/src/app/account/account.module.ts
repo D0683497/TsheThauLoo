@@ -7,12 +7,14 @@ import { SelectRegisterComponent } from './register/select-register/select-regis
 import { AdministratorRegisterComponent } from './register/administrator-register/administrator-register.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TermsRegisterComponent } from './register/terms-register/terms-register.component';
+import { AlumnusRegisterComponent } from './register/alumnus-register/alumnus-register.component';
 
 @NgModule({
   declarations: [
     SelectRegisterComponent,
     AdministratorRegisterComponent,
-    TermsRegisterComponent
+    TermsRegisterComponent,
+    AlumnusRegisterComponent
   ],
   imports: [
     CommonModule,
