@@ -16,18 +16,18 @@ using TsheThauLoo.Validator.Account.Register;
 namespace TsheThauLoo.Controllers.Account
 {
     [ApiController]
-    [Route("api/account/employee")]
-    public class EmployeeController : ControllerBase
+    [Route("api/account/examiner")]
+    public class ExaminerController : ControllerBase
     {
-        private readonly ILogger<EmployeeController> _logger;
+        private readonly ILogger<ExaminerController> _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly TsheThauLooDbContext _dbContext;
 
-        public EmployeeController(
-            ILogger<EmployeeController> logger, 
+        public ExaminerController(
+            ILogger<ExaminerController> logger, 
             IMapper mapper, 
-            UserManager<ApplicationUser> userManager, 
+            UserManager<ApplicationUser> userManager,
             TsheThauLooDbContext dbContext)
         {
             _logger = logger;
@@ -37,10 +37,10 @@ namespace TsheThauLoo.Controllers.Account
         }
         
         [AllowAnonymous]
-        [HttpPost("register", Name = nameof(EmployeeRegister))]
-        public async Task<IActionResult> EmployeeRegister([FromBody] EmployeeRegisterDto dto)
+        [HttpPost("register", Name = nameof(ExaminerRegister))]
+        public async Task<IActionResult> ExaminerRegister([FromBody] ExaminerRegisterDto dto)
         {
-            EmployeeRegisterDtoValidator validator = new EmployeeRegisterDtoValidator();
+            ExaminerRegisterDtoValidator validator = new ExaminerRegisterDtoValidator();
             ValidationResult result = await validator.ValidateAsync(dto);
             if (result.IsValid)
             {
@@ -66,13 +66,6 @@ namespace TsheThauLoo.Controllers.Account
                     if (await _userManager.Users.AnyAsync(x => x.NationalId == dto.NationalId.ToUpper()))
                     {
                         result.Errors.Add(new ValidationFailure("nationalId", "身份證字號已經被使用"));
-                    }
-                }
-                if (!string.IsNullOrEmpty(dto.NetworkId))
-                {
-                    if (await _userManager.Users.AnyAsync(x => x.Employee.NetworkId == dto.NetworkId.ToUpper()))
-                    {
-                        result.Errors.Add(new ValidationFailure("networkId", "證號已經被使用"));
                     }
                 }
 
@@ -114,7 +107,7 @@ namespace TsheThauLoo.Controllers.Account
                             
                             #region 添加角色
 
-                            if (await _userManager.AddToRoleAsync(entity, "Employee") != IdentityResult.Success)
+                            if (await _userManager.AddToRoleAsync(entity, "Examiner") != IdentityResult.Success)
                             {
                                 throw new DbUpdateException();
                             }
