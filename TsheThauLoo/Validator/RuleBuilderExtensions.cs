@@ -43,13 +43,10 @@ namespace TsheThauLoo.Validator
             return (10 - (seed.Sum() % 10)) % 10 == Convert.ToInt32(input.Substring(9, 1));
         }
         
-        public static IRuleBuilderOptions<T, string> PhoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder)     
+        public static IRuleBuilderOptions<T, string> PhoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             return ruleBuilder
-                .Must(VerifyPhoneNumber)
-                .WithName("手機號碼")
-                .WithMessage("{PropertyName}格式錯誤")
-                .OverridePropertyName("phoneNumber");     
+                .Must(VerifyPhoneNumber);
         }
 
         private static bool VerifyPhoneNumber(string input)

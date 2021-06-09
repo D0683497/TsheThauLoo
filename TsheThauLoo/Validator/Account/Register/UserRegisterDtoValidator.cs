@@ -69,6 +69,9 @@ namespace TsheThauLoo.Validator.Account.Register
                 .OverridePropertyName("phoneNumber")
                 .When(x => !string.IsNullOrEmpty(x.PhoneNumber))
                 .PhoneNumber()
+                .WithName("手機號碼")
+                .WithMessage("{PropertyName}格式錯誤")
+                .OverridePropertyName("phoneNumber")
                 .When(x => !string.IsNullOrEmpty(x.PhoneNumber));
             RuleFor(x => x.NationalId)
                 .Cascade(CascadeMode.Stop)
