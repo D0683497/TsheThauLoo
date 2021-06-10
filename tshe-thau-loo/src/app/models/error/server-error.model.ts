@@ -3,5 +3,5 @@ export interface IServerError {
   title: string;
   status: number;
   detail: string;
-  traceId: string;
+  traceId?: string;
 }
