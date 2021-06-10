@@ -1,4 +1,3 @@
-using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +18,7 @@ namespace TsheThauLoo.Controllers
             _logger = logger;
         }
         
+        [AllowAnonymous]
         [Route("error")]
         public IActionResult Error()
         {

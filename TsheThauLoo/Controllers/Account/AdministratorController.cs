@@ -11,11 +11,13 @@ using Microsoft.Extensions.Logging;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
+using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Account.Register;
 
 namespace TsheThauLoo.Controllers.Account
 {
     [ApiController]
+    [AuthAuthorize]
     [Route("api/account/administrator")]
     public class AdministratorController : ControllerBase
     {

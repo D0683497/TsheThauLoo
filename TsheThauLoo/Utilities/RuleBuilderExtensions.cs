@@ -3,7 +3,7 @@ using System.Linq;
 using FluentValidation;
 using PhoneNumbers;
 
-namespace TsheThauLoo.Validator
+namespace TsheThauLoo.Utilities
 {
     public static class RuleBuilderExtensions
     {

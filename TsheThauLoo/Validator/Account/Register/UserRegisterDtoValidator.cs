@@ -1,6 +1,7 @@
 using System;
 using FluentValidation;
 using TsheThauLoo.Dtos.Account.Register;
+using TsheThauLoo.Utilities;
 
 namespace TsheThauLoo.Validator.Account.Register
 {
