@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json.Serialization;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,12 +15,14 @@ namespace TsheThauLoo
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -48,7 +52,7 @@ namespace TsheThauLoo
                 options.Password.RequiredUniqueChars = 1;
                 options.SignIn.RequireConfirmedEmail = true;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
-                options.User.AllowedUserNameCharacters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#$%\/()[]*&:><^!{}";
+                options.User.AllowedUserNameCharacters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-=_.";
                 options.User.RequireUniqueEmail = true;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
                 options.Lockout.MaxFailedAccessAttempts = 10;
@@ -57,24 +61,68 @@ namespace TsheThauLoo
 
             #endregion
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(opts =>
+                {
+                    opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                })
+                .AddFluentValidation();
+            
+            #region CORS
+
+            if (Environment.IsDevelopment())
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("api", policy =>
+                    {
+                        // URL 不 能包含尾端斜線 (/)
+                        policy.WithOrigins(Configuration["FrontendUrl"])
+                            .AllowAnyHeader()
+                            .WithExposedHeaders("X-Pagination")
+                            .WithExposedHeaders("Location")
+                            .AllowAnyMethod();
+                    });
+                });
+            }
+
+            #endregion
+            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            // if (env.IsDevelopment())
+            // {
+            //     app.UseDeveloperExceptionPage();
+            // }
+           
+            app.UseExceptionHandler("/api/error");
+
+            app.UseStaticFiles();
+            app.UseRouting();
+            
+            if (Environment.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseCors("api");
             }
 
-            app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                if (Environment.IsDevelopment())
+                {
+                    endpoints.MapControllers().RequireCors("api");
+                }
+                else
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapFallbackToFile("index.html");
+                }
             });
         }
     }
