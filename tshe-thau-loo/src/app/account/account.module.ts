@@ -11,6 +11,7 @@ import { AlumnusRegisterComponent } from './register/alumnus-register/alumnus-re
 import { EmployeeRegisterComponent } from './register/employee-register/employee-register.component';
 import { ExaminerRegisterComponent } from './register/examiner-register/examiner-register.component';
 import { ManagerRegisterComponent } from './register/manager-register/manager-register.component';
+import { StudentRegisterComponent } from './register/student-register/student-register.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ManagerRegisterComponent } from './register/manager-register/manager-re
     AlumnusRegisterComponent,
     EmployeeRegisterComponent,
     ExaminerRegisterComponent,
-    ManagerRegisterComponent
+    ManagerRegisterComponent,
+    StudentRegisterComponent
   ],
   imports: [
     CommonModule,
