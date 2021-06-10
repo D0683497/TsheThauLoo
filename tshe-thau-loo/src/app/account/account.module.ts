@@ -10,6 +10,7 @@ import { TermsRegisterComponent } from './register/terms-register/terms-register
 import { AlumnusRegisterComponent } from './register/alumnus-register/alumnus-register.component';
 import { EmployeeRegisterComponent } from './register/employee-register/employee-register.component';
 import { ExaminerRegisterComponent } from './register/examiner-register/examiner-register.component';
+import { ManagerRegisterComponent } from './register/manager-register/manager-register.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ExaminerRegisterComponent } from './register/examiner-register/examiner
     TermsRegisterComponent,
     AlumnusRegisterComponent,
     EmployeeRegisterComponent,
-    ExaminerRegisterComponent
+    ExaminerRegisterComponent,
+    ManagerRegisterComponent
   ],
   imports: [
     CommonModule,

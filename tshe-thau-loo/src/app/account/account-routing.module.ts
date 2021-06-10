@@ -5,6 +5,7 @@ import { SelectRegisterComponent } from './register/select-register/select-regis
 import { AlumnusRegisterComponent } from './register/alumnus-register/alumnus-register.component';
 import { EmployeeRegisterComponent } from './register/employee-register/employee-register.component';
 import { ExaminerRegisterComponent } from './register/examiner-register/examiner-register.component';
+import { ManagerRegisterComponent } from './register/manager-register/manager-register.component';
 
 const routes: Routes = [
   {
@@ -14,7 +15,8 @@ const routes: Routes = [
       { path: 'administrator', component: AdministratorRegisterComponent, pathMatch: 'full' },
       { path: 'alumnus', component: AlumnusRegisterComponent, pathMatch: 'full' },
       { path: 'employee', component: EmployeeRegisterComponent, pathMatch: 'full' },
-      { path: 'examiner', component: ExaminerRegisterComponent, pathMatch: 'full' }
+      { path: 'examiner', component: ExaminerRegisterComponent, pathMatch: 'full' },
+      { path: 'manager', component: ManagerRegisterComponent, pathMatch: 'full' },
     ]
   },
 ];
