@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TermsRegisterComponent } from './register/terms-register/terms-register.component';
 import { AlumnusRegisterComponent } from './register/alumnus-register/alumnus-register.component';
 import { EmployeeRegisterComponent } from './register/employee-register/employee-register.component';
+import { ExaminerRegisterComponent } from './register/examiner-register/examiner-register.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { EmployeeRegisterComponent } from './register/employee-register/employee
     AdministratorRegisterComponent,
     TermsRegisterComponent,
     AlumnusRegisterComponent,
-    EmployeeRegisterComponent
+    EmployeeRegisterComponent,
+    ExaminerRegisterComponent
   ],
   imports: [
     CommonModule,
