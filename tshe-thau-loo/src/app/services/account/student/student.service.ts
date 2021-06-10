@@ -3,6 +3,7 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IStudentRegister } from '../../../models/account/register/student-register.model';
 import { Observable } from 'rxjs';
+import { IStudentProfile } from '../../../models/account/profile/student-profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +18,14 @@ export class StudentService {
 
   constructor(private http: HttpClient) { }
 
-  register(data: IStudentRegister): Observable<void> {
+  register(data: IStudentRegister): Observable<IStudentProfile> {
     const url = `${this.urlRoot}/account/student/register`;
-    return this.http.post<void>(url, data, this.httpOptions);
+    return this.http.post<IStudentProfile>(url, data, this.httpOptions);
+  }
+
+  getProfile(): Observable<IStudentProfile> {
+    const url = `${this.urlRoot}/account/student/profile`;
+    return this.http.get<IStudentProfile>(url, this.httpOptions);
   }
 
 }

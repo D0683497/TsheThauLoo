@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using TsheThauLoo.Data;
+using TsheThauLoo.Dtos.Account.Profile;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
@@ -21,7 +23,7 @@ using TsheThauLoo.Validator.Account.Register;
 namespace TsheThauLoo.Controllers.Account
 {
     [ApiController]
-    [AuthAuthorize]
+    [AuthAuthorize(Roles = "Examiner")]
     [Route("api/account/examiner")]
     public class ExaminerController : ControllerBase
     {
@@ -151,10 +153,25 @@ namespace TsheThauLoo.Controllers.Account
 
                     #endregion
 
-                    return NoContent();
+                    var returnDto = _mapper.Map<ExaminerProfileDto>(entity);
+                    return CreatedAtAction(nameof(ExaminerProfile), null, returnDto);
                 }
             }
             return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize(Roles = "Examiner")]
+        [HttpGet("profile", Name = nameof(ExaminerProfile))]
+        public async Task<ActionResult<ExaminerProfileDto>> ExaminerProfile()
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.Users
+                .AsNoTracking()
+                .Include(x => x.Examiner)
+                .SingleOrDefaultAsync(x => x.Id == userId);
+            var dto = _mapper.Map<ExaminerProfileDto>(entity);
+            return Ok(dto);
         }
     }
 }

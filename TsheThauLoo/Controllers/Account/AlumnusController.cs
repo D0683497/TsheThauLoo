@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using TsheThauLoo.Data;
+using TsheThauLoo.Dtos.Account.Profile;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
@@ -21,7 +23,7 @@ using TsheThauLoo.Validator.Account.Register;
 namespace TsheThauLoo.Controllers.Account
 {
     [ApiController]
-    [AuthAuthorize]
+    [AuthAuthorize(Roles = "Alumnus")]
     [Route("api/account/alumnus")]
     public class AlumnusController : ControllerBase
     {
@@ -150,11 +152,26 @@ namespace TsheThauLoo.Controllers.Account
                         $"<p><a href=\"{link}\">{link}</a></p>");
 
                     #endregion
-
-                    return NoContent();
+                    
+                    var returnDto = _mapper.Map<AlumnusProfileDto>(entity);
+                    return CreatedAtAction(nameof(AlumnusProfile), null, returnDto);
                 }
             }
             return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize(Roles = "Alumnus")]
+        [HttpGet("profile", Name = nameof(AlumnusProfile))]
+        public async Task<ActionResult<AlumnusProfileDto>> AlumnusProfile()
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.Users
+                .AsNoTracking()
+                .Include(x => x.Alumnus)
+                .SingleOrDefaultAsync(x => x.Id == userId);
+            var dto = _mapper.Map<AlumnusProfileDto>(entity);
+            return Ok(dto);
         }
     }
 }

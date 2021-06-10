@@ -9,6 +9,13 @@ import { ManagerRegisterComponent } from './register/manager-register/manager-re
 import { StudentRegisterComponent } from './register/student-register/student-register.component';
 import { LoginComponent } from './login/login/login.component';
 import { AccountRedirectGuard } from '../guards/account-redirect/account-redirect.guard';
+import { AdministratorProfileComponent } from './profile/administrator-profile/administrator-profile.component';
+import { RequiredLoginGuard } from '../guards/required-login/required-login.guard';
+import { AlumnusProfileComponent } from './profile/alumnus-profile/alumnus-profile.component';
+import { EmployeeProfileComponent } from './profile/employee-profile/employee-profile.component';
+import { ExaminerProfileComponent } from './profile/examiner-profile/examiner-profile.component';
+import { ManagerProfileComponent } from './profile/manager-profile/manager-profile.component';
+import { StudentProfileComponent } from './profile/student-profile/student-profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -23,6 +30,18 @@ const routes: Routes = [
       { path: 'manager', component: ManagerRegisterComponent, pathMatch: 'full' },
       { path: 'student', component: StudentRegisterComponent, pathMatch: 'full' }
     ]
+  },
+  {
+    path: 'profile',
+    children: [
+      { path: 'administrator', component: AdministratorProfileComponent, pathMatch: 'full' },
+      { path: 'alumnus', component: AlumnusProfileComponent, pathMatch: 'full' },
+      { path: 'employee', component: EmployeeProfileComponent, pathMatch: 'full' },
+      { path: 'examiner', component: ExaminerProfileComponent, pathMatch: 'full' },
+      { path: 'manager', component: ManagerProfileComponent, pathMatch: 'full' },
+      { path: 'student', component: StudentProfileComponent, pathMatch: 'full' }
+    ],
+    canActivate: [RequiredLoginGuard]
   },
   { path: '', pathMatch: 'full', canActivate: [AccountRedirectGuard], runGuardsAndResolvers: 'always' }
 ];

@@ -3,6 +3,7 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IEmployeeRegister } from '../../../models/account/register/employee-register.model';
 import { Observable } from 'rxjs';
+import { IEmployeeProfile } from '../../../models/account/profile/employee-profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +18,14 @@ export class EmployeeService {
 
   constructor(private http: HttpClient) { }
 
-  register(data: IEmployeeRegister): Observable<void> {
+  register(data: IEmployeeRegister): Observable<IEmployeeProfile> {
     const url = `${this.urlRoot}/account/employee/register`;
-    return this.http.post<void>(url, data, this.httpOptions);
+    return this.http.post<IEmployeeProfile>(url, data, this.httpOptions);
+  }
+
+  getProfile(): Observable<IEmployeeProfile> {
+    const url = `${this.urlRoot}/account/employee/profile`;
+    return this.http.get<IEmployeeProfile>(url, this.httpOptions);
   }
 
 }

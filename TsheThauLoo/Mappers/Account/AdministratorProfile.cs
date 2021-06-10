@@ -1,4 +1,5 @@
 using AutoMapper;
+using TsheThauLoo.Dtos.Account.Profile;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 
@@ -44,6 +45,66 @@ namespace TsheThauLoo.Mappers.Account
                     dest.Administrator.ApplicationUserId = dest.Id;
                     dest.Administrator.ApplicationUser = dest;
                 });
+
+            #endregion
+            
+            #region ApplicationUser 轉換成 AdministratorProfileDto
+            
+            CreateMap<ApplicationUser, AdministratorProfileDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.UserName,
+                    opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.Email,
+                    opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.EmailConfirmed,
+                    opt => opt.MapFrom(src => src.EmailConfirmed))
+                .ForMember(dest => dest.PhoneNumber,
+                    opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.PhoneNumberConfirmed,
+                    opt => opt.MapFrom(src => src.PhoneNumberConfirmed))
+                .ForMember(dest => dest.IsEnable,
+                    opt => opt.MapFrom(src => src.IsEnable))
+                .ForMember(dest => dest.IdentityConfirmed,
+                    opt => opt.MapFrom(src => src.IdentityConfirmed))
+                .ForMember(dest => dest.NationalId,
+                    opt => opt.MapFrom(src => src.NationalId))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Gender,
+                    opt => opt.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.DateOfBirth,
+                    opt => opt.MapFrom(src => src.DateOfBirth))
+                .ForMember(dest => dest.CurrentAddress,
+                    opt => opt.MapFrom(src => src.CurrentAddress))
+                .ForPath(dest => dest.AdministratorConfirmed,
+                    opt => opt.MapFrom(src => src.Administrator.AdministratorConfirmed))
+                .ForPath(dest => dest.ShowAbout,
+                    opt => opt.MapFrom(src => src.Administrator.ShowAbout))
+                .ForPath(dest => dest.NetworkId,
+                    opt => opt.MapFrom(src => src.Administrator.NetworkId))
+                .ForPath(dest => dest.Dept,
+                    opt => opt.MapFrom(src => src.Administrator.Dept))
+                .ForPath(dest => dest.Unit,
+                    opt => opt.MapFrom(src => src.Administrator.Unit))
+                .ForPath(dest => dest.JobTitle,
+                    opt => opt.MapFrom(src => src.Administrator.JobTitle))
+                .ForPath(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Administrator.Extension))
+                .ForPath(dest => dest.ContactEmail,
+                    opt => opt.MapFrom(src => src.Administrator.ContactEmail))
+                .ForPath(dest => dest.Responsibilities,
+                    opt => opt.MapFrom(src => src.Administrator.Responsibilities));
+            
+            #endregion
+
+            #region Responsibility 轉換成 ResponsibilityDto
+
+            CreateMap<Responsibility, ResponsibilityDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ResponsibilityId))
+                .ForMember(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.Description));
 
             #endregion
         }

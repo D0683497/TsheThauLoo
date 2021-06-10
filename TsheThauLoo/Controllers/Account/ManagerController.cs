@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using TsheThauLoo.Data;
+using TsheThauLoo.Dtos.Account.Profile;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
@@ -21,7 +23,7 @@ using TsheThauLoo.Validator.Account.Register;
 namespace TsheThauLoo.Controllers.Account
 {
     [ApiController]
-    [AuthAuthorize]
+    [AuthAuthorize(Roles = "Manager")]
     [Route("api/account/manager")]
     public class ManagerController : ControllerBase
     {
@@ -151,10 +153,26 @@ namespace TsheThauLoo.Controllers.Account
 
                     #endregion
 
-                    return NoContent();
+                    var returnDto = _mapper.Map<ManagerProfileDto>(entity);
+                    return CreatedAtAction(nameof(ManagerProfile), null, returnDto);
                 }
             }
             return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [HttpGet("profile", Name = nameof(ManagerProfile))]
+        public async Task<ActionResult<ManagerProfileDto>> ManagerProfile()
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.Users
+                .AsNoTracking()
+                .Include(x => x.Manager)
+                .Include(x => x.Manager.Substitute)
+                .SingleOrDefaultAsync(x => x.Id == userId);
+            var dto = _mapper.Map<ManagerProfileDto>(entity);
+            return Ok(dto);
         }
     }
 }

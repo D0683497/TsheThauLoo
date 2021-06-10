@@ -3,6 +3,7 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IManagerRegister } from '../../../models/account/register/manager-register.model';
 import { Observable } from 'rxjs';
+import { IManagerProfile } from '../../../models/account/profile/manager-profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +18,14 @@ export class ManagerService {
 
   constructor(private http: HttpClient) { }
 
-  register(data: IManagerRegister): Observable<void> {
+  register(data: IManagerRegister): Observable<IManagerProfile> {
     const url = `${this.urlRoot}/account/manager/register`;
-    return this.http.post<void>(url, data, this.httpOptions);
+    return this.http.post<IManagerProfile>(url, data, this.httpOptions);
+  }
+
+  getProfile(): Observable<IManagerProfile> {
+    const url = `${this.urlRoot}/account/manager/profile`;
+    return this.http.get<IManagerProfile>(url, this.httpOptions);
   }
 
 }

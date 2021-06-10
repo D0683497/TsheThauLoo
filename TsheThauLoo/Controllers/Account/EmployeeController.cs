@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using TsheThauLoo.Data;
+using TsheThauLoo.Dtos.Account.Profile;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
@@ -21,7 +23,7 @@ using TsheThauLoo.Validator.Account.Register;
 namespace TsheThauLoo.Controllers.Account
 {
     [ApiController]
-    [AuthAuthorize]
+    [AuthAuthorize(Roles = "Employee")]
     [Route("api/account/employee")]
     public class EmployeeController : ControllerBase
     {
@@ -158,10 +160,25 @@ namespace TsheThauLoo.Controllers.Account
 
                     #endregion
 
-                    return NoContent();
+                    var returnDto = _mapper.Map<EmployeeProfileDto>(entity);
+                    return CreatedAtAction(nameof(EmployeeProfile), null, returnDto);
                 }
             }
             return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize(Roles = "Employee")]
+        [HttpGet("profile", Name = nameof(EmployeeProfile))]
+        public async Task<ActionResult<EmployeeProfileDto>> EmployeeProfile()
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.Users
+                .AsNoTracking()
+                .Include(x => x.Employee)
+                .SingleOrDefaultAsync(x => x.Id == userId);
+            var dto = _mapper.Map<EmployeeProfileDto>(entity);
+            return Ok(dto);
         }
     }
 }
