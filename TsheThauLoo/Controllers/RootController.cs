@@ -1,3 +1,4 @@
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,17 @@ namespace TsheThauLoo.Controllers
                 case DbUpdateException:
                     title = "資料庫存取錯誤";
                     detail = "請稍後再試，若持續出現此情況，請聯絡管理員";
+                    break;
+                case SmtpCommandException commandException:
+                    title = "電子郵件服務發生錯誤";
+                    detail = commandException.ErrorCode switch
+                    {
+                        SmtpErrorCode.RecipientNotAccepted => "請檢查收件人電子郵件是否填寫正確",
+                        SmtpErrorCode.SenderNotAccepted => "請聯絡管理員",
+                        SmtpErrorCode.MessageNotAccepted => "郵件未被接受，請稍後再試，若持續出現此情況，請聯絡管理員",
+                        SmtpErrorCode.UnexpectedStatusCode => "請稍後再試，若持續出現此情況，請聯絡管理員",
+                        _ => detail
+                    };
                     break;
             }
 

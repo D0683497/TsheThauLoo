@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using TsheThauLoo.Data;
 using TsheThauLoo.Entities.User;
+using TsheThauLoo.Services;
+using TsheThauLoo.Services.Interface;
 
 namespace TsheThauLoo
 {
@@ -70,6 +72,12 @@ namespace TsheThauLoo
                     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 })
                 .AddFluentValidation();
+            
+            #region Service
+
+            services.AddSingleton<IMailService, MailService>();
+
+            #endregion
             
             #region Authentication
             

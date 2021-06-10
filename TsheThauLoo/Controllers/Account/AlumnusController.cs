@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -7,10 +8,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MimeKit;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
+using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Account.Register;
 
@@ -25,17 +29,23 @@ namespace TsheThauLoo.Controllers.Account
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly TsheThauLooDbContext _dbContext;
+        private readonly IConfiguration _configuration;
+        private readonly IMailService _mailService;
 
         public AlumnusController(
             ILogger<AlumnusController> logger, 
             IMapper mapper, 
             UserManager<ApplicationUser> userManager, 
-            TsheThauLooDbContext dbContext)
+            TsheThauLooDbContext dbContext, 
+            IConfiguration configuration, 
+            IMailService mailService)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
             _dbContext = dbContext;
+            _configuration = configuration;
+            _mailService = mailService;
         }
         
         [AllowAnonymous]
@@ -125,7 +135,21 @@ namespace TsheThauLoo.Controllers.Account
                         }
                     }
                     
-                    // TODO: 寄信
+                    #region 寄信
+
+                    var link = $"{_configuration["FrontendUrl"]}/account/email/confirm" + 
+                               $"?userId={Uri.EscapeDataString(entity.Id)}" + 
+                               $"&token={Uri.EscapeDataString(await _userManager.GenerateEmailConfirmationTokenAsync(entity))}";
+
+                    await _mailService.SendLinkEmailAsync(MessageImportance.High, entity.Email, entity.Email, 
+                        "用戶電子郵件驗證", 
+                        "<p><b>感謝您註冊【逢甲大學-成就人才發展系統】</b></p>" +
+                        "<p>請點擊下方按鈕驗證您的電子郵件</p>", 
+                        link, "立即驗證",
+                        $"<p>若您無法直接點擊連結，請複製以下網址，在瀏覽器網址列中貼上：</p>" +
+                        $"<p><a href=\"{link}\">{link}</a></p>");
+
+                    #endregion
 
                     return NoContent();
                 }
