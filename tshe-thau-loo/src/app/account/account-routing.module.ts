@@ -7,8 +7,11 @@ import { EmployeeRegisterComponent } from './register/employee-register/employee
 import { ExaminerRegisterComponent } from './register/examiner-register/examiner-register.component';
 import { ManagerRegisterComponent } from './register/manager-register/manager-register.component';
 import { StudentRegisterComponent } from './register/student-register/student-register.component';
+import { LoginComponent } from './login/login/login.component';
+import { AccountRedirectGuard } from '../guards/account-redirect/account-redirect.guard';
 
 const routes: Routes = [
+  { path: 'login', component: LoginComponent, pathMatch: 'full' },
   {
     path: 'register',
     children: [
@@ -21,6 +24,7 @@ const routes: Routes = [
       { path: 'student', component: StudentRegisterComponent, pathMatch: 'full' }
     ]
   },
+  { path: '', pathMatch: 'full', canActivate: [AccountRedirectGuard], runGuardsAndResolvers: 'always' }
 ];
 
 @NgModule({

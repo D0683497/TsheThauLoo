@@ -34,7 +34,10 @@ export class NotificationService {
       timerProgressBar: true,
       toast: true,
       position: 'bottom',
-      showConfirmButton: false
+      showConfirmButton: false,
+      showCloseButton: true,
+      width: '15rem',
+      padding: '0.5rem'
     });
   }
 
