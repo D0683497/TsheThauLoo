@@ -3,7 +3,8 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IStudentRegister } from '../../../models/account/register/student-register.model';
 import { Observable } from 'rxjs';
-import { IStudentProfile } from '../../../models/account/profile/student-profile.model';
+import { IStudentProfile } from '../../../models/account/profile/student/student-profile.model';
+import { IStudentInfo } from '../../../models/account/profile/student/student-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,11 @@ export class StudentService {
   getProfile(): Observable<IStudentProfile> {
     const url = `${this.urlRoot}/account/student/profile`;
     return this.http.get<IStudentProfile>(url, this.httpOptions);
+  }
+
+  getInfo(): Observable<IStudentInfo> {
+    const url = `${this.urlRoot}/account/student/profile/info`;
+    return this.http.get<IStudentInfo>(url, this.httpOptions);
   }
 
 }

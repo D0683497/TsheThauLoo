@@ -1,5 +1,5 @@
 using AutoMapper;
-using TsheThauLoo.Dtos.Account.Profile;
+using TsheThauLoo.Dtos.Account.Profile.Examiner;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 
@@ -75,6 +75,20 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Examiner.DivisionName))
                 .ForPath(dest => dest.JobTitle,
                     opt => opt.MapFrom(src => src.Examiner.JobTitle));
+
+            #endregion
+            
+            #region Examiner 轉換成 ExaminerInfoDto
+
+            CreateMap<Examiner, ExaminerInfoDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ApplicationUserId))
+                .ForMember(dest => dest.ExaminerConfirmed,
+                    opt => opt.MapFrom(src => src.ExaminerConfirmed))
+                .ForMember(dest => dest.DivisionName,
+                    opt => opt.MapFrom(src => src.DivisionName))
+                .ForMember(dest => dest.JobTitle,
+                    opt => opt.MapFrom(src => src.JobTitle));
 
             #endregion
         }

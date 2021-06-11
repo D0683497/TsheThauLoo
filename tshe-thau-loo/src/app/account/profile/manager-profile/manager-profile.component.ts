@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IManagerProfile } from '../../../models/account/profile/manager-profile.model';
 import { ManagerService } from '../../../services/account/manager/manager.service';
 import { AccountService } from '../../../services/account/account.service';
 import { NotificationService } from '../../../services/notification/notification.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
+import { IManagerProfile } from '../../../models/account/profile/manager/manager-profile.model';
 
 @Component({
   selector: 'app-manager-profile',

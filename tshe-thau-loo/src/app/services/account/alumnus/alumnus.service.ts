@@ -3,7 +3,8 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IAlumnusRegister } from '../../../models/account/register/alumnus-register.model';
 import { Observable } from 'rxjs';
-import { IAlumnusProfile } from '../../../models/account/profile/alumnus-profile.model';
+import { IAlumnusProfile } from '../../../models/account/profile/alumnus/alumnus-profile.model';
+import { IAlumnusInfo } from '../../../models/account/profile/alumnus/alumnus-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,11 @@ export class AlumnusService {
   getProfile(): Observable<IAlumnusProfile> {
     const url = `${this.urlRoot}/account/alumnus/profile`;
     return this.http.get<IAlumnusProfile>(url, this.httpOptions);
+  }
+
+  getInfo(): Observable<IAlumnusInfo> {
+    const url = `${this.urlRoot}/account/alumnus/profile/info`;
+    return this.http.get<IAlumnusInfo>(url, this.httpOptions);
   }
 
 }

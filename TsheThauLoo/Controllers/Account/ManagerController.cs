@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using TsheThauLoo.Data;
-using TsheThauLoo.Dtos.Account.Profile;
+using TsheThauLoo.Dtos.Account.Profile.Manager;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
@@ -172,6 +172,20 @@ namespace TsheThauLoo.Controllers.Account
                 .Include(x => x.Manager.Substitute)
                 .SingleOrDefaultAsync(x => x.Id == userId);
             var dto = _mapper.Map<ManagerProfileDto>(entity);
+            return Ok(dto);
+        }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [HttpGet("profile/info", Name = nameof(ManagerInfo))]
+        public async Task<ActionResult<ManagerInfoDto>> ManagerInfo()
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.Managers
+                .AsNoTracking()
+                .Include(x => x.Substitute)
+                .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+            var dto = _mapper.Map<ManagerInfoDto>(entity);
             return Ok(dto);
         }
     }

@@ -1,4 +1,4 @@
-import { IUserProfile } from './user-profile.model';
+import { IUserProfile } from '../user-profile.model';
 
 export interface IExaminerProfile extends IUserProfile {
   examinerConfirmed: boolean;

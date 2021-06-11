@@ -1,5 +1,5 @@
 using AutoMapper;
-using TsheThauLoo.Dtos.Account.Profile;
+using TsheThauLoo.Dtos.Account.Profile.Administrator;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 
@@ -105,6 +105,32 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.ResponsibilityId))
                 .ForMember(dest => dest.Description,
                     opt => opt.MapFrom(src => src.Description));
+
+            #endregion
+
+            #region Administrator 轉換成 AdministratorInfoDto
+
+            CreateMap<Administrator, AdministratorInfoDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ApplicationUserId))
+                .ForMember(dest => dest.AdministratorConfirmed,
+                    opt => opt.MapFrom(src => src.AdministratorConfirmed))
+                .ForMember(dest => dest.ShowAbout,
+                    opt => opt.MapFrom(src => src.ShowAbout))
+                .ForMember(dest => dest.NetworkId,
+                    opt => opt.MapFrom(src => src.NetworkId))
+                .ForMember(dest => dest.Dept,
+                    opt => opt.MapFrom(src => src.Dept))
+                .ForMember(dest => dest.Unit,
+                    opt => opt.MapFrom(src => src.Unit))
+                .ForMember(dest => dest.JobTitle,
+                    opt => opt.MapFrom(src => src.JobTitle))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension))
+                .ForMember(dest => dest.ContactEmail,
+                    opt => opt.MapFrom(src => src.ContactEmail))
+                .ForPath(dest => dest.Responsibilities,
+                    opt => opt.MapFrom(src => src.Responsibilities));
 
             #endregion
         }

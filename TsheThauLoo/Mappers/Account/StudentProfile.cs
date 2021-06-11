@@ -1,5 +1,5 @@
 using AutoMapper;
-using TsheThauLoo.Dtos.Account.Profile;
+using TsheThauLoo.Dtos.Account.Profile.Student;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 
@@ -84,6 +84,24 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Student.Department))
                 .ForPath(dest => dest.Class,
                     opt => opt.MapFrom(src => src.Student.Class));
+            
+            #endregion
+            
+            #region Student 轉換成 StudentInfoDto
+
+            CreateMap<Student, StudentInfoDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ApplicationUserId))
+                .ForMember(dest => dest.StudentConfirmed,
+                    opt => opt.MapFrom(src => src.StudentConfirmed))
+                .ForMember(dest => dest.NetworkId,
+                    opt => opt.MapFrom(src => src.NetworkId))
+                .ForMember(dest => dest.College,
+                    opt => opt.MapFrom(src => src.College))
+                .ForMember(dest => dest.Department,
+                    opt => opt.MapFrom(src => src.Department))
+                .ForMember(dest => dest.Class,
+                    opt => opt.MapFrom(src => src.Class));
             
             #endregion
         }

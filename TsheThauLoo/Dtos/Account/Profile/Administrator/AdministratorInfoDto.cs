@@ -1,11 +1,15 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace TsheThauLoo.Dtos.Account.Profile
+namespace TsheThauLoo.Dtos.Account.Profile.Administrator
 {
-    public class AdministratorProfileDto : UserProfileDto
+    public class AdministratorInfoDto
     {
+        [JsonPropertyName("id")]
+        [Display(Name = "使用者識別碼")]
+        public string Id { get; set; }
+        
         [JsonPropertyName("administratorConfirmed")]
         [Display(Name = "管理員驗證")]
         public bool AdministratorConfirmed { get; set; }

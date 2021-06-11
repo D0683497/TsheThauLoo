@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IStudentProfile } from '../../../models/account/profile/student-profile.model';
 import { StudentService } from '../../../services/account/student/student.service';
 import { AccountService } from '../../../services/account/account.service';
 import { NotificationService } from '../../../services/notification/notification.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
+import { IStudentProfile } from '../../../models/account/profile/student/student-profile.model';
 
 @Component({
   selector: 'app-student-profile',

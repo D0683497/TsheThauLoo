@@ -1,5 +1,5 @@
 using AutoMapper;
-using TsheThauLoo.Dtos.Account.Profile;
+using TsheThauLoo.Dtos.Account.Profile.Employee;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 
@@ -79,6 +79,22 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Employee.Dept))
                 .ForPath(dest => dest.Unit,
                     opt => opt.MapFrom(src => src.Employee.Unit));
+
+            #endregion
+            
+            #region Employee 轉換成 EmployeeInfoDto
+
+            CreateMap<Employee, EmployeeInfoDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ApplicationUserId))
+                .ForMember(dest => dest.EmployeeConfirmed,
+                    opt => opt.MapFrom(src => src.EmployeeConfirmed))
+                .ForMember(dest => dest.NetworkId,
+                    opt => opt.MapFrom(src => src.NetworkId))
+                .ForMember(dest => dest.Dept,
+                    opt => opt.MapFrom(src => src.Dept))
+                .ForMember(dest => dest.Unit,
+                    opt => opt.MapFrom(src => src.Unit));
 
             #endregion
         }

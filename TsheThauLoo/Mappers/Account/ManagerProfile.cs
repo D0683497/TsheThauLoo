@@ -1,5 +1,5 @@
 using AutoMapper;
-using TsheThauLoo.Dtos.Account.Profile;
+using TsheThauLoo.Dtos.Account.Profile.Manager;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 
@@ -107,6 +107,28 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.ContactPhone))
                 .ForMember(dest => dest.ContactAddress,
                     opt => opt.MapFrom(src => src.ContactAddress));
+
+            #endregion
+            
+            #region Manager 轉換成 ManagerInfoDto
+
+            CreateMap<Manager, ManagerInfoDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ApplicationUserId))
+                .ForMember(dest => dest.ManagerConfirmed,
+                    opt => opt.MapFrom(src => src.ManagerConfirmed))
+                .ForMember(dest => dest.DivisionName,
+                    opt => opt.MapFrom(src => src.DivisionName))
+                .ForMember(dest => dest.JobTitle,
+                    opt => opt.MapFrom(src => src.JobTitle))
+                .ForMember(dest => dest.ContactEmail,
+                    opt => opt.MapFrom(src => src.ContactEmail))
+                .ForMember(dest => dest.ContactPhone,
+                    opt => opt.MapFrom(src => src.ContactPhone))
+                .ForMember(dest => dest.ContactAddress,
+                    opt => opt.MapFrom(src => src.ContactAddress))
+                .ForPath(dest => dest.Substitute,
+                    opt => opt.MapFrom(src => src.Substitute));
 
             #endregion
         }

@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace TsheThauLoo.Dtos.Account.Profile
+namespace TsheThauLoo.Dtos.Account.Profile.Manager
 {
-    public class ManagerProfileDto : UserProfileDto
+    public class SubstituteDto
     {
-        [JsonPropertyName("managerConfirmed")]
-        [Display(Name = "公司使用者驗證")]
-        public bool ManagerConfirmed { get; set; }
+        [JsonPropertyName("name")]
+        [Display(Name = "姓名")]
+        public string Name { get; set; }
         
         [JsonPropertyName("divisionName")]
         [Display(Name = "所屬部門/單位")]
@@ -28,9 +28,5 @@ namespace TsheThauLoo.Dtos.Account.Profile
         [JsonPropertyName("contactAddress")]
         [Display(Name = "聯絡用地址")]
         public string ContactAddress { get; set; }
-
-        [JsonPropertyName("substitute")]
-        [Display(Name = "職務代理人")]
-        public SubstituteDto Substitute { get; set; }
     }
 }

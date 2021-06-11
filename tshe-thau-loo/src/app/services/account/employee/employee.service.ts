@@ -3,7 +3,8 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IEmployeeRegister } from '../../../models/account/register/employee-register.model';
 import { Observable } from 'rxjs';
-import { IEmployeeProfile } from '../../../models/account/profile/employee-profile.model';
+import { IEmployeeProfile } from '../../../models/account/profile/employee/employee-profile.model';
+import { IEmployeeInfo } from '../../../models/account/profile/employee/employee-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,11 @@ export class EmployeeService {
   getProfile(): Observable<IEmployeeProfile> {
     const url = `${this.urlRoot}/account/employee/profile`;
     return this.http.get<IEmployeeProfile>(url, this.httpOptions);
+  }
+
+  getInfo(): Observable<IEmployeeInfo> {
+    const url = `${this.urlRoot}/account/employee/profile/info`;
+    return this.http.get<IEmployeeInfo>(url, this.httpOptions);
   }
 
 }

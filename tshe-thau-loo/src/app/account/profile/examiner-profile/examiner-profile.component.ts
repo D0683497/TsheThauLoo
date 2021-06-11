@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IExaminerProfile } from '../../../models/account/profile/examiner-profile.model';
 import { ExaminerService } from '../../../services/account/examiner/examiner.service';
 import { AccountService } from '../../../services/account/account.service';
 import { NotificationService } from '../../../services/notification/notification.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
+import { IExaminerProfile } from '../../../models/account/profile/examiner/examiner-profile.model';
 
 @Component({
   selector: 'app-examiner-profile',

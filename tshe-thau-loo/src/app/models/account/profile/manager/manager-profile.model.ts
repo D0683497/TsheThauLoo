@@ -1,4 +1,4 @@
-import { IUserProfile } from './user-profile.model';
+import { IUserProfile } from '../user-profile.model';
 import { ISubstitute } from './substitute.model';
 
 export interface IManagerProfile extends IUserProfile {

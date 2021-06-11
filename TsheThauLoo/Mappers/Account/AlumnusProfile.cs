@@ -1,5 +1,6 @@
 using AutoMapper;
-using TsheThauLoo.Dtos.Account.Profile;
+using TsheThauLoo.Dtos.Account.Profile.Administrator;
+using TsheThauLoo.Dtos.Account.Profile.Alumnus;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 
@@ -83,6 +84,24 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Alumnus.Department))
                 .ForPath(dest => dest.Class,
                     opt => opt.MapFrom(src => src.Alumnus.Class));
+
+            #endregion
+            
+            #region Alumnus 轉換成 AlumnusInfoDto
+
+            CreateMap<Alumnus, AlumnusInfoDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ApplicationUserId))
+                .ForMember(dest => dest.AlumnusConfirmed,
+                    opt => opt.MapFrom(src => src.AlumnusConfirmed))
+                .ForMember(dest => dest.DateOfGraduation,
+                    opt => opt.MapFrom(src => src.DateOfGraduation))
+                .ForMember(dest => dest.College,
+                    opt => opt.MapFrom(src => src.College))
+                .ForMember(dest => dest.Department,
+                    opt => opt.MapFrom(src => src.Department))
+                .ForMember(dest => dest.Class,
+                    opt => opt.MapFrom(src => src.Class));
 
             #endregion
         }

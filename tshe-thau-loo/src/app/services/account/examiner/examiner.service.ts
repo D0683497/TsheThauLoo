@@ -3,7 +3,8 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IExaminerRegister } from '../../../models/account/register/examiner-register.model';
 import { Observable } from 'rxjs';
-import { IExaminerProfile } from '../../../models/account/profile/examiner-profile.model';
+import { IExaminerProfile } from '../../../models/account/profile/examiner/examiner-profile.model';
+import { IExaminerInfo } from '../../../models/account/profile/examiner/examiner-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,11 @@ export class ExaminerService {
   getProfile(): Observable<IExaminerProfile> {
     const url = `${this.urlRoot}/account/examiner/profile`;
     return this.http.get<IExaminerProfile>(url, this.httpOptions);
+  }
+
+  getInfo(): Observable<IExaminerInfo> {
+    const url = `${this.urlRoot}/account/examiner/profile/info`;
+    return this.http.get<IExaminerInfo>(url, this.httpOptions);
   }
 
 }

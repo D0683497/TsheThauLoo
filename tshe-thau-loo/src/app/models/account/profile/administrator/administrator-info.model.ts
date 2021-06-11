@@ -1,7 +1,7 @@
-import { IUserProfile } from './user-profile.model';
 import { IResponsibility } from './responsibility.model';
 
-export interface IAdministratorProfile extends IUserProfile {
+export interface IAdministratorInfo {
+  id: string;
   administratorConfirmed: boolean;
   showAbout: boolean;
   networkId: string;

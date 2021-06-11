@@ -1,10 +1,14 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace TsheThauLoo.Dtos.Account.Profile
+namespace TsheThauLoo.Dtos.Account.Profile.Student
 {
-    public class StudentProfileDto : UserProfileDto
+    public class StudentInfoDto
     {
+        [JsonPropertyName("id")]
+        [Display(Name = "使用者識別碼")]
+        public string Id { get; set; }
+        
         [JsonPropertyName("studentConfirmed")]
         [Display(Name = "在校生驗證")]
         public bool StudentConfirmed { get; set; }

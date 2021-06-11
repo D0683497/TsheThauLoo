@@ -3,7 +3,8 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IAdministratorRegister } from '../../../models/account/register/administrator-register.model';
 import { Observable } from 'rxjs';
-import { IAdministratorProfile } from '../../../models/account/profile/administrator-profile.model';
+import { IAdministratorProfile } from '../../../models/account/profile/administrator/administrator-profile.model';
+import { IAdministratorInfo } from '../../../models/account/profile/administrator/administrator-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,11 @@ export class AdministratorService {
   getProfile(): Observable<IAdministratorProfile> {
     const url = `${this.urlRoot}/account/administrator/profile`;
     return this.http.get<IAdministratorProfile>(url, this.httpOptions);
+  }
+
+  getInfo(): Observable<IAdministratorInfo> {
+    const url = `${this.urlRoot}/account/administrator/profile/info`;
+    return this.http.get<IAdministratorInfo>(url, this.httpOptions);
   }
 
 

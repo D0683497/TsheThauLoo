@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { IAdministratorProfile } from '../../../models/account/profile/administrator-profile.model';
 import { BehaviorSubject } from 'rxjs';
 import { AdministratorService } from '../../../services/account/administrator/administrator.service';
 import { AccountService } from '../../../services/account/account.service';
@@ -7,6 +6,7 @@ import { NotificationService } from '../../../services/notification/notification
 import { Router } from '@angular/router';
 import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
 import { HttpErrorResponse } from '@angular/common/http';
+import { IAdministratorProfile } from '../../../models/account/profile/administrator/administrator-profile.model';
 
 @Component({
   selector: 'app-administrator-profile',

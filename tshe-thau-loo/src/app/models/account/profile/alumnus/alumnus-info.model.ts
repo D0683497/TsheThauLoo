@@ -1,6 +1,5 @@
-import { IUserProfile } from './user-profile.model';
-
-export interface IAlumnusProfile extends IUserProfile {
+export interface IAlumnusInfo {
+  id: string;
   alumnusConfirmed: boolean;
   dateOfGraduation: string;
   college: string;

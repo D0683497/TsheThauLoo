@@ -13,7 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using TsheThauLoo.Data;
-using TsheThauLoo.Dtos.Account.Profile;
+using TsheThauLoo.Dtos.Account.Profile.Administrator;
+using TsheThauLoo.Dtos.Account.Profile.Alumnus;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
@@ -171,6 +172,19 @@ namespace TsheThauLoo.Controllers.Account
                 .Include(x => x.Alumnus)
                 .SingleOrDefaultAsync(x => x.Id == userId);
             var dto = _mapper.Map<AlumnusProfileDto>(entity);
+            return Ok(dto);
+        }
+        
+        [AuthAuthorize(Roles = "Alumnus")]
+        [HttpGet("profile/info", Name = nameof(AlumnusInfo))]
+        public async Task<ActionResult<AlumnusInfoDto>> AlumnusInfo()
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.Alumni
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+            var dto = _mapper.Map<AlumnusInfoDto>(entity);
             return Ok(dto);
         }
     }
