@@ -28,6 +28,12 @@ namespace TsheThauLoo.Services
 
         public async Task SendLinkEmailAsync(MessageImportance importance, string name, string email, string subject, string body1, string link, string buttonText, string body2)
         {
+            if (_environment.IsDevelopment())
+            {
+                _logger.LogInformation($"{name} - {email} - {link}");
+                return;
+            }
+            
             var message = new MimeMessage();
             message.Importance = importance;
             message.From.Add(new MailboxAddress(_configuration["MailSettings:SenderName"], _configuration["MailSettings:SenderEmail"]));
