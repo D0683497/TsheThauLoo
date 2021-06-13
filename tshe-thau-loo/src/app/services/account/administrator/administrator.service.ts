@@ -5,6 +5,7 @@ import { IAdministratorRegister } from '../../../models/account/register/adminis
 import { Observable } from 'rxjs';
 import { IAdministratorProfile } from '../../../models/account/profile/administrator/administrator-profile.model';
 import { IAdministratorInfo } from '../../../models/account/profile/administrator/administrator-info.model';
+import { IAdministratorEditInfo } from '../../../models/account/profile/administrator/administrator-edit-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,9 @@ export class AdministratorService {
     return this.http.get<IAdministratorInfo>(url, this.httpOptions);
   }
 
+  editInfo(data: IAdministratorEditInfo): Observable<IAdministratorInfo> {
+    const url = `${this.urlRoot}/account/administrator/profile/info`;
+    return this.http.post<IAdministratorInfo>(url, data, this.httpOptions);
+  }
 
 }

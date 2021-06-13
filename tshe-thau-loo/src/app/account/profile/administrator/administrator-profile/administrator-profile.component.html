@@ -174,10 +174,10 @@
             </ion-item>
           </ion-item-group>
         </ion-card-content>
-        <ion-button routerLink="/account/profile/administrator/info" class="ion-margin" shape="round" expand="block">編輯</ion-button>
+        <ion-button *ngIf="profile.administratorConfirmed" routerLink="/account/profile/administrator/info" class="ion-margin" shape="round" expand="block">編輯</ion-button>
         <div class="ion-text-center ion-margin">
-          <ion-badge [color]="profile.showAbout ? 'warning' : 'medium'">
-            {{profile.showAbout ? '卡片資訊將會顯示於關於我頁面' : '卡片資訊將不會顯示於關於我頁面'}}
+          <ion-badge [color]="profile.showAbout && profile.administratorConfirmed ? 'warning' : 'medium'">
+            {{profile.showAbout && profile.administratorConfirmed ? '卡片資訊將會顯示於關於我們頁面' : '卡片資訊將不會顯示於關於我們頁面'}}
           </ion-badge>
         </div>
       </ion-card>

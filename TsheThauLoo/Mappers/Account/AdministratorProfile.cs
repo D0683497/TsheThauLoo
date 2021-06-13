@@ -133,6 +133,26 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Responsibilities));
 
             #endregion
+            
+            #region AdministratorEditInfoDto 轉換成 Administrator
+
+            CreateMap<AdministratorEditInfoDto, Administrator>()
+                .ForMember(dest => dest.ShowAbout,
+                    opt => opt.MapFrom(src => src.ShowAbout))
+                .ForMember(dest => dest.NetworkId,
+                    opt => opt.MapFrom(src => src.NetworkId.ToUpper()))
+                .ForMember(dest => dest.Dept,
+                    opt => opt.MapFrom(src => src.Dept))
+                .ForMember(dest => dest.Unit,
+                    opt => opt.MapFrom(src => src.Unit))
+                .ForMember(dest => dest.JobTitle,
+                    opt => opt.MapFrom(src => src.JobTitle))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension))
+                .ForMember(dest => dest.ContactEmail,
+                    opt => opt.MapFrom(src => src.ContactEmail));
+
+            #endregion
         }
     }
 }
