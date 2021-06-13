@@ -13,6 +13,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ServerErrorInterceptor } from './interceptors/server-error.interceptor';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { AuthService } from './services/auth/auth.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,7 +35,8 @@ import { IonicStorageModule } from '@ionic/storage-angular';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(library: FaIconLibrary) {
+  constructor(private library: FaIconLibrary, private authService: AuthService) {
     library.addIconPacks(fas, far, fab);
+    this.authService.init();
   }
 }

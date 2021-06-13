@@ -25,7 +25,7 @@ export class AccountService {
     const url = `${this.urlRoot}/account/login`;
     return this.http.post<ILoginResponse>(url, data, this.httpOptions).pipe(
       map((result) => {
-        this.authService.setLoginStatus(result.accessToken).then();
+        this.authService.setLoginStatus(result.accessToken);
       })
     );
   }
