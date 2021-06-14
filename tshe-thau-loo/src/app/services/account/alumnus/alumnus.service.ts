@@ -5,6 +5,7 @@ import { IAlumnusRegister } from '../../../models/account/register/alumnus-regis
 import { Observable } from 'rxjs';
 import { IAlumnusProfile } from '../../../models/account/profile/alumnus/alumnus-profile.model';
 import { IAlumnusInfo } from '../../../models/account/profile/alumnus/alumnus-info.model';
+import { IAlumnusEditInfo } from '../../../models/account/profile/alumnus/alumnus-edit-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,11 @@ export class AlumnusService {
   getInfo(): Observable<IAlumnusInfo> {
     const url = `${this.urlRoot}/account/alumnus/profile/info`;
     return this.http.get<IAlumnusInfo>(url, this.httpOptions);
+  }
+
+  editInfo(data: IAlumnusEditInfo): Observable<IAlumnusInfo> {
+    const url = `${this.urlRoot}/account/alumnus/profile/info`;
+    return this.http.post<IAlumnusInfo>(url, data, this.httpOptions);
   }
 
 }

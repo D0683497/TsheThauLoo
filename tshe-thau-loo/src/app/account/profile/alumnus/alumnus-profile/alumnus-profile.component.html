@@ -33,7 +33,9 @@
               <ion-label>使用者名稱</ion-label>
             </ion-item-divider>
             <ion-item lines="none" routerLink="/account/username" detail>
-              <ion-label class="ion-text-wrap like-link">{{profile.userName}}</ion-label>
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">{{profile.userName}}</ion-text>
+              </ion-label>
             </ion-item>
             <ion-item-divider>
               <ion-label>電子郵件</ion-label>
@@ -42,7 +44,9 @@
               </ion-badge>
             </ion-item-divider>
             <ion-item lines="none" routerLink="/account/email" detail>
-              <ion-label class="ion-text-wrap like-link">{{profile.email}}</ion-label>
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">{{profile.email}}</ion-text>
+              </ion-label>
             </ion-item>
             <ion-item-divider>
               <ion-label>手機號碼</ion-label>
@@ -51,10 +55,14 @@
               </ion-badge>
             </ion-item-divider>
             <ion-item lines="full" routerLink="/account/phone" detail>
-              <ion-label class="ion-text-wrap like-link">{{profile.phoneNumber}}</ion-label>
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">{{profile.phoneNumber}}</ion-text>
+              </ion-label>
             </ion-item>
             <ion-item lines="none" routerLink="/account/password" detail>
-              <ion-label class="ion-text-wrap like-link">修改密碼</ion-label>
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">修改密碼</ion-text>
+              </ion-label>
             </ion-item>
           </ion-item-group>
         </ion-card-content>

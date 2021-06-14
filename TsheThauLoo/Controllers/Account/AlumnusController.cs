@@ -19,6 +19,7 @@ using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
+using TsheThauLoo.Validator.Account.Profile;
 using TsheThauLoo.Validator.Account.Register;
 
 namespace TsheThauLoo.Controllers.Account
@@ -186,6 +187,31 @@ namespace TsheThauLoo.Controllers.Account
                 .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
             var dto = _mapper.Map<AlumnusInfoDto>(entity);
             return Ok(dto);
+        }
+        
+        [AuthAuthorize(Roles = "Alumnus")]
+        [HttpPost("profile/info", Name = nameof(AlumnusEditInfo))]
+        public async Task<ActionResult<AlumnusInfoDto>> AlumnusEditInfo([FromBody] AlumnusEditInfoDto dto)
+        {
+            AlumnusEditInfoDtoValidator validator = new AlumnusEditInfoDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var entity = await _dbContext.Alumni
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                if (entity.AlumnusConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "校友已驗證", statusCode: 403);
+                }
+                var updateEntity = _mapper.Map(dto, entity);
+                _dbContext.Alumni.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var returnDto = _mapper.Map<AlumnusInfoDto>(updateEntity);
+                return CreatedAtAction(nameof(AlumnusInfo), null, returnDto);
+            }
+            return BadRequest(result.Errors);
         }
     }
 }

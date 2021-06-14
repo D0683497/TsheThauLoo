@@ -10,13 +10,14 @@ import { StudentRegisterComponent } from './register/student-register/student-re
 import { LoginComponent } from './login/login/login.component';
 import { AccountRedirectGuard } from '../guards/account-redirect/account-redirect.guard';
 import { RequiredLoginGuard } from '../guards/required-login/required-login.guard';
-import { AlumnusProfileComponent } from './profile/alumnus-profile/alumnus-profile.component';
 import { EmployeeProfileComponent } from './profile/employee-profile/employee-profile.component';
 import { ExaminerProfileComponent } from './profile/examiner-profile/examiner-profile.component';
 import { ManagerProfileComponent } from './profile/manager-profile/manager-profile.component';
 import { StudentProfileComponent } from './profile/student-profile/student-profile.component';
 import { AdministratorProfileComponent } from './profile/administrator/administrator-profile/administrator-profile.component';
 import { AdministratorEditProfileComponent } from './profile/administrator/administrator-edit-profile/administrator-edit-profile.component';
+import { AlumnusProfileComponent } from './profile/alumnus/alumnus-profile/alumnus-profile.component';
+import { AlumnusEditProfileComponent } from './profile/alumnus/alumnus-edit-profile/alumnus-edit-profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -42,7 +43,13 @@ const routes: Routes = [
           { path: 'info', component: AdministratorEditProfileComponent, pathMatch: 'full' }
         ]
       },
-      { path: 'alumnus', component: AlumnusProfileComponent, pathMatch: 'full' },
+      {
+        path: 'alumnus',
+        children: [
+          { path: '', component: AlumnusProfileComponent, pathMatch: 'full' },
+          { path: 'info', component: AlumnusEditProfileComponent, pathMatch: 'full' }
+        ]
+      },
       { path: 'employee', component: EmployeeProfileComponent, pathMatch: 'full' },
       { path: 'examiner', component: ExaminerProfileComponent, pathMatch: 'full' },
       { path: 'manager', component: ManagerProfileComponent, pathMatch: 'full' },

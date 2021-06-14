@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { IAlumnusProfile } from '../../../../models/account/profile/alumnus/alumnus-profile.model';
 import { BehaviorSubject } from 'rxjs';
-import { AlumnusService } from '../../../services/account/alumnus/alumnus.service';
-import { AccountService } from '../../../services/account/account.service';
-import { NotificationService } from '../../../services/notification/notification.service';
+import { AlumnusService } from '../../../../services/account/alumnus/alumnus.service';
+import { AccountService } from '../../../../services/account/account.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
-import { IAlumnusProfile } from '../../../models/account/profile/alumnus/alumnus-profile.model';
+import { SweetAlertIcon } from '../../../../enums/sweet-alert-icon.enum';
 
 @Component({
   selector: 'app-alumnus-profile',

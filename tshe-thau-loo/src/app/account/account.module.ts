@@ -13,13 +13,14 @@ import { ExaminerRegisterComponent } from './register/examiner-register/examiner
 import { ManagerRegisterComponent } from './register/manager-register/manager-register.component';
 import { StudentRegisterComponent } from './register/student-register/student-register.component';
 import { LoginComponent } from './login/login/login.component';
-import { AlumnusProfileComponent } from './profile/alumnus-profile/alumnus-profile.component';
 import { EmployeeProfileComponent } from './profile/employee-profile/employee-profile.component';
 import { ExaminerProfileComponent } from './profile/examiner-profile/examiner-profile.component';
 import { ManagerProfileComponent } from './profile/manager-profile/manager-profile.component';
 import { StudentProfileComponent } from './profile/student-profile/student-profile.component';
 import { AdministratorProfileComponent } from './profile/administrator/administrator-profile/administrator-profile.component';
 import { AdministratorEditProfileComponent } from './profile/administrator/administrator-edit-profile/administrator-edit-profile.component';
+import { AlumnusProfileComponent } from './profile/alumnus/alumnus-profile/alumnus-profile.component';
+import { AlumnusEditProfileComponent } from './profile/alumnus/alumnus-edit-profile/alumnus-edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { AdministratorEditProfileComponent } from './profile/administrator/admin
     AdministratorProfileComponent,
     AdministratorEditProfileComponent,
     AlumnusProfileComponent,
+    AlumnusEditProfileComponent,
     EmployeeProfileComponent,
     ExaminerProfileComponent,
     ManagerProfileComponent,
