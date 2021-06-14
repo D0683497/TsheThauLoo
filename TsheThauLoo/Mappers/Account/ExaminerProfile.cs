@@ -91,6 +91,16 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.JobTitle));
 
             #endregion
+            
+            #region ExaminerEditInfoDto 轉換成 Examiner
+
+            CreateMap<ExaminerEditInfoDto, Examiner>()
+                .ForMember(dest => dest.DivisionName,
+                    opt => opt.MapFrom(src => src.DivisionName))
+                .ForMember(dest => dest.JobTitle,
+                    opt => opt.MapFrom(src => src.JobTitle));
+
+            #endregion
         }
     }
 }

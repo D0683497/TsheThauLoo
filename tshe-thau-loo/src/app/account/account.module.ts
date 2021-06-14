@@ -13,7 +13,6 @@ import { ExaminerRegisterComponent } from './register/examiner-register/examiner
 import { ManagerRegisterComponent } from './register/manager-register/manager-register.component';
 import { StudentRegisterComponent } from './register/student-register/student-register.component';
 import { LoginComponent } from './login/login/login.component';
-import { ExaminerProfileComponent } from './profile/examiner-profile/examiner-profile.component';
 import { ManagerProfileComponent } from './profile/manager-profile/manager-profile.component';
 import { StudentProfileComponent } from './profile/student-profile/student-profile.component';
 import { AdministratorProfileComponent } from './profile/administrator/administrator-profile/administrator-profile.component';
@@ -22,6 +21,8 @@ import { AlumnusProfileComponent } from './profile/alumnus/alumnus-profile/alumn
 import { AlumnusEditProfileComponent } from './profile/alumnus/alumnus-edit-profile/alumnus-edit-profile.component';
 import { EmployeeProfileComponent } from './profile/employee/employee-profile/employee-profile.component';
 import { EmployeeEditProfileComponent } from './profile/employee/employee-edit-profile/employee-edit-profile.component';
+import { ExaminerProfileComponent } from './profile/examiner/examiner-profile/examiner-profile.component';
+import { ExaminerEditProfileComponent } from './profile/examiner/examiner-edit-profile/examiner-edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { EmployeeEditProfileComponent } from './profile/employee/employee-edit-p
     EmployeeProfileComponent,
     EmployeeEditProfileComponent,
     ExaminerProfileComponent,
+    ExaminerEditProfileComponent,
     ManagerProfileComponent,
     StudentProfileComponent
   ],
