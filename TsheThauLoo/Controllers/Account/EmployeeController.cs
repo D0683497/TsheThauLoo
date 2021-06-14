@@ -211,6 +211,20 @@ namespace TsheThauLoo.Controllers.Account
                 {
                     return Problem(title: "禁止修改", detail: "教職員工已驗證", statusCode: 403);
                 }
+
+                #region 驗證重複
+
+                if (entity.NetworkId != dto.NetworkId && !string.IsNullOrEmpty(dto.NetworkId))
+                {
+                    if (await _userManager.Users.AnyAsync(x => x.Employee.NetworkId == dto.NetworkId.ToUpper()))
+                    {
+                        result.Errors.Add(new ValidationFailure("networkId", "證號已經被使用"));
+                        return BadRequest(result.Errors);
+                    }
+                }
+
+                #endregion
+                
                 var updateEntity = _mapper.Map(dto, entity);
                 _dbContext.Employees.Update(updateEntity);
                 await _dbContext.SaveChangesAsync();
