@@ -23,8 +23,8 @@ export class ModalService {
       swipeToClose: true
     });
     await this.modal.present();
-    const { data } = await this.modal.onDidDismiss();
-    return data.agree;
+    const { data } = await this.modal.onDidDismiss<boolean>();
+    return data;
   }
 
   async createAdministratorResponsibility(): Promise<IAdministratorInfo> {
