@@ -181,41 +181,41 @@
               <ion-label>姓名</ion-label>
             </ion-item-divider>
             <ion-item lines="none">
-              <ion-label class="ion-text-wrap">{{profile.name}}</ion-label>
+              <ion-label class="ion-text-wrap">{{profile.substitute.name}}</ion-label>
             </ion-item>
             <ion-item-divider>
               <ion-label>所屬部門/單位</ion-label>
             </ion-item-divider>
             <ion-item lines="none">
-              <ion-label class="ion-text-wrap">{{profile.divisionName}}</ion-label>
+              <ion-label class="ion-text-wrap">{{profile.substitute.divisionName}}</ion-label>
             </ion-item>
             <ion-item-divider>
               <ion-label>職稱</ion-label>
             </ion-item-divider>
             <ion-item lines="none">
-              <ion-label class="ion-text-wrap">{{profile.jobTitle}}</ion-label>
+              <ion-label class="ion-text-wrap">{{profile.substitute.jobTitle}}</ion-label>
             </ion-item>
             <ion-item-divider>
               <ion-label>聯絡用電子郵件</ion-label>
             </ion-item-divider>
             <ion-item lines="none">
-              <ion-label class="ion-text-wrap">{{profile.contactEmail}}</ion-label>
+              <ion-label class="ion-text-wrap">{{profile.substitute.contactEmail}}</ion-label>
             </ion-item>
             <ion-item-divider>
               <ion-label>聯絡用電話號碼</ion-label>
             </ion-item-divider>
             <ion-item lines="none">
-              <ion-label class="ion-text-wrap">{{profile.contactPhone}}</ion-label>
+              <ion-label class="ion-text-wrap">{{profile.substitute.contactPhone}}</ion-label>
             </ion-item>
             <ion-item-divider>
               <ion-label>聯絡用地址</ion-label>
             </ion-item-divider>
             <ion-item lines="none">
-              <ion-label class="ion-text-wrap">{{profile.contactAddress}}</ion-label>
+              <ion-label class="ion-text-wrap">{{profile.substitute.contactAddress}}</ion-label>
             </ion-item>
           </ion-item-group>
         </ion-card-content>
-        <ion-button class="ion-margin" routerLink="/account/profile/manager/info" shape="round" expand="block">編輯</ion-button>
+        <ion-button *ngIf="!profile.managerConfirmed" class="ion-margin" routerLink="/account/profile/manager/substitute" shape="round" expand="block">編輯</ion-button>
       </ion-card>
     </ng-container>
     <ng-template #error>

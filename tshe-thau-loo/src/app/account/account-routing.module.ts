@@ -24,6 +24,7 @@ import { StudentProfileComponent } from './profile/student/student-profile/stude
 import { StudentEditProfileComponent } from './profile/student/student-edit-profile/student-edit-profile.component';
 // eslint-disable-next-line max-len
 import { AdministratorResponsibilityComponent } from './profile/administrator/administrator-responsibility/administrator-responsibility.component';
+import { ManagerSubstituteComponent } from './profile/manager/manager-substitute/manager-substitute.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -75,7 +76,8 @@ const routes: Routes = [
         path: 'manager',
         children: [
           { path: '', component: ManagerProfileComponent, pathMatch: 'full' },
-          { path: 'info', component: ManagerEditProfileComponent, pathMatch: 'full' }
+          { path: 'info', component: ManagerEditProfileComponent, pathMatch: 'full' },
+          { path: 'substitute', component: ManagerSubstituteComponent, pathMatch: 'full' }
         ]
       },
       {

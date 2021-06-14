@@ -201,6 +201,7 @@ namespace TsheThauLoo.Controllers.Account
                 var userId = User.Claims
                     .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
                 var entity = await _dbContext.Managers
+                    .Include(x => x.Substitute)
                     .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
                 if (entity.ManagerConfirmed)
                 {
@@ -210,6 +211,32 @@ namespace TsheThauLoo.Controllers.Account
                 _dbContext.Managers.Update(updateEntity);
                 await _dbContext.SaveChangesAsync();
                 var returnDto = _mapper.Map<ManagerInfoDto>(updateEntity);
+                return CreatedAtAction(nameof(ManagerInfo), null, returnDto);
+            }
+            return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [HttpPost("profile/info/substitute", Name = nameof(ManagerEditSubstitute))]
+        public async Task<ActionResult<ManagerInfoDto>> ManagerEditSubstitute([FromBody] SubstituteEditDto dto)
+        {
+            SubstituteEditDtoValidator validator = new SubstituteEditDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var manager = await _dbContext.Managers
+                    .Include(x => x.Substitute)
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                if (manager.ManagerConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "企業使用者已驗證", statusCode: 403);
+                }
+                var updateEntity = _mapper.Map(dto, manager.Substitute);
+                _dbContext.Substitutes.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var returnDto = _mapper.Map<ManagerInfoDto>(manager);
                 return CreatedAtAction(nameof(ManagerInfo), null, returnDto);
             }
             return BadRequest(result.Errors);

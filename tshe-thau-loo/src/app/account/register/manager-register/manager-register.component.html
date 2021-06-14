@@ -294,6 +294,113 @@
           {{ registerForm.controls['contactAddress'].getError('server') }}
         </ion-text>
       </div>
+      <ion-list-header>
+        <ion-label color="tertiary">職務代理人資料</ion-label>
+      </ion-list-header>
+      <ng-container formGroupName="substitute">
+        <!-- substitute name -->
+        <ion-item>
+          <ion-label position="stacked"><ion-text color="danger">*</ion-text>姓名</ion-label>
+          <ion-input formControlName="name" type="text" inputmode="text" autocomplete="name" placeholder="姓名" required></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.name').hasError('required') && (registerForm.get('substitute.name').dirty || registerForm.get('substitute.name').touched)">
+            姓名是<strong>必填的</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.name').hasError('maxlength') && (registerForm.get('substitute.name').dirty || registerForm.get('substitute.name').touched)">
+            姓名<strong>最50位</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.name').hasError('server') && (registerForm.get('substitute.name').dirty || registerForm.get('substitute.name').touched)">
+            {{ registerForm.get('substitute.name').getError('server') }}
+          </ion-text>
+        </div>
+        <!-- substitute divisionName -->
+        <ion-item>
+          <ion-label position="stacked"><ion-text color="danger">*</ion-text>所屬部門/單位</ion-label>
+          <ion-input formControlName="divisionName" type="text" inputmode="text" placeholder="所屬部門/單位" required></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.divisionName').hasError('required') && (registerForm.get('substitute.divisionName').dirty || registerForm.get('substitute.divisionName').touched)">
+            所屬部門/單位是<strong>必填的</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.divisionName').hasError('maxlength') && (registerForm.get('substitute.divisionName').dirty || registerForm.get('substitute.divisionName').touched)">
+            所屬部門/單位<strong>最多30位</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.divisionName').hasError('server') && (registerForm.get('substitute.divisionName').dirty || registerForm.get('substitute.divisionName').touched)">
+            {{ registerForm.get('substitute.divisionName').getError('server') }}
+          </ion-text>
+        </div>
+        <!-- substitute jobTitle -->
+        <ion-item>
+          <ion-label position="stacked"><ion-text color="danger">*</ion-text>職稱</ion-label>
+          <ion-input formControlName="jobTitle" type="text" inputmode="text" placeholder="職稱" required></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.jobTitle').hasError('required') && (registerForm.get('substitute.jobTitle').dirty || registerForm.get('substitute.jobTitle').touched)">
+            職稱是<strong>必填的</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.jobTitle').hasError('maxlength') && (registerForm.get('substitute.jobTitle').dirty || registerForm.get('substitute.jobTitle').touched)">
+            職稱<strong>最多30位</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.jobTitle').hasError('server') && (registerForm.get('substitute.jobTitle').dirty || registerForm.get('substitute.jobTitle').touched)">
+            {{ registerForm.get('substitute.jobTitle').getError('server') }}
+          </ion-text>
+        </div>
+        <!-- substitute contactEmail -->
+        <ion-item>
+          <ion-label position="stacked"><ion-text color="danger">*</ion-text>聯絡用電子郵件</ion-label>
+          <ion-input formControlName="contactEmail" type="email" inputmode="email" autocomplete="email" placeholder="聯絡用電子郵件" required></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactEmail').hasError('required') && (registerForm.get('substitute.contactEmail').dirty || registerForm.get('substitute.contactEmail').touched)">
+            聯絡用電子郵件是<strong>必填的</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactEmail').hasError('email') && (registerForm.get('substitute.contactEmail').dirty || registerForm.get('substitute.contactEmail').touched)">
+            聯絡用電子郵件<strong>格式錯誤</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactEmail').hasError('maxlength') && (registerForm.get('substitute.contactEmail').dirty || registerForm.get('substitute.contactEmail').touched)">
+            聯絡用電子郵件<strong>最多320位</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactEmail').hasError('server') && (registerForm.get('substitute.contactEmail').dirty || registerForm.get('substitute.contactEmail').touched)">
+            {{ registerForm.get('substitute.contactEmail').getError('server') }}
+          </ion-text>
+        </div>
+        <!-- substitute contactPhone -->
+        <ion-item>
+          <ion-label position="stacked"><ion-text color="danger">*</ion-text>聯絡用電話號碼</ion-label>
+          <ion-input formControlName="contactPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="聯絡用電話號碼" required></ion-input>
+        </ion-item>
+        <div class="validation-errors">
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactPhone').hasError('required') && (registerForm.get('substitute.contactPhone').dirty || registerForm.get('substitute.contactPhone').touched)">
+            聯絡用電話號碼是<strong>必填的</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactPhone').hasError('phone') && (registerForm.get('substitute.contactPhone').dirty || registerForm.get('substitute.contactPhone').touched)">
+            聯絡用電話號碼<strong>格式錯誤</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactPhone').hasError('maxlength') && (registerForm.get('substitute.contactPhone').dirty || registerForm.get('substitute.contactPhone').touched)">
+            聯絡用電話號碼<strong>最多30位</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactPhone').hasError('server') && (registerForm.get('substitute.contactPhone').dirty || registerForm.get('substitute.contactPhone').touched)">
+            {{ registerForm.get('substitute.contactPhone').getError('server') }}
+          </ion-text>
+        </div>
+        <!-- substitute contactAddress -->
+        <ion-item>
+          <ion-label position="stacked"><ion-text color="danger">*</ion-text>聯絡用地址</ion-label>
+          <ion-textarea formControlName="contactAddress" auto-grow="true" inputmode="text" placeholder="聯絡用地址" required></ion-textarea>
+        </ion-item>
+        <div class="validation-errors">
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactAddress').hasError('required') && (registerForm.get('substitute.contactAddress').dirty || registerForm.get('substitute.contactAddress').touched)">
+            聯絡用地址是<strong>必填的</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactAddress').hasError('maxlength') && (registerForm.get('substitute.contactAddress').dirty || registerForm.get('substitute.contactAddress').touched)">
+            聯絡用地址<strong>最多200位</strong>
+          </ion-text>
+          <ion-text color="danger" class="error-message" *ngIf="registerForm.get('substitute.contactAddress').hasError('server') && (registerForm.get('substitute.contactAddress').dirty || registerForm.get('substitute.contactAddress').touched)">
+            {{ registerForm.get('substitute.contactAddress').getError('server') }}
+          </ion-text>
+        </div>
+      </ng-container>
     </ion-list>
     <ion-button class="ion-margin" [disabled]="registerForm.invalid" type="submit" shape="round" expand="block">註冊</ion-button>
   </form>

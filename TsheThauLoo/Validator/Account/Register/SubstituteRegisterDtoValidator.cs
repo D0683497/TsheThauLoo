@@ -1,15 +1,23 @@
-using FluentValidation;
+﻿using FluentValidation;
 using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Utilities;
 
 namespace TsheThauLoo.Validator.Account.Register
 {
-    public class ManagerRegisterDtoValidator : AbstractValidator<ManagerRegisterDto>
+    public class SubstituteRegisterDtoValidator : AbstractValidator<SubstituteRegisterDto>
     {
-        public ManagerRegisterDtoValidator()
+        public SubstituteRegisterDtoValidator()
         {
-            Include(new UserRegisterDtoValidator());
-            
+            RuleFor(x => x.Name)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                .WithName("姓名")
+                .WithMessage("{PropertyName}是必填的")
+                .OverridePropertyName("name")
+                .MaximumLength(50)
+                .WithName("姓名")
+                .WithMessage("{PropertyName}最多{MaxLength}")
+                .OverridePropertyName("name");
             RuleFor(x => x.DivisionName)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
@@ -60,18 +68,10 @@ namespace TsheThauLoo.Validator.Account.Register
                 .OverridePropertyName("contactPhone");
             RuleFor(x => x.ContactAddress)
                 .Cascade(CascadeMode.Stop)
-                .NotEmpty()
-                .WithName("聯絡用地址")
-                .WithMessage("{PropertyName}是必填的")
-                .OverridePropertyName("contactAddress")
                 .MaximumLength(200)
                 .WithName("聯絡用地址")
                 .WithMessage("{PropertyName}最多{MaxLength}")
                 .OverridePropertyName("contactAddress");
-            RuleFor(x => x.Substitute)
-                .SetValidator(new SubstituteRegisterDtoValidator())
-                .WithName("職務代理人")
-                .OverridePropertyName("substitute");
         }
     }
 }

@@ -31,6 +31,7 @@ import { AdministratorResponsibilityComponent } from './profile/administrator/ad
 import { AdministratorEditResponsibilityComponent } from './profile/administrator/administrator-edit-responsibility/administrator-edit-responsibility.component';
 // eslint-disable-next-line max-len
 import { AdministratorCreateResponsibilityComponent } from './profile/administrator/administrator-create-responsibility/administrator-create-responsibility.component';
+import { ManagerSubstituteComponent } from './profile/manager/manager-substitute/manager-substitute.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { AdministratorCreateResponsibilityComponent } from './profile/administra
     StudentEditProfileComponent,
     AdministratorResponsibilityComponent,
     AdministratorEditResponsibilityComponent,
-    AdministratorCreateResponsibilityComponent
+    AdministratorCreateResponsibilityComponent,
+    ManagerSubstituteComponent
   ],
   imports: [
     CommonModule,
