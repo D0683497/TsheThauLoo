@@ -104,6 +104,20 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Class));
             
             #endregion
+            
+            #region StudentEditInfoDto 轉換成 Student
+
+            CreateMap<StudentEditInfoDto, Student>()
+                .ForMember(dest => dest.NetworkId,
+                    opt => opt.MapFrom(src => src.NetworkId.ToUpper()))
+                .ForMember(dest => dest.College,
+                    opt => opt.MapFrom(src => src.College))
+                .ForMember(dest => dest.Department,
+                    opt => opt.MapFrom(src => src.Department))
+                .ForMember(dest => dest.Class,
+                    opt => opt.MapFrom(src => src.Class));
+            
+            #endregion
         }
     }
 }

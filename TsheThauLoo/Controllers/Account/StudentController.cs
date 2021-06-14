@@ -18,6 +18,7 @@ using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
+using TsheThauLoo.Validator.Account.Profile;
 using TsheThauLoo.Validator.Account.Register;
 
 namespace TsheThauLoo.Controllers.Account
@@ -192,6 +193,45 @@ namespace TsheThauLoo.Controllers.Account
                 .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
             var dto = _mapper.Map<StudentInfoDto>(entity);
             return Ok(dto);
+        }
+        
+        [AuthAuthorize(Roles = "Student")]
+        [HttpPost("profile/info", Name = nameof(StudentEditInfo))]
+        public async Task<ActionResult<StudentInfoDto>> StudentEditInfo([FromBody] StudentEditInfoDto dto)
+        {
+            StudentEditInfoDtoValidator validator = new StudentEditInfoDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var entity = await _dbContext.Students
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                if (entity.StudentConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "在校生已驗證", statusCode: 403);
+                }
+
+                #region 驗證重複
+
+                if (entity.NetworkId != dto.NetworkId && !string.IsNullOrEmpty(dto.NetworkId))
+                {
+                    if (await _userManager.Users.AnyAsync(x => x.Student.NetworkId == dto.NetworkId.ToUpper()))
+                    {
+                        result.Errors.Add(new ValidationFailure("networkId", "證號已經被使用"));
+                        return BadRequest(result.Errors);
+                    }
+                }
+
+                #endregion
+                
+                var updateEntity = _mapper.Map(dto, entity);
+                _dbContext.Students.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var returnDto = _mapper.Map<StudentInfoDto>(updateEntity);
+                return CreatedAtAction(nameof(StudentInfo), null, returnDto);
+            }
+            return BadRequest(result.Errors);
         }
     }
 }

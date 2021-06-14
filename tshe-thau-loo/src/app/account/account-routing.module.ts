@@ -10,7 +10,6 @@ import { StudentRegisterComponent } from './register/student-register/student-re
 import { LoginComponent } from './login/login/login.component';
 import { AccountRedirectGuard } from '../guards/account-redirect/account-redirect.guard';
 import { RequiredLoginGuard } from '../guards/required-login/required-login.guard';
-import { StudentProfileComponent } from './profile/student-profile/student-profile.component';
 import { AdministratorProfileComponent } from './profile/administrator/administrator-profile/administrator-profile.component';
 import { AdministratorEditProfileComponent } from './profile/administrator/administrator-edit-profile/administrator-edit-profile.component';
 import { AlumnusProfileComponent } from './profile/alumnus/alumnus-profile/alumnus-profile.component';
@@ -21,6 +20,8 @@ import { ExaminerProfileComponent } from './profile/examiner/examiner-profile/ex
 import { ExaminerEditProfileComponent } from './profile/examiner/examiner-edit-profile/examiner-edit-profile.component';
 import { ManagerProfileComponent } from './profile/manager/manager-profile/manager-profile.component';
 import { ManagerEditProfileComponent } from './profile/manager/manager-edit-profile/manager-edit-profile.component';
+import { StudentProfileComponent } from './profile/student/student-profile/student-profile.component';
+import { StudentEditProfileComponent } from './profile/student/student-edit-profile/student-edit-profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -74,7 +75,13 @@ const routes: Routes = [
           { path: 'info', component: ManagerEditProfileComponent, pathMatch: 'full' }
         ]
       },
-      { path: 'student', component: StudentProfileComponent, pathMatch: 'full' }
+      {
+        path: 'student',
+        children: [
+          { path: '', component: StudentProfileComponent, pathMatch: 'full' },
+          { path: 'info', component: StudentEditProfileComponent, pathMatch: 'full' }
+        ]
+      }
     ],
     canActivate: [RequiredLoginGuard]
   },

@@ -5,6 +5,7 @@ import { IStudentRegister } from '../../../models/account/register/student-regis
 import { Observable } from 'rxjs';
 import { IStudentProfile } from '../../../models/account/profile/student/student-profile.model';
 import { IStudentInfo } from '../../../models/account/profile/student/student-info.model';
+import { IStudentEditInfo } from '../../../models/account/profile/student/student-edit-info';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,11 @@ export class StudentService {
   getInfo(): Observable<IStudentInfo> {
     const url = `${this.urlRoot}/account/student/profile/info`;
     return this.http.get<IStudentInfo>(url, this.httpOptions);
+  }
+
+  editInfo(data: IStudentEditInfo): Observable<IStudentInfo> {
+    const url = `${this.urlRoot}/account/student/profile/info`;
+    return this.http.post<IStudentInfo>(url, data, this.httpOptions);
   }
 
 }

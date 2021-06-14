@@ -163,13 +163,13 @@
             </ion-item>
           </ion-item-group>
         </ion-card-content>
-        <ion-grid *ngIf="!profile.identityConfirmed">
+        <ion-grid *ngIf="!profile.studentConfirmed">
           <ion-row>
             <ion-col>
-              <ion-button routerLink="/account/profile/manager/verify" color="secondary" shape="round" expand="block">驗證</ion-button>
+              <ion-button routerLink="/account/profile/student/verify" color="secondary" shape="round" expand="block">驗證</ion-button>
             </ion-col>
             <ion-col>
-              <ion-button routerLink="/account/profile/manager/info" shape="round" expand="block">編輯</ion-button>
+              <ion-button routerLink="/account/profile/student/info" shape="round" expand="block">編輯</ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>

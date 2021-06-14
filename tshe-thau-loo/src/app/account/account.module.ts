@@ -13,7 +13,6 @@ import { ExaminerRegisterComponent } from './register/examiner-register/examiner
 import { ManagerRegisterComponent } from './register/manager-register/manager-register.component';
 import { StudentRegisterComponent } from './register/student-register/student-register.component';
 import { LoginComponent } from './login/login/login.component';
-import { StudentProfileComponent } from './profile/student-profile/student-profile.component';
 import { AdministratorProfileComponent } from './profile/administrator/administrator-profile/administrator-profile.component';
 import { AdministratorEditProfileComponent } from './profile/administrator/administrator-edit-profile/administrator-edit-profile.component';
 import { AlumnusProfileComponent } from './profile/alumnus/alumnus-profile/alumnus-profile.component';
@@ -24,6 +23,8 @@ import { ExaminerProfileComponent } from './profile/examiner/examiner-profile/ex
 import { ExaminerEditProfileComponent } from './profile/examiner/examiner-edit-profile/examiner-edit-profile.component';
 import { ManagerProfileComponent } from './profile/manager/manager-profile/manager-profile.component';
 import { ManagerEditProfileComponent } from './profile/manager/manager-edit-profile/manager-edit-profile.component';
+import { StudentProfileComponent } from './profile/student/student-profile/student-profile.component';
+import { StudentEditProfileComponent } from './profile/student/student-edit-profile/student-edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { ManagerEditProfileComponent } from './profile/manager/manager-edit-prof
     ExaminerEditProfileComponent,
     ManagerProfileComponent,
     ManagerEditProfileComponent,
-    StudentProfileComponent
+    StudentProfileComponent,
+    StudentEditProfileComponent
   ],
   imports: [
     CommonModule,
