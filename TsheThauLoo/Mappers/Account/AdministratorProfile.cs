@@ -153,6 +153,22 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.ContactEmail));
 
             #endregion
+
+            #region CreateResponsibilityDto 轉換成 Responsibility
+
+            CreateMap<CreateResponsibilityDto, Responsibility>()
+                .ForMember(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.Description));
+
+            #endregion
+
+            #region EditResponsibilityDto 轉換成 Responsibility
+
+            CreateMap<EditResponsibilityDto, Responsibility>()
+                .ForMember(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.Description));
+
+            #endregion
         }
     }
 }

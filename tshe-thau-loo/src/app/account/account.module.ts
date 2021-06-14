@@ -25,6 +25,12 @@ import { ManagerProfileComponent } from './profile/manager/manager-profile/manag
 import { ManagerEditProfileComponent } from './profile/manager/manager-edit-profile/manager-edit-profile.component';
 import { StudentProfileComponent } from './profile/student/student-profile/student-profile.component';
 import { StudentEditProfileComponent } from './profile/student/student-edit-profile/student-edit-profile.component';
+// eslint-disable-next-line max-len
+import { AdministratorResponsibilityComponent } from './profile/administrator/administrator-responsibility/administrator-responsibility.component';
+// eslint-disable-next-line max-len
+import { AdministratorEditResponsibilityComponent } from './profile/administrator/administrator-edit-responsibility/administrator-edit-responsibility.component';
+// eslint-disable-next-line max-len
+import { AdministratorCreateResponsibilityComponent } from './profile/administrator/administrator-create-responsibility/administrator-create-responsibility.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +54,10 @@ import { StudentEditProfileComponent } from './profile/student/student-edit-prof
     ManagerProfileComponent,
     ManagerEditProfileComponent,
     StudentProfileComponent,
-    StudentEditProfileComponent
+    StudentEditProfileComponent,
+    AdministratorResponsibilityComponent,
+    AdministratorEditResponsibilityComponent,
+    AdministratorCreateResponsibilityComponent
   ],
   imports: [
     CommonModule,

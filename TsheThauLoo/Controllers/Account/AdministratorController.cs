@@ -208,6 +208,7 @@ namespace TsheThauLoo.Controllers.Account
                 var userId = User.Claims
                     .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
                 var entity = await _dbContext.Administrators
+                    .Include(x => x.Responsibilities)
                     .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
                 if (!entity.AdministratorConfirmed)
                 {
@@ -234,6 +235,91 @@ namespace TsheThauLoo.Controllers.Account
                 return CreatedAtAction(nameof(AdministratorInfo), null, returnDto);
             }
             return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpPost("profile/info/responsibilities", Name = nameof(AdministratorCreateResponsibility))]
+        public async Task<ActionResult<AdministratorInfoDto>> AdministratorCreateResponsibility([FromBody] CreateResponsibilityDto dto)
+        {
+            CreateResponsibilityDtoValidator validator = new CreateResponsibilityDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var administrator = await _dbContext.Administrators
+                    .Include(x => x.Responsibilities)
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                if (!administrator.AdministratorConfirmed)
+                {
+                    return Problem(title: "禁止建立", detail: "管理員尚未驗證", statusCode: 403);
+                }
+                var entity = _mapper.Map<Responsibility>(dto);
+                administrator.Responsibilities.Add(entity);
+                _dbContext.Administrators.Update(administrator);
+                await _dbContext.SaveChangesAsync();
+                var returnDto = _mapper.Map<AdministratorInfoDto>(administrator);
+                return CreatedAtAction(nameof(AdministratorInfo), null, returnDto);
+            }
+            return BadRequest(result.Errors);
+        }
+
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpPost("profile/info/responsibilities/{responsibilityId}", Name = nameof(AdministratorEditResponsibility))]
+        public async Task<ActionResult<AdministratorInfoDto>> AdministratorEditResponsibility([FromRoute] string responsibilityId, [FromBody] EditResponsibilityDto dto)
+        {
+            EditResponsibilityDtoValidator validator = new EditResponsibilityDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var administrator = await _dbContext.Administrators
+                    .Include(x => x.Responsibilities)
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                var entity = administrator.Responsibilities
+                    .SingleOrDefault(x => x.ResponsibilityId == responsibilityId);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+                if (!administrator.AdministratorConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "管理員尚未驗證", statusCode: 403);
+                }
+                var updateEntity = _mapper.Map(dto, entity);
+                _dbContext.Responsibilities.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var returnDto = _mapper.Map<AdministratorInfoDto>(administrator);
+                return CreatedAtAction(nameof(AdministratorInfo), null, returnDto);
+                
+            }
+            return BadRequest(result.Errors);
+        }
+
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpDelete("profile/info/responsibilities/{responsibilityId}", Name = nameof(AdministratorDeleteResponsibility))]
+        public async Task<ActionResult<AdministratorInfoDto>> AdministratorDeleteResponsibility([FromRoute] string responsibilityId)
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var administrator = await _dbContext.Administrators
+                .Include(x => x.Responsibilities)
+                .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+            var entity = administrator.Responsibilities
+                .SingleOrDefault(x => x.ResponsibilityId == responsibilityId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            if (!administrator.AdministratorConfirmed)
+            {
+                return Problem(title: "禁止刪除", detail: "管理員尚未驗證", statusCode: 403);
+            }
+            _dbContext.Responsibilities.Remove(entity);
+            await _dbContext.SaveChangesAsync();
+            var returnDto = _mapper.Map<AdministratorInfoDto>(administrator);
+            return CreatedAtAction(nameof(AdministratorInfo), null, returnDto);
         }
     }
 }

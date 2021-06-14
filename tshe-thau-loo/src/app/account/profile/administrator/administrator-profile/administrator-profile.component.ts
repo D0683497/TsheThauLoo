@@ -7,6 +7,7 @@ import { NotificationService } from '../../../../services/notification/notificat
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SweetAlertIcon } from '../../../../enums/sweet-alert-icon.enum';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-administrator-profile',
@@ -25,7 +26,8 @@ export class AdministratorProfileComponent implements OnInit {
     private administratorService: AdministratorService,
     private accountService: AccountService,
     private notificationService: NotificationService,
-    private router: Router) { }
+    private router: Router,
+    private actionSheetController: ActionSheetController) { }
 
   ngOnInit(): void {}
 
@@ -58,5 +60,31 @@ export class AdministratorProfileComponent implements OnInit {
   }
 
   toggleNationalId = (): boolean => this.showNationalId = !this.showNationalId;
+
+  async editProfile(): Promise<void> {
+    const actionSheet = await this.actionSheetController.create({
+      header: '編輯',
+      buttons: [
+        {
+          text: '管理員資訊',
+          handler: () => {
+            this.router.navigate(['/account/profile/administrator/info']);
+          }
+        },
+        {
+          text: '負責業務',
+          handler: () => {
+            this.router.navigate(['/account/profile/administrator/responsibility']);
+          }
+        },
+        {
+          text: '取消',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
 
 }
