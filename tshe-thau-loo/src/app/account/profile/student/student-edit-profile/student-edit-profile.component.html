@@ -33,15 +33,15 @@
             <ion-input formControlName="networkId" type="text" inputmode="text" placeholder="學號" required></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['networkId'].hasError('required') && (editForm.controls['networkId'].dirty || editForm.controls['networkId'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['networkId'].hasError('required') && (editForm.controls['networkId'].dirty || editForm.controls['networkId'].touched)">
               學號是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['networkId'].hasError('maxlength') && (editForm.controls['networkId'].dirty || editForm.controls['networkId'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['networkId'].hasError('maxlength') && (editForm.controls['networkId'].dirty || editForm.controls['networkId'].touched)">
               學號<strong>最多10位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['networkId'].hasError('server') && (editForm.controls['networkId'].dirty || editForm.controls['networkId'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['networkId'].hasError('server') && (editForm.controls['networkId'].dirty || editForm.controls['networkId'].touched)">
               {{ editForm.controls['networkId'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
           <!-- college -->
           <ion-item>
@@ -49,15 +49,15 @@
             <ion-input formControlName="college" type="text" inputmode="text" placeholder="學院" required></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['college'].hasError('required') && (editForm.controls['college'].dirty || editForm.controls['college'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['college'].hasError('required') && (editForm.controls['college'].dirty || editForm.controls['college'].touched)">
               學院是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['college'].hasError('maxlength') && (editForm.controls['college'].dirty || editForm.controls['college'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['college'].hasError('maxlength') && (editForm.controls['college'].dirty || editForm.controls['college'].touched)">
               學院<strong>最多20位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['college'].hasError('server') && (editForm.controls['college'].dirty || editForm.controls['college'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['college'].hasError('server') && (editForm.controls['college'].dirty || editForm.controls['college'].touched)">
               {{ editForm.controls['college'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
           <!-- department -->
           <ion-item>
@@ -65,15 +65,15 @@
             <ion-input formControlName="department" type="text" inputmode="text" placeholder="系所" required></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['department'].hasError('required') && (editForm.controls['department'].dirty || editForm.controls['department'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['department'].hasError('required') && (editForm.controls['department'].dirty || editForm.controls['department'].touched)">
               系所是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['department'].hasError('maxlength') && (editForm.controls['department'].dirty || editForm.controls['department'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['department'].hasError('maxlength') && (editForm.controls['department'].dirty || editForm.controls['department'].touched)">
               系所<strong>最多20位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['department'].hasError('server') && (editForm.controls['department'].dirty || editForm.controls['department'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['department'].hasError('server') && (editForm.controls['department'].dirty || editForm.controls['department'].touched)">
               {{ editForm.controls['department'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
           <!-- class -->
           <ion-item>
@@ -81,15 +81,15 @@
             <ion-input formControlName="class" type="text" inputmode="text" placeholder="班級" required></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['class'].hasError('required') && (editForm.controls['class'].dirty || editForm.controls['class'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['class'].hasError('required') && (editForm.controls['class'].dirty || editForm.controls['class'].touched)">
               班級是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['class'].hasError('maxlength') && (editForm.controls['class'].dirty || editForm.controls['class'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['class'].hasError('maxlength') && (editForm.controls['class'].dirty || editForm.controls['class'].touched)">
               班級<strong>最多20位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['class'].hasError('server') && (editForm.controls['class'].dirty || editForm.controls['class'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['class'].hasError('server') && (editForm.controls['class'].dirty || editForm.controls['class'].touched)">
               {{ editForm.controls['class'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
         </ion-list>
         <ion-button class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>

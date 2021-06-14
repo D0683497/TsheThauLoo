@@ -33,15 +33,15 @@
             <ion-input formControlName="divisionName" type="text" inputmode="text" placeholder="所屬部門/單位" required></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['divisionName'].hasError('required') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['divisionName'].hasError('required') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
               所屬部門/單位是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['divisionName'].hasError('maxlength') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['divisionName'].hasError('maxlength') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
               所屬部門/單位<strong>最多30位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['divisionName'].hasError('server') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['divisionName'].hasError('server') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
               {{ editForm.controls['divisionName'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
           <!-- jobTitle -->
           <ion-item>
@@ -49,15 +49,15 @@
             <ion-input formControlName="jobTitle" type="text" inputmode="text" placeholder="職稱" required></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('required') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('required') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
               職稱是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('maxlength') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('maxlength') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
               職稱<strong>最多30位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('server') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('server') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
               {{ editForm.controls['jobTitle'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
           <!-- contactEmail -->
           <ion-item>
@@ -65,18 +65,18 @@
             <ion-input formControlName="contactEmail" type="email" inputmode="email" autocomplete="email" placeholder="聯絡用電子郵件" required></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['contactEmail'].hasError('required') && (editForm.controls['contactEmail'].dirty || editForm.controls['contactEmail'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactEmail'].hasError('required') && (editForm.controls['contactEmail'].dirty || editForm.controls['contactEmail'].touched)">
               聯絡用電子郵件是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['contactEmail'].hasError('email') && (editForm.controls['contactEmail'].dirty || editForm.controls['contactEmail'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactEmail'].hasError('email') && (editForm.controls['contactEmail'].dirty || editForm.controls['contactEmail'].touched)">
               聯絡用電子郵件<strong>格式錯誤</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['contactEmail'].hasError('maxlength') && (editForm.controls['contactEmail'].dirty || editForm.controls['contactEmail'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactEmail'].hasError('maxlength') && (editForm.controls['contactEmail'].dirty || editForm.controls['contactEmail'].touched)">
               聯絡用電子郵件<strong>最多320位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['contactEmail'].hasError('server') && (editForm.controls['contactEmail'].dirty || editForm.controls['contactEmail'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactEmail'].hasError('server') && (editForm.controls['contactEmail'].dirty || editForm.controls['contactEmail'].touched)">
               {{ editForm.controls['contactEmail'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
           <!-- contactPhone -->
           <ion-item>
@@ -84,18 +84,18 @@
             <ion-input formControlName="contactPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="聯絡用電話號碼" required></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['contactPhone'].hasError('required') && (editForm.controls['contactPhone'].dirty || editForm.controls['contactPhone'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactPhone'].hasError('required') && (editForm.controls['contactPhone'].dirty || editForm.controls['contactPhone'].touched)">
               聯絡用電話號碼是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['contactPhone'].hasError('phone') && (editForm.controls['contactPhone'].dirty || editForm.controls['contactPhone'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactPhone'].hasError('phone') && (editForm.controls['contactPhone'].dirty || editForm.controls['contactPhone'].touched)">
               聯絡用電話號碼<strong>格式錯誤</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['contactPhone'].hasError('maxlength') && (editForm.controls['contactPhone'].dirty || editForm.controls['contactPhone'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactPhone'].hasError('maxlength') && (editForm.controls['contactPhone'].dirty || editForm.controls['contactPhone'].touched)">
               聯絡用電話號碼<strong>最多30位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['contactPhone'].hasError('server') && (editForm.controls['contactPhone'].dirty || editForm.controls['contactPhone'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactPhone'].hasError('server') && (editForm.controls['contactPhone'].dirty || editForm.controls['contactPhone'].touched)">
               {{ editForm.controls['contactPhone'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
           <!-- contactAddress -->
           <ion-item>
@@ -103,15 +103,15 @@
             <ion-textarea formControlName="contactAddress" auto-grow="true" inputmode="text" placeholder="聯絡用地址" required></ion-textarea>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['contactAddress'].hasError('required') && (editForm.controls['contactAddress'].dirty || editForm.controls['contactAddress'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactAddress'].hasError('required') && (editForm.controls['contactAddress'].dirty || editForm.controls['contactAddress'].touched)">
               聯絡用地址是<strong>必填的</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['contactAddress'].hasError('maxlength') && (editForm.controls['contactAddress'].dirty || editForm.controls['contactAddress'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactAddress'].hasError('maxlength') && (editForm.controls['contactAddress'].dirty || editForm.controls['contactAddress'].touched)">
               聯絡用地址<strong>最多200位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['contactAddress'].hasError('server') && (editForm.controls['contactAddress'].dirty || editForm.controls['contactAddress'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['contactAddress'].hasError('server') && (editForm.controls['contactAddress'].dirty || editForm.controls['contactAddress'].touched)">
               {{ editForm.controls['contactAddress'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
         </ion-list>
         <ion-button class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>

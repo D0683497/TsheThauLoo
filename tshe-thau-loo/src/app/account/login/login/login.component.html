@@ -37,18 +37,18 @@
         <ion-input formControlName="userName" type="text" inputmode="text" autocomplete="username" placeholder="使用者名稱" required></ion-input>
       </ion-item>
       <div class="validation-errors">
-        <div class="error-message" *ngIf="loginForm.controls['userName'].hasError('required') && (loginForm.controls['userName'].dirty || loginForm.controls['userName'].touched)">
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['userName'].hasError('required') && (loginForm.controls['userName'].dirty || loginForm.controls['userName'].touched)">
           使用者名稱是<strong>必填的</strong>
-        </div>
-        <div class="error-message" *ngIf="loginForm.controls['userName'].hasError('maxlength') && (loginForm.controls['userName'].dirty || loginForm.controls['userName'].touched)">
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['userName'].hasError('maxlength') && (loginForm.controls['userName'].dirty || loginForm.controls['userName'].touched)">
           使用者名稱<strong>最多100位</strong>
-        </div>
-        <div class="error-message" *ngIf="loginForm.controls['userName'].hasError('pattern') && (loginForm.controls['userName'].dirty || loginForm.controls['userName'].touched)">
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['userName'].hasError('pattern') && (loginForm.controls['userName'].dirty || loginForm.controls['userName'].touched)">
           使用者名稱只能是<strong>字母或數字或<code>+ - = _ .</code></strong>
-        </div>
-        <div class="error-message" *ngIf="loginForm.controls['userName'].hasError('server') && (loginForm.controls['userName'].dirty || loginForm.controls['userName'].touched)">
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['userName'].hasError('server') && (loginForm.controls['userName'].dirty || loginForm.controls['userName'].touched)">
           {{ loginForm.controls['userName'].getError('server') }}
-        </div>
+        </ion-text>
       </div>
       <!-- password -->
       <ion-item>
@@ -56,21 +56,21 @@
         <ion-input formControlName="password" type="password" inputmode="text" autocomplete="current-password" placeholder="密碼" required></ion-input>
       </ion-item>
       <div class="validation-errors">
-        <div class="error-message" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['password'].hasError('required') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
           密碼是<strong>必填的</strong>
-        </div>
-        <div class="error-message" *ngIf="loginForm.controls['password'].hasError('minlength') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['password'].hasError('minlength') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
           密碼<strong>最少須要8位</strong>
-        </div>
-        <div class="error-message" *ngIf="loginForm.controls['password'].hasError('maxlength') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['password'].hasError('maxlength') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
           密碼<strong>最多64位</strong>
-        </div>
-        <div class="error-message" *ngIf="loginForm.controls['password'].hasError('pattern') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['password'].hasError('pattern') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
           密碼<strong>至少需要1位數字及1位小寫字母</strong>
-        </div>
-        <div class="error-message" *ngIf="loginForm.controls['password'].hasError('server') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="loginForm.controls['password'].hasError('server') && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
           {{ loginForm.controls['password'].getError('server') }}
-        </div>
+        </ion-text>
       </div>
       <ion-button [disabled]="loginForm.invalid" class="ion-margin" type="submit" size="default" expand="block">登入</ion-button>
     </form>

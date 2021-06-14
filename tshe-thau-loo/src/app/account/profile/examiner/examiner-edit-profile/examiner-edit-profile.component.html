@@ -33,12 +33,12 @@
             <ion-input formControlName="divisionName" type="text" inputmode="text" placeholder="工作單位"></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['divisionName'].hasError('maxlength') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['divisionName'].hasError('maxlength') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
               工作單位<strong>最多30位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['divisionName'].hasError('server') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['divisionName'].hasError('server') && (editForm.controls['divisionName'].dirty || editForm.controls['divisionName'].touched)">
               {{ editForm.controls['divisionName'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
           <!-- jobTitle -->
           <ion-item>
@@ -46,12 +46,12 @@
             <ion-input formControlName="jobTitle" type="text" inputmode="text" placeholder="職稱"></ion-input>
           </ion-item>
           <div class="validation-errors">
-            <div class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('maxlength') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('maxlength') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
               職稱<strong>最多30位</strong>
-            </div>
-            <div class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('server') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
+            </ion-text>
+            <ion-text color="danger" class="error-message" *ngIf="editForm.controls['jobTitle'].hasError('server') && (editForm.controls['jobTitle'].dirty || editForm.controls['jobTitle'].touched)">
               {{ editForm.controls['jobTitle'].getError('server') }}
-            </div>
+            </ion-text>
           </div>
         </ion-list>
         <ion-button class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>
