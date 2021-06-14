@@ -10,7 +10,6 @@ import { StudentRegisterComponent } from './register/student-register/student-re
 import { LoginComponent } from './login/login/login.component';
 import { AccountRedirectGuard } from '../guards/account-redirect/account-redirect.guard';
 import { RequiredLoginGuard } from '../guards/required-login/required-login.guard';
-import { ManagerProfileComponent } from './profile/manager-profile/manager-profile.component';
 import { StudentProfileComponent } from './profile/student-profile/student-profile.component';
 import { AdministratorProfileComponent } from './profile/administrator/administrator-profile/administrator-profile.component';
 import { AdministratorEditProfileComponent } from './profile/administrator/administrator-edit-profile/administrator-edit-profile.component';
@@ -20,6 +19,8 @@ import { EmployeeProfileComponent } from './profile/employee/employee-profile/em
 import { EmployeeEditProfileComponent } from './profile/employee/employee-edit-profile/employee-edit-profile.component';
 import { ExaminerProfileComponent } from './profile/examiner/examiner-profile/examiner-profile.component';
 import { ExaminerEditProfileComponent } from './profile/examiner/examiner-edit-profile/examiner-edit-profile.component';
+import { ManagerProfileComponent } from './profile/manager/manager-profile/manager-profile.component';
+import { ManagerEditProfileComponent } from './profile/manager/manager-edit-profile/manager-edit-profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -66,7 +67,13 @@ const routes: Routes = [
           { path: 'info', component: ExaminerEditProfileComponent, pathMatch: 'full' }
         ]
       },
-      { path: 'manager', component: ManagerProfileComponent, pathMatch: 'full' },
+      {
+        path: 'manager',
+        children: [
+          { path: '', component: ManagerProfileComponent, pathMatch: 'full' },
+          { path: 'info', component: ManagerEditProfileComponent, pathMatch: 'full' }
+        ]
+      },
       { path: 'student', component: StudentProfileComponent, pathMatch: 'full' }
     ],
     canActivate: [RequiredLoginGuard]

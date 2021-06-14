@@ -18,6 +18,7 @@ using TsheThauLoo.Dtos.Account.Register;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
+using TsheThauLoo.Validator.Account.Profile;
 using TsheThauLoo.Validator.Account.Register;
 
 namespace TsheThauLoo.Controllers.Account
@@ -187,6 +188,31 @@ namespace TsheThauLoo.Controllers.Account
                 .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
             var dto = _mapper.Map<ManagerInfoDto>(entity);
             return Ok(dto);
+        }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [HttpPost("profile/info", Name = nameof(ManagerEditInfo))]
+        public async Task<ActionResult<ManagerInfoDto>> ManagerEditInfo([FromBody] ManagerEditInfoDto dto)
+        {
+            ManagerEditInfoDtoValidator validator = new ManagerEditInfoDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var entity = await _dbContext.Managers
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                if (entity.ManagerConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "企業使用者已驗證", statusCode: 403);
+                }
+                var updateEntity = _mapper.Map(dto, entity);
+                _dbContext.Managers.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var returnDto = _mapper.Map<ManagerInfoDto>(updateEntity);
+                return CreatedAtAction(nameof(ManagerInfo), null, returnDto);
+            }
+            return BadRequest(result.Errors);
         }
     }
 }

@@ -13,7 +13,6 @@ import { ExaminerRegisterComponent } from './register/examiner-register/examiner
 import { ManagerRegisterComponent } from './register/manager-register/manager-register.component';
 import { StudentRegisterComponent } from './register/student-register/student-register.component';
 import { LoginComponent } from './login/login/login.component';
-import { ManagerProfileComponent } from './profile/manager-profile/manager-profile.component';
 import { StudentProfileComponent } from './profile/student-profile/student-profile.component';
 import { AdministratorProfileComponent } from './profile/administrator/administrator-profile/administrator-profile.component';
 import { AdministratorEditProfileComponent } from './profile/administrator/administrator-edit-profile/administrator-edit-profile.component';
@@ -23,6 +22,8 @@ import { EmployeeProfileComponent } from './profile/employee/employee-profile/em
 import { EmployeeEditProfileComponent } from './profile/employee/employee-edit-profile/employee-edit-profile.component';
 import { ExaminerProfileComponent } from './profile/examiner/examiner-profile/examiner-profile.component';
 import { ExaminerEditProfileComponent } from './profile/examiner/examiner-edit-profile/examiner-edit-profile.component';
+import { ManagerProfileComponent } from './profile/manager/manager-profile/manager-profile.component';
+import { ManagerEditProfileComponent } from './profile/manager/manager-edit-profile/manager-edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ExaminerEditProfileComponent } from './profile/examiner/examiner-edit-p
     ExaminerProfileComponent,
     ExaminerEditProfileComponent,
     ManagerProfileComponent,
+    ManagerEditProfileComponent,
     StudentProfileComponent
   ],
   imports: [

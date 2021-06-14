@@ -5,6 +5,7 @@ import { IManagerRegister } from '../../../models/account/register/manager-regis
 import { Observable } from 'rxjs';
 import { IManagerProfile } from '../../../models/account/profile/manager/manager-profile.model';
 import { IManagerInfo } from '../../../models/account/profile/manager/manager-info.model';
+import { IManagerEditInfo } from '../../../models/account/profile/manager/manager-edit-info';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,11 @@ export class ManagerService {
   getInfo(): Observable<IManagerInfo> {
     const url = `${this.urlRoot}/account/manager/profile/info`;
     return this.http.get<IManagerInfo>(url, this.httpOptions);
+  }
+
+  editInfo(data: IManagerEditInfo): Observable<IManagerInfo> {
+    const url = `${this.urlRoot}/account/manager/profile/info`;
+    return this.http.post<IManagerInfo>(url, data, this.httpOptions);
   }
 
 }

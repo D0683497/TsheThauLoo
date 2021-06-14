@@ -131,6 +131,22 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Substitute));
 
             #endregion
+            
+            #region ManagerEditInfoDto 轉換成 Manager
+
+            CreateMap<ManagerEditInfoDto, Manager>()
+                .ForMember(dest => dest.DivisionName,
+                    opt => opt.MapFrom(src => src.DivisionName))
+                .ForMember(dest => dest.JobTitle,
+                    opt => opt.MapFrom(src => src.JobTitle))
+                .ForMember(dest => dest.ContactEmail,
+                    opt => opt.MapFrom(src => src.ContactEmail))
+                .ForMember(dest => dest.ContactPhone,
+                    opt => opt.MapFrom(src => src.ContactPhone))
+                .ForMember(dest => dest.ContactAddress,
+                    opt => opt.MapFrom(src => src.ContactAddress));
+
+            #endregion
         }
     }
 }
