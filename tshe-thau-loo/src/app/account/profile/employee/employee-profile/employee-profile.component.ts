@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { IEmployeeProfile } from '../../../../models/account/profile/employee/employee-profile.model';
 import { BehaviorSubject } from 'rxjs';
-import { EmployeeService } from '../../../services/account/employee/employee.service';
-import { AccountService } from '../../../services/account/account.service';
-import { NotificationService } from '../../../services/notification/notification.service';
+import { EmployeeService } from '../../../../services/account/employee/employee.service';
+import { AccountService } from '../../../../services/account/account.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
-import { IEmployeeProfile } from '../../../models/account/profile/employee/employee-profile.model';
+import { SweetAlertIcon } from '../../../../enums/sweet-alert-icon.enum';
 
 @Component({
   selector: 'app-employee-profile',

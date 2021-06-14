@@ -5,6 +5,7 @@ import { IEmployeeRegister } from '../../../models/account/register/employee-reg
 import { Observable } from 'rxjs';
 import { IEmployeeProfile } from '../../../models/account/profile/employee/employee-profile.model';
 import { IEmployeeInfo } from '../../../models/account/profile/employee/employee-info.model';
+import { IEmployeeEditInfo } from '../../../models/account/profile/employee/employee-edit-info';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,11 @@ export class EmployeeService {
   getInfo(): Observable<IEmployeeInfo> {
     const url = `${this.urlRoot}/account/employee/profile/info`;
     return this.http.get<IEmployeeInfo>(url, this.httpOptions);
+  }
+
+  editInfo(data: IEmployeeEditInfo): Observable<IEmployeeInfo> {
+    const url = `${this.urlRoot}/account/employee/profile/info`;
+    return this.http.post<IEmployeeInfo>(url, data, this.httpOptions);
   }
 
 }

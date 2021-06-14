@@ -97,6 +97,18 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Unit));
 
             #endregion
+            
+            #region EmployeeEditInfoDto 轉換成 Employee
+
+            CreateMap<EmployeeEditInfoDto, Employee>()
+                .ForMember(dest => dest.NetworkId,
+                    opt => opt.MapFrom(src => src.NetworkId))
+                .ForMember(dest => dest.Dept,
+                    opt => opt.MapFrom(src => src.Dept))
+                .ForMember(dest => dest.Unit,
+                    opt => opt.MapFrom(src => src.Unit));
+
+            #endregion
         }
     }
 }
