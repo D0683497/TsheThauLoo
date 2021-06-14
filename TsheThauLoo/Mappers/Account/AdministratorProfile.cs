@@ -156,7 +156,7 @@ namespace TsheThauLoo.Mappers.Account
 
             #region CreateResponsibilityDto 轉換成 Responsibility
 
-            CreateMap<CreateResponsibilityDto, Responsibility>()
+            CreateMap<ResponsibilityCreateDto, Responsibility>()
                 .ForMember(dest => dest.Description,
                     opt => opt.MapFrom(src => src.Description));
 
@@ -164,7 +164,7 @@ namespace TsheThauLoo.Mappers.Account
 
             #region EditResponsibilityDto 轉換成 Responsibility
 
-            CreateMap<EditResponsibilityDto, Responsibility>()
+            CreateMap<ResponsibilityEditDto, Responsibility>()
                 .ForMember(dest => dest.Description,
                     opt => opt.MapFrom(src => src.Description));
 

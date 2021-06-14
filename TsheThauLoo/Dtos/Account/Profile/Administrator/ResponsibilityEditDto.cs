@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace TsheThauLoo.Dtos.Account.Profile.Administrator
 {
-    public class EditResponsibilityDto
+    public class ResponsibilityEditDto
     {
         [JsonPropertyName("description")]
         [Display(Name = "描述")]

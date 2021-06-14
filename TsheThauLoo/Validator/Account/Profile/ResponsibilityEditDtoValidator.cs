@@ -3,9 +3,9 @@ using TsheThauLoo.Dtos.Account.Profile.Administrator;
 
 namespace TsheThauLoo.Validator.Account.Profile
 {
-    public class CreateResponsibilityDtoValidator : AbstractValidator<CreateResponsibilityDto>
+    public class ResponsibilityEditDtoValidator : AbstractValidator<ResponsibilityEditDto>
     {
-        public CreateResponsibilityDtoValidator()
+        public ResponsibilityEditDtoValidator()
         {
             RuleFor(x => x.Description)
                 .Cascade(CascadeMode.Stop)

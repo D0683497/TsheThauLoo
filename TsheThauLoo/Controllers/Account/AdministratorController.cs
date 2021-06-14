@@ -239,9 +239,9 @@ namespace TsheThauLoo.Controllers.Account
         
         [AuthAuthorize(Roles = "Administrator")]
         [HttpPost("profile/info/responsibilities", Name = nameof(AdministratorCreateResponsibility))]
-        public async Task<ActionResult<AdministratorInfoDto>> AdministratorCreateResponsibility([FromBody] CreateResponsibilityDto dto)
+        public async Task<ActionResult<AdministratorInfoDto>> AdministratorCreateResponsibility([FromBody] ResponsibilityEditDto dto)
         {
-            CreateResponsibilityDtoValidator validator = new CreateResponsibilityDtoValidator();
+            ResponsibilityEditDtoValidator validator = new ResponsibilityEditDtoValidator();
             ValidationResult result = await validator.ValidateAsync(dto);
             if (result.IsValid)
             {
@@ -266,9 +266,9 @@ namespace TsheThauLoo.Controllers.Account
 
         [AuthAuthorize(Roles = "Administrator")]
         [HttpPost("profile/info/responsibilities/{responsibilityId}", Name = nameof(AdministratorEditResponsibility))]
-        public async Task<ActionResult<AdministratorInfoDto>> AdministratorEditResponsibility([FromRoute] string responsibilityId, [FromBody] EditResponsibilityDto dto)
+        public async Task<ActionResult<AdministratorInfoDto>> AdministratorEditResponsibility([FromRoute] string responsibilityId, [FromBody] ResponsibilityEditDto dto)
         {
-            EditResponsibilityDtoValidator validator = new EditResponsibilityDtoValidator();
+            ResponsibilityEditDtoValidator validator = new ResponsibilityEditDtoValidator();
             ValidationResult result = await validator.ValidateAsync(dto);
             if (result.IsValid)
             {
