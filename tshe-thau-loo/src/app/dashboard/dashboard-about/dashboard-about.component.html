@@ -33,37 +33,39 @@
     <ion-row class="ion-justify-content-center">
       <ion-col size-sm="12" size-md="10" size-lg="8" size-xl="6">
         <ng-container *ngIf="(loading$ | async) === false; else loading">
-          <ion-card *ngIf="abouts.length !== 0 && (loadingError$ | async) === false">
-            <ion-card-header>
-              <ion-card-title>成員介紹</ion-card-title>
-            </ion-card-header>
-            <ion-row>
-              <ion-col *ngFor="let about of abouts" size-sm="12" size-md="6" size-lg="4">
-                <ion-card color="medium" class="ion-no-margin ion-margin-top">
-                  <ion-card-header>
-                    <ion-card-subtitle>{{about.jobTitle}}</ion-card-subtitle>
-                    <ion-card-title>{{about.name}}</ion-card-title>
-                  </ion-card-header>
-                  <!-- TODO: image -->
-                  <ion-list class="ion-no-padding">
-                    <ion-item color="medium">
-                      <ion-icon name="mail" slot="start"></ion-icon>
-                      <ion-label class="ion-text-wrap">{{about.contactEmail}}</ion-label>
-                    </ion-item>
-                    <ion-item color="medium">
-                      <ion-icon name="call" slot="start"></ion-icon>
-                      <ion-label class="ion-text-wrap">04-24517250#{{about.extension}}</ion-label>
-                    </ion-item>
-                    <ion-list-header color="medium">負責業務</ion-list-header>
-                    <ion-item *ngFor="let responsibility of about.responsibilities; let i=index" color="medium">
-                      <ion-note slot="start" color="light">{{i+1}}.</ion-note>
-                      <ion-label class="ion-text-wrap">{{responsibility.description}}</ion-label>
-                    </ion-item>
-                  </ion-list>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ion-card>
+          <ng-container *ngIf="(loadingError$ | async) === false">
+            <ion-card *ngIf="abouts.length !== 0">
+              <ion-card-header>
+                <ion-card-title>成員介紹</ion-card-title>
+              </ion-card-header>
+              <ion-row>
+                <ion-col *ngFor="let about of abouts" size-sm="12" size-md="6" size-lg="4">
+                  <ion-card color="medium" class="ion-no-margin ion-margin-top">
+                    <ion-card-header>
+                      <ion-card-subtitle>{{about.jobTitle}}</ion-card-subtitle>
+                      <ion-card-title>{{about.name}}</ion-card-title>
+                    </ion-card-header>
+                    <!-- TODO: image -->
+                    <ion-list class="ion-no-padding">
+                      <ion-item color="medium">
+                        <ion-icon name="mail" slot="start"></ion-icon>
+                        <ion-label class="ion-text-wrap">{{about.contactEmail}}</ion-label>
+                      </ion-item>
+                      <ion-item color="medium">
+                        <ion-icon name="call" slot="start"></ion-icon>
+                        <ion-label class="ion-text-wrap">04-24517250#{{about.extension}}</ion-label>
+                      </ion-item>
+                      <ion-list-header color="medium">負責業務</ion-list-header>
+                      <ion-item *ngFor="let responsibility of about.responsibilities; let i=index" color="medium">
+                        <ion-note slot="start" color="light">{{i+1}}.</ion-note>
+                        <ion-label class="ion-text-wrap">{{responsibility.description}}</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </ng-container>
         </ng-container>
         <ng-template #loading>
           <ion-card>
