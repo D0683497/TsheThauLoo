@@ -14,6 +14,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ServerErrorInterceptor } from './interceptors/server-error.interceptor';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { AuthService } from './services/auth/auth.service';
+import { QuillModule } from 'ngx-quill';
+import * as QuillBlotFormatter from 'quill-blot-formatter';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +28,27 @@ import { AuthService } from './services/auth/auth.service';
     ReactiveFormsModule,
     FontAwesomeModule,
     IonicStorageModule.forRoot(),
+    QuillModule.forRoot({
+      modules: {
+        syntax: false, // 程式碼語法檢測
+        toolbar: [
+          [{ header: [1, 2, 3, 4, 5, 6, false] }], // 標題大小
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ list: 'ordered'}, { list: 'bullet' }],
+          [{ align: [] }],
+          [{ indent: '-1'}, { indent: '+1' }],
+          [{ color: [] }, { background: [] }],
+          ['blockquote', 'code-block'],
+          ['link', 'image'],
+          ['clean'],
+        ],
+        blotFormatter: {}
+      },
+      customModules: [{
+        implementation: QuillBlotFormatter.default,
+        path: 'modules/blotFormatter'
+      }],
+    })
   ],
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
