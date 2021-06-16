@@ -41,6 +41,10 @@ namespace TsheThauLoo.Mappers.Account
                 {
                     dest.Alumnus.ApplicationUserId = dest.Id;
                     dest.Alumnus.ApplicationUser = dest;
+                    dest.Alumnus.AlumnusVerify = new AlumnusVerify
+                    {
+                        AlumnusId = dest.Alumnus.AlumnusId
+                    };
                 });
 
             #endregion
@@ -116,6 +120,36 @@ namespace TsheThauLoo.Mappers.Account
                     opt => opt.MapFrom(src => src.Department))
                 .ForMember(dest => dest.Class,
                     opt => opt.MapFrom(src => src.Class));
+
+            #endregion
+            
+            #region Alumnus 轉換成 AlumnusVerifyDto
+
+            CreateMap<Alumnus, AlumnusVerifyDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ApplicationUserId))
+                .ForMember(dest => dest.AlumnusConfirmed,
+                    opt => opt.MapFrom(src => src.AlumnusConfirmed))
+                .ForMember(dest => dest.DateOfGraduation,
+                    opt => opt.MapFrom(src => src.DateOfGraduation))
+                .ForMember(dest => dest.College,
+                    opt => opt.MapFrom(src => src.College))
+                .ForMember(dest => dest.Department,
+                    opt => opt.MapFrom(src => src.Department))
+                .ForMember(dest => dest.Class,
+                    opt => opt.MapFrom(src => src.Class))
+                .ForPath(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.AlumnusVerify.Description))
+                .ForPath(dest => dest.Files,
+                    opt => opt.MapFrom(src => src.AlumnusVerify.AlumnusVerifyFiles));
+
+            #endregion
+
+            #region AlumnusEditVerifyDto 轉換成 AlumnusVerify
+
+            CreateMap<AlumnusEditVerifyDto, AlumnusVerify>()
+                .ForMember(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.Description));
 
             #endregion
         }

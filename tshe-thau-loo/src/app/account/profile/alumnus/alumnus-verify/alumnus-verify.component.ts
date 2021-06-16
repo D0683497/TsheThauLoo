@@ -1,37 +1,37 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { StudentService } from '../../../../services/account/student/student.service';
 import { AccountService } from '../../../../services/account/account.service';
 import { NotificationService } from '../../../../services/notification/notification.service';
 import { Router } from '@angular/router';
+import { LoadingService } from '../../../../services/loading/loading.service';
+import { ModalService } from '../../../../services/modal/modal.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SweetAlertIcon } from '../../../../enums/sweet-alert-icon.enum';
-import { IStudentVerify } from '../../../../models/account/profile/student/student-verify.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IStudentEditVerify } from '../../../../models/account/profile/student/student-edit-verify.model';
-import { LoadingService } from '../../../../services/loading/loading.service';
 import { IFormError } from '../../../../models/error/form-error.model';
 import { IServerError } from '../../../../models/error/server-error.model';
 import { IDocument } from '../../../../models/document/document.model';
 import { saveAs } from 'file-saver';
-import { ModalService } from '../../../../services/modal/modal.service';
+import { IAlumnusVerify } from '../../../../models/account/profile/alumnus/alumnus-verify.model';
+import { AlumnusService } from '../../../../services/account/alumnus/alumnus.service';
+import { IAlumnusEditVerify } from '../../../../models/account/profile/alumnus/alumnus-edit-verify.model';
 
 @Component({
-  selector: 'app-student-verify',
-  templateUrl: './student-verify.component.html',
-  styleUrls: ['./student-verify.component.scss'],
+  selector: 'app-alumnus-verify',
+  templateUrl: './alumnus-verify.component.html',
+  styleUrls: ['./alumnus-verify.component.scss'],
 })
-export class StudentVerifyComponent implements OnInit {
+export class AlumnusVerifyComponent implements OnInit {
 
   date = Date.now();
   segment = 'info';
-  verify: IStudentVerify;
+  verify: IAlumnusVerify;
   editForm: FormGroup;
   loading$ = new BehaviorSubject<boolean>(true);
   loadingError$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private studentService: StudentService,
+    private alumnusService: AlumnusService,
     private accountService: AccountService,
     private notificationService: NotificationService,
     private router: Router,
@@ -46,13 +46,13 @@ export class StudentVerifyComponent implements OnInit {
   }
 
   async getData(): Promise<void> {
-    this.studentService.getVerify().subscribe(
-      (res: IStudentVerify) => { this.getSuccess(res); },
+    this.alumnusService.getVerify().subscribe(
+      (res: IAlumnusVerify) => { this.getSuccess(res); },
       (err: HttpErrorResponse) => { this.getFail(err); }
     );
   }
 
-  getSuccess(res: IStudentVerify): void {
+  getSuccess(res: IAlumnusVerify): void {
     this.verify = res;
     this.buildForm(res);
     this.loading$.next(false);
@@ -64,21 +64,21 @@ export class StudentVerifyComponent implements OnInit {
     this.loading$.next(false);
   }
 
-  buildForm(data: IStudentVerify): void {
+  buildForm(data: IAlumnusVerify): void {
     this.editForm = this.fb.group({
       description: [data.description, Validators.maxLength(500)]
     });
   }
 
-  async onSubmit(data: IStudentEditVerify): Promise<void> {
+  async onSubmit(data: IAlumnusEditVerify): Promise<void> {
     await this.loadingService.start('修改中...');
-    this.studentService.editVerify(data).subscribe(
-      (res: IStudentVerify) => { this.editSuccess(res); },
+    this.alumnusService.editVerify(data).subscribe(
+      (res: IAlumnusVerify) => { this.editSuccess(res); },
       (err: HttpErrorResponse) => { this.editFail(err); }
     );
   }
 
-  async editSuccess(res: IStudentVerify): Promise<void> {
+  async editSuccess(res: IAlumnusVerify): Promise<void> {
     await this.loadingService.end();
     this.verify = res;
     await this.notificationService.toast('修改成功', 2000, SweetAlertIcon.success);
@@ -99,7 +99,7 @@ export class StudentVerifyComponent implements OnInit {
       case 403:
       {
         const error: IServerError = err.error;
-        await this.router.navigate(['/account/profile/student']);
+        await this.router.navigate(['/account/profile/alumnus']);
         await this.notificationService.notify(error.title, error.detail, SweetAlertIcon.warning);
         break;
       }
@@ -114,7 +114,7 @@ export class StudentVerifyComponent implements OnInit {
         return;
       }
       await this.loadingService.start('上傳中...');
-      this.studentService.createVerifyFile(file).subscribe(
+      this.alumnusService.createVerifyFile(file).subscribe(
         (res: IDocument) => { this.uploadSuccess(res); },
         (err: HttpErrorResponse) => { this.uploadFail(err); }
       );
@@ -132,7 +132,7 @@ export class StudentVerifyComponent implements OnInit {
     switch (err.status) {
       case 403:
         const error: IServerError = err.error;
-        await this.router.navigate(['/account/profile/student']);
+        await this.router.navigate(['/account/profile/alumnus']);
         await this.notificationService.notify(error.title, error.detail, SweetAlertIcon.warning);
         break;
       case 400:
@@ -143,7 +143,7 @@ export class StudentVerifyComponent implements OnInit {
 
   async delete(fileId: string): Promise<void> {
     await this.loadingService.start('刪除中…');
-    this.studentService.deleteVerifyFile(fileId).subscribe(
+    this.alumnusService.deleteVerifyFile(fileId).subscribe(
       () => { this.deleteSuccess(fileId); },
       (err: HttpErrorResponse) => { this.deleteFail(err); }
     );
@@ -161,7 +161,7 @@ export class StudentVerifyComponent implements OnInit {
     switch (err.status) {
       case 403:
         const error: IServerError = err.error;
-        await this.router.navigate(['/account/profile/student']);
+        await this.router.navigate(['/account/profile/alumnus']);
         await this.notificationService.notify(error.title, error.detail, SweetAlertIcon.warning);
         break;
       case 404:
@@ -175,7 +175,7 @@ export class StudentVerifyComponent implements OnInit {
 
   async download(fileId: string, fileName: string): Promise<void> {
     await this.loadingService.start('下載中…');
-    this.studentService.downloadVerifyFile(fileId).subscribe(
+    this.alumnusService.downloadVerifyFile(fileId).subscribe(
       (res: Blob) => { this.downloadSuccess(res, fileName); },
       (err: HttpErrorResponse) => { this.downloadFail(err); }
     );
@@ -199,7 +199,7 @@ export class StudentVerifyComponent implements OnInit {
   }
 
   async editFile(file: IDocument): Promise<void> {
-    const data = await this.modalService.editStudentVerifyFile(file);
+    const data = await this.modalService.editAlumnusVerifyFile(file);
     if (data !== undefined) {
       const index = this.verify.files.findIndex(x => x.id === data.id);
       this.verify.files[index] = data;

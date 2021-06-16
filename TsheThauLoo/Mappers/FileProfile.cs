@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using AutoMapper;
 using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.User;
@@ -47,6 +46,50 @@ namespace TsheThauLoo.Mappers
             #region FileEditDto 轉換成 StudentVerifyFile
 
             CreateMap<FileEditDto, StudentVerifyFile>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+            
+            #region AlumnusVerifyFile 轉換成 FileDto
+
+            CreateMap<AlumnusVerifyFile, FileDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.AlumnusVerifyFileId))
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+
+            #region FileCreateDto 轉換成 AlumnusVerifyFile
+
+            CreateMap<FileCreateDto, AlumnusVerifyFile>()
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .AfterMap((src, dest) =>
+                {
+                    var name = Path.GetFileNameWithoutExtension(src.Name);
+                    dest.Name = name;
+                    var extension = Path.GetExtension(src.Name);
+                    dest.Extension = extension == string.Empty ? null : extension;
+                    dest.Path = $@"wwwroot{Path.DirectorySeparatorChar}"+
+                                $"users{Path.DirectorySeparatorChar}"+
+                                $"verify{Path.DirectorySeparatorChar}" +
+                                $"alumnus{Path.DirectorySeparatorChar}" +
+                                $"{Path.GetRandomFileName()}";
+                });
+
+            #endregion
+
+            #region FileEditDto 轉換成 AlumnusVerifyFile
+
+            CreateMap<FileEditDto, AlumnusVerifyFile>()
                 .ForMember(dest => dest.Name,
                     opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Extension,

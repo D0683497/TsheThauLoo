@@ -1,22 +1,22 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDocument } from '../../../../models/document/document.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { LoadingService } from '../../../../services/loading/loading.service';
 import { NotificationService } from '../../../../services/notification/notification.service';
-import { StudentService } from '../../../../services/account/student/student.service';
+import { IDocumentEdit } from '../../../../models/document/document-edit.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SweetAlertIcon } from '../../../../enums/sweet-alert-icon.enum';
 import { IFormError } from '../../../../models/error/form-error.model';
 import { IServerError } from '../../../../models/error/server-error.model';
-import { IDocumentEdit } from '../../../../models/document/document-edit.model';
+import { AlumnusService } from '../../../../services/account/alumnus/alumnus.service';
 
 @Component({
-  selector: 'app-student-edit-verify-file',
-  templateUrl: './student-edit-verify-file.component.html',
-  styleUrls: ['./student-edit-verify-file.component.scss'],
+  selector: 'app-alumnus-edit-verify-file',
+  templateUrl: './alumnus-edit-verify-file.component.html',
+  styleUrls: ['./alumnus-edit-verify-file.component.scss'],
 })
-export class StudentEditVerifyFileComponent implements OnInit {
+export class AlumnusEditVerifyFileComponent implements OnInit {
 
   @Input() file: IDocument;
   date = Date.now();
@@ -26,7 +26,7 @@ export class StudentEditVerifyFileComponent implements OnInit {
     private modalController: ModalController,
     private fb: FormBuilder,
     private loadingService: LoadingService,
-    private studentService: StudentService,
+    private alumnusService: AlumnusService,
     private notificationService: NotificationService) { }
 
   ngOnInit(): void {
@@ -38,7 +38,7 @@ export class StudentEditVerifyFileComponent implements OnInit {
 
   async onSubmit(data: IDocumentEdit): Promise<void> {
     await this.loadingService.start('修改中...');
-    this.studentService.editVerifyFile(this.file.id, data).subscribe(
+    this.alumnusService.editVerifyFile(this.file.id, data).subscribe(
       (res: IDocument) => { this.editSuccess(res); },
       (err: HttpErrorResponse) => { this.editFail(err); }
     );

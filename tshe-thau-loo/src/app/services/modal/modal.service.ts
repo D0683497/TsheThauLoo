@@ -9,6 +9,7 @@ import { AdministratorCreateResponsibilityComponent } from '../../account/profil
 import { AdministratorEditResponsibilityComponent } from '../../account/profile/administrator/administrator-edit-responsibility/administrator-edit-responsibility.component';
 import { IDocument } from '../../models/document/document.model';
 import { StudentEditVerifyFileComponent } from '../../account/profile/student/student-edit-verify-file/student-edit-verify-file.component';
+import { AlumnusEditVerifyFileComponent } from '../../account/profile/alumnus/alumnus-edit-verify-file/alumnus-edit-verify-file.component';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,17 @@ export class ModalService {
   async editStudentVerifyFile(file: IDocument): Promise<IDocument> {
     this.modal = await this.modalController.create({
       component: StudentEditVerifyFileComponent,
+      componentProps: {file},
+      swipeToClose: true
+    });
+    await this.modal.present();
+    const { data } = await this.modal.onDidDismiss<IDocument>();
+    return data;
+  }
+
+  async editAlumnusVerifyFile(file: IDocument): Promise<IDocument> {
+    this.modal = await this.modalController.create({
+      component: AlumnusEditVerifyFileComponent,
       componentProps: {file},
       swipeToClose: true
     });

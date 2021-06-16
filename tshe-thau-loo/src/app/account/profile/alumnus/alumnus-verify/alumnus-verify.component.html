@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/account/profile/student" text="返回"></ion-back-button>
+      <ion-back-button defaultHref="/account/profile/alumnus" text="返回"></ion-back-button>
     </ion-buttons>
-    <ion-title>在校生驗證</ion-title>
+    <ion-title>校友驗證</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
         <ion-icon slot="icon-only" name="log-out"></ion-icon>
@@ -15,12 +15,12 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">在校生驗證</ion-title>
+      <ion-title size="large">校友驗證</ion-title>
     </ion-toolbar>
   </ion-header>
   <ng-container *ngIf="(loading$ | async) === false; else loading">
     <ng-container *ngIf="(loadingError$ | async) === false; else error">
-      <ion-item *ngIf="!verify.studentConfirmed" lines="none" color="warning">
+      <ion-item *ngIf="!verify.alumnusConfirmed" lines="none" color="warning">
         <ion-label class="ion-text-wrap">請提供資訊以便管理員審核您的身份</ion-label>
       </ion-item>
       <ion-toolbar>
@@ -39,40 +39,40 @@
       <ng-container *ngIf="segment === 'info'">
         <ion-card>
           <ion-item lines="none">
-            <ion-label>在校生資訊</ion-label>
-            <ion-badge [color]="verify.studentConfirmed ? 'success' : 'light'">
-              {{verify.studentConfirmed ? '已驗證' : '尚未驗證'}}
+            <ion-label>校友資訊</ion-label>
+            <ion-badge [color]="verify.alumnusConfirmed ? 'success' : 'light'">
+              {{verify.alumnusConfirmed ? '已驗證' : '尚未驗證'}}
             </ion-badge>
           </ion-item>
           <ion-card-content>
             <ion-item-group>
               <ion-item-divider>
-                <ion-label>學號</ion-label>
+                <ion-label>畢業年度</ion-label>
               </ion-item-divider>
               <ion-item lines="none">
-                <ion-label class="ion-text-wrap">{{verify.networkId}}</ion-label>
+                <ion-label class="ion-text-wrap">{{verify.dateOfGraduation}}</ion-label>
               </ion-item>
               <ion-item-divider>
-                <ion-label>學院</ion-label>
+                <ion-label>畢業學院</ion-label>
               </ion-item-divider>
               <ion-item lines="none">
                 <ion-label class="ion-text-wrap">{{verify.college}}</ion-label>
               </ion-item>
               <ion-item-divider>
-                <ion-label>系所</ion-label>
+                <ion-label>畢業系所</ion-label>
               </ion-item-divider>
               <ion-item lines="none">
                 <ion-label class="ion-text-wrap">{{verify.department}}</ion-label>
               </ion-item>
               <ion-item-divider>
-                <ion-label>班級</ion-label>
+                <ion-label>畢業班級</ion-label>
               </ion-item-divider>
               <ion-item lines="none">
                 <ion-label class="ion-text-wrap">{{verify.class}}</ion-label>
               </ion-item>
             </ion-item-group>
           </ion-card-content>
-          <ion-button *ngIf="!verify.studentConfirmed" routerLink="/account/profile/student/info" class="ion-margin" shape="round" expand="block">編輯</ion-button>
+          <ion-button *ngIf="!verify.alumnusConfirmed" routerLink="/account/profile/alumnus/info" class="ion-margin" shape="round" expand="block">編輯</ion-button>
         </ion-card>
       </ng-container>
       <ng-container *ngIf="segment === 'files'">
@@ -80,15 +80,15 @@
           <ion-list>
             <ion-item lines="none">
               <ion-label>驗證附檔</ion-label>
-              <ion-button *ngIf="!verify.studentConfirmed" (click)="file.click()" class="like-link" fill="clear" slot="end">上傳</ion-button>
+              <ion-button *ngIf="!verify.alumnusConfirmed" (click)="file.click()" class="like-link" fill="clear" slot="end">上傳</ion-button>
             </ion-item>
-            <ion-item *ngIf="!verify.studentConfirmed" lines="none" color="light">
+            <ion-item *ngIf="!verify.alumnusConfirmed" lines="none" color="light">
               <ion-label class="ion-text-wrap">
                 向右滑即可<strong>編輯</strong>檔案，向左滑即可<strong>刪除</strong>檔案
               </ion-label>
             </ion-item>
             <ion-item-sliding *ngFor="let file of verify.files">
-              <ion-item-options *ngIf="!verify.studentConfirmed" side="start">
+              <ion-item-options *ngIf="!verify.alumnusConfirmed" side="start">
                 <ion-item-option (click)="editFile(file)" color="primary">編輯</ion-item-option>
               </ion-item-options>
               <ion-item>
@@ -97,7 +97,7 @@
                   <ion-icon slot="icon-only" name="arrow-down-circle"></ion-icon>
                 </ion-button>
               </ion-item>
-              <ion-item-options *ngIf="!verify.studentConfirmed" side="end">
+              <ion-item-options *ngIf="!verify.alumnusConfirmed" side="end">
                 <ion-item-option (click)="delete(file.id)" color="danger">刪除</ion-item-option>
               </ion-item-options>
             </ion-item-sliding>
@@ -131,7 +131,7 @@
               </ion-text>
             </div>
           </ion-list>
-          <ion-button *ngIf="!verify.studentConfirmed" class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>
+          <ion-button *ngIf="!verify.alumnusConfirmed" class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>
         </form>
       </ng-container>
     </ng-container>
