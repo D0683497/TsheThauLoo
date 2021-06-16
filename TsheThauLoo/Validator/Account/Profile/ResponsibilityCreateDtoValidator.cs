@@ -12,11 +12,11 @@ namespace TsheThauLoo.Validator.Account.Profile
                 .NotEmpty()
                 .WithName("描述")
                 .WithMessage("{PropertyName}是必填的")
-                .OverridePropertyName("networkId")
+                .OverridePropertyName("description")
                 .MaximumLength(200)
                 .WithName("描述")
                 .WithMessage("{PropertyName}最多{MaxLength}")
-                .OverridePropertyName("networkId");
+                .OverridePropertyName("description");
         }
     }
 }
