@@ -11,7 +11,7 @@ import { IFormError } from '../../../../models/error/form-error.model';
 import { IServerError } from '../../../../models/error/server-error.model';
 import { IExaminerInfo } from '../../../../models/account/profile/examiner/examiner-info.model';
 import { ExaminerService } from '../../../../services/account/examiner/examiner.service';
-import { IExaminerEditInfo } from '../../../../models/account/profile/examiner/examiner-edit-info';
+import { IExaminerEditInfo } from '../../../../models/account/profile/examiner/examiner-edit-info.model';
 
 @Component({
   selector: 'app-examiner-edit-profile',

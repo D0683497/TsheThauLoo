@@ -11,7 +11,7 @@ import { IFormError } from '../../../../models/error/form-error.model';
 import { IServerError } from '../../../../models/error/server-error.model';
 import { IManagerInfo } from '../../../../models/account/profile/manager/manager-info.model';
 import { ManagerService } from '../../../../services/account/manager/manager.service';
-import { IManagerEditInfo } from '../../../../models/account/profile/manager/manager-edit-info';
+import { IManagerEditInfo } from '../../../../models/account/profile/manager/manager-edit-info.model';
 import { PhoneNumberValidator } from '../../../../validators/phone.validator';
 
 @Component({

@@ -11,7 +11,7 @@ import { IFormError } from '../../../../models/error/form-error.model';
 import { IServerError } from '../../../../models/error/server-error.model';
 import { IEmployeeInfo } from '../../../../models/account/profile/employee/employee-info.model';
 import { EmployeeService } from '../../../../services/account/employee/employee.service';
-import { IEmployeeEditInfo } from '../../../../models/account/profile/employee/employee-edit-info';
+import { IEmployeeEditInfo } from '../../../../models/account/profile/employee/employee-edit-info.model';
 
 @Component({
   selector: 'app-employee-edit-profile',

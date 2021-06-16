@@ -11,7 +11,7 @@ import { IFormError } from '../../../../models/error/form-error.model';
 import { IServerError } from '../../../../models/error/server-error.model';
 import { IStudentInfo } from '../../../../models/account/profile/student/student-info.model';
 import { StudentService } from '../../../../services/account/student/student.service';
-import { IStudentEditInfo } from '../../../../models/account/profile/student/student-edit-info';
+import { IStudentEditInfo } from '../../../../models/account/profile/student/student-edit-info.model';
 
 @Component({
   selector: 'app-student-edit-profile',

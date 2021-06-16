@@ -5,7 +5,7 @@ import { IManagerRegister } from '../../../models/account/register/manager-regis
 import { Observable } from 'rxjs';
 import { IManagerProfile } from '../../../models/account/profile/manager/manager-profile.model';
 import { IManagerInfo } from '../../../models/account/profile/manager/manager-info.model';
-import { IManagerEditInfo } from '../../../models/account/profile/manager/manager-edit-info';
+import { IManagerEditInfo } from '../../../models/account/profile/manager/manager-edit-info.model';
 import { ISubstituteEdit } from '../../../models/account/profile/manager/substitute-edit.model';
 
 @Injectable({

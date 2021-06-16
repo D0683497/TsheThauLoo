@@ -5,7 +5,7 @@ import { IExaminerRegister } from '../../../models/account/register/examiner-reg
 import { Observable } from 'rxjs';
 import { IExaminerProfile } from '../../../models/account/profile/examiner/examiner-profile.model';
 import { IExaminerInfo } from '../../../models/account/profile/examiner/examiner-info.model';
-import { IExaminerEditInfo } from '../../../models/account/profile/examiner/examiner-edit-info';
+import { IExaminerEditInfo } from '../../../models/account/profile/examiner/examiner-edit-info.model';
 
 @Injectable({
   providedIn: 'root'

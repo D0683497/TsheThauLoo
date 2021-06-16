@@ -5,7 +5,7 @@ import { IEmployeeRegister } from '../../../models/account/register/employee-reg
 import { Observable } from 'rxjs';
 import { IEmployeeProfile } from '../../../models/account/profile/employee/employee-profile.model';
 import { IEmployeeInfo } from '../../../models/account/profile/employee/employee-info.model';
-import { IEmployeeEditInfo } from '../../../models/account/profile/employee/employee-edit-info';
+import { IEmployeeEditInfo } from '../../../models/account/profile/employee/employee-edit-info.model';
 
 @Injectable({
   providedIn: 'root'
