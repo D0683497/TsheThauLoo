@@ -7,6 +7,8 @@ import { IResponsibility } from '../../models/account/profile/administrator/resp
 import { AdministratorCreateResponsibilityComponent } from '../../account/profile/administrator/administrator-create-responsibility/administrator-create-responsibility.component';
 // eslint-disable-next-line max-len
 import { AdministratorEditResponsibilityComponent } from '../../account/profile/administrator/administrator-edit-responsibility/administrator-edit-responsibility.component';
+import { IDocument } from '../../models/document/document.model';
+import { StudentEditVerifyFileComponent } from '../../account/profile/student/student-edit-verify-file/student-edit-verify-file.component';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +47,17 @@ export class ModalService {
     });
     await this.modal.present();
     const { data } = await this.modal.onDidDismiss<IAdministratorInfo>();
+    return data;
+  }
+
+  async editStudentVerifyFile(file: IDocument): Promise<IDocument> {
+    this.modal = await this.modalController.create({
+      component: StudentEditVerifyFileComponent,
+      componentProps: {file},
+      swipeToClose: true
+    });
+    await this.modal.present();
+    const { data } = await this.modal.onDidDismiss<IDocument>();
     return data;
   }
 

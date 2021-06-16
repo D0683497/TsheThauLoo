@@ -73,7 +73,7 @@ namespace TsheThauLoo.Data
             {
                 $"users{Path.DirectorySeparatorChar}photo",
                 $"users{Path.DirectorySeparatorChar}verify{Path.DirectorySeparatorChar}national",
-                $"users{Path.DirectorySeparatorChar}verify{Path.DirectorySeparatorChar}national",
+                $"users{Path.DirectorySeparatorChar}verify{Path.DirectorySeparatorChar}alumnus",
                 $"users{Path.DirectorySeparatorChar}verify{Path.DirectorySeparatorChar}student",
                 $"resumes",
                 $"companies{Path.DirectorySeparatorChar}logo",

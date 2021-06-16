@@ -40,6 +40,10 @@ namespace TsheThauLoo.Mappers.Account
                 {
                     dest.Student.ApplicationUserId = dest.Id;
                     dest.Student.ApplicationUser = dest;
+                    dest.Student.StudentVerify = new StudentVerify
+                    {
+                        StudentId = dest.Student.StudentId
+                    };
                 });
 
 
@@ -117,6 +121,36 @@ namespace TsheThauLoo.Mappers.Account
                 .ForMember(dest => dest.Class,
                     opt => opt.MapFrom(src => src.Class));
             
+            #endregion
+
+            #region Student 轉換成 StudentVerifyDto
+
+            CreateMap<Student, StudentVerifyDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.ApplicationUserId))
+                .ForMember(dest => dest.StudentConfirmed,
+                    opt => opt.MapFrom(src => src.StudentConfirmed))
+                .ForMember(dest => dest.NetworkId,
+                    opt => opt.MapFrom(src => src.NetworkId))
+                .ForMember(dest => dest.College,
+                    opt => opt.MapFrom(src => src.College))
+                .ForMember(dest => dest.Department,
+                    opt => opt.MapFrom(src => src.Department))
+                .ForMember(dest => dest.Class,
+                    opt => opt.MapFrom(src => src.Class))
+                .ForPath(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.StudentVerify.Description))
+                .ForPath(dest => dest.Files,
+                    opt => opt.MapFrom(src => src.StudentVerify.StudentVerifyFiles));
+
+            #endregion
+
+            #region StudentEditVerifyDto 轉換成 StudentVerify
+
+            CreateMap<StudentEditVerifyDto, StudentVerify>()
+                .ForMember(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.Description));
+
             #endregion
         }
     }

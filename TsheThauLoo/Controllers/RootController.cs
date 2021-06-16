@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -56,6 +57,10 @@ namespace TsheThauLoo.Controllers
             {
                 case DbUpdateException:
                     title = "資料庫存取錯誤";
+                    detail = "請稍後再試，若持續出現此情況，請聯絡管理員";
+                    break;
+                case IOException:
+                    title = "檔案存取錯誤";
                     detail = "請稍後再試，若持續出現此情況，請聯絡管理員";
                     break;
                 case SmtpCommandException commandException:
