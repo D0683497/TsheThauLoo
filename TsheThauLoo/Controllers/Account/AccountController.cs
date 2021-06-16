@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,15 +10,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using TsheThauLoo.Data;
+using TsheThauLoo.Dtos.Account;
 using TsheThauLoo.Dtos.Account.Login;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Account;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace TsheThauLoo.Controllers.Account
 {
@@ -32,6 +35,7 @@ namespace TsheThauLoo.Controllers.Account
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
+        private readonly TsheThauLooDbContext _dbContext;
 
         public AccountController(
             ILogger<AccountController> logger, 
@@ -39,7 +43,8 @@ namespace TsheThauLoo.Controllers.Account
             SignInManager<ApplicationUser> signInManager, 
             RoleManager<ApplicationRole> roleManager, 
             IConfiguration configuration, 
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment, 
+            TsheThauLooDbContext dbContext)
         {
             _logger = logger;
             _userManager = userManager;
@@ -47,6 +52,7 @@ namespace TsheThauLoo.Controllers.Account
             _roleManager = roleManager;
             _configuration = configuration;
             _environment = environment;
+            _dbContext = dbContext;
         }
         
         [AllowAnonymous]
@@ -112,6 +118,45 @@ namespace TsheThauLoo.Controllers.Account
                 #endregion
                 
                 return Problem(title: "登入失敗", detail: "請檢查您的帳號密碼是否正確", statusCode: 403);
+            }
+            return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize]
+        [HttpPost("username", Name = nameof(ChangeUserName))]
+        public async Task<IActionResult> ChangeUserName([FromBody] ChangeUserNameDto dto)
+        {
+            ChangeUserNameDtoValidator validator = new ChangeUserNameDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                #region 驗證重複
+
+                if (await _userManager.Users.AnyAsync(x => x.UserName == dto.NewUserName))
+                {
+                    result.Errors.Add(new ValidationFailure("newUserName", "新的使用者名稱已經被使用"));
+                    return BadRequest(result.Errors);
+                }
+
+                #endregion
+                
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var user = await _userManager.FindByIdAsync(userId);
+                user.UserName = dto.NewUserName;
+                user.NormalizedUserName = dto.NewUserName.ToUpper();
+                _dbContext.Users.Update(user);
+                await _dbContext.SaveChangesAsync();
+
+                #region UpdateSecurity
+
+                var oldSecurityStamp = user.SecurityStamp;
+                await _userManager.UpdateSecurityStampAsync(user);
+                await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp));
+
+                #endregion
+
+                return NoContent();
             }
             return BadRequest(result.Errors);
         }

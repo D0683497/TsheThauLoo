@@ -20,6 +20,7 @@
           <ion-text color="danger">*</ion-text>為必填項目
         </ion-label>
       </ion-item>
+      <!-- name -->
       <ion-item>
         <ion-label position="stacked"><ion-text color="danger">*</ion-text>檔案名稱</ion-label>
         <ion-input formControlName="name" type="text" inputmode="text" placeholder="檔案名稱" required></ion-input>
@@ -35,6 +36,7 @@
           {{ editForm.controls['name'].getError('server') }}
         </ion-text>
       </div>
+      <!-- extension -->
       <ion-item>
         <ion-label position="stacked">副檔名</ion-label>
         <ion-input formControlName="extension" type="text" inputmode="text" placeholder="副檔名"></ion-input>

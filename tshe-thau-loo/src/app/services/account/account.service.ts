@@ -6,6 +6,7 @@ import { ILogin } from '../../models/account/login/login.model';
 import { Observable } from 'rxjs';
 import { ILoginResponse } from '../../models/account/login/login-response.model';
 import { map } from 'rxjs/operators';
+import { IChangeUserName } from '../../models/account/change-user-name.models';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,11 @@ export class AccountService {
   // 登出
   async logout(): Promise<void> {
     await this.authService.removeLoginStatus();
+  }
+
+  changeUserName(data: IChangeUserName): Observable<void> {
+    const url = `${this.urlRoot}/account/username`;
+    return this.http.post<void>(url, data, this.httpOptions);
   }
 
 }

@@ -35,6 +35,7 @@ import { ManagerSubstituteComponent } from './profile/manager/manager-substitute
 import { StudentVerifyComponent } from './profile/student/student-verify/student-verify.component';
 import { AlumnusVerifyComponent } from './profile/alumnus/alumnus-verify/alumnus-verify.component';
 import { EditVerifyFileComponent } from './profile/edit-verify-file/edit-verify-file.component';
+import { ChangeUserNameComponent } from './change-user-name/change-user-name.component';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { EditVerifyFileComponent } from './profile/edit-verify-file/edit-verify-
     ManagerSubstituteComponent,
     StudentVerifyComponent,
     AlumnusVerifyComponent,
-    EditVerifyFileComponent
+    EditVerifyFileComponent,
+    ChangeUserNameComponent
   ],
   imports: [
     CommonModule,
