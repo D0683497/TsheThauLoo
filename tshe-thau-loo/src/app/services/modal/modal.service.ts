@@ -8,8 +8,8 @@ import { AdministratorCreateResponsibilityComponent } from '../../account/profil
 // eslint-disable-next-line max-len
 import { AdministratorEditResponsibilityComponent } from '../../account/profile/administrator/administrator-edit-responsibility/administrator-edit-responsibility.component';
 import { IDocument } from '../../models/document/document.model';
-import { StudentEditVerifyFileComponent } from '../../account/profile/student/student-edit-verify-file/student-edit-verify-file.component';
-import { AlumnusEditVerifyFileComponent } from '../../account/profile/alumnus/alumnus-edit-verify-file/alumnus-edit-verify-file.component';
+import { EditVerifyFileComponent } from '../../account/profile/edit-verify-file/edit-verify-file.component';
+import { RoleType } from '../../enums/role-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -51,21 +51,10 @@ export class ModalService {
     return data;
   }
 
-  async editStudentVerifyFile(file: IDocument): Promise<IDocument> {
+  async editVerifyFile(role: RoleType, file: IDocument): Promise<IDocument> {
     this.modal = await this.modalController.create({
-      component: StudentEditVerifyFileComponent,
-      componentProps: {file},
-      swipeToClose: true
-    });
-    await this.modal.present();
-    const { data } = await this.modal.onDidDismiss<IDocument>();
-    return data;
-  }
-
-  async editAlumnusVerifyFile(file: IDocument): Promise<IDocument> {
-    this.modal = await this.modalController.create({
-      component: AlumnusEditVerifyFileComponent,
-      componentProps: {file},
+      component: EditVerifyFileComponent,
+      componentProps: {role, file},
       swipeToClose: true
     });
     await this.modal.present();

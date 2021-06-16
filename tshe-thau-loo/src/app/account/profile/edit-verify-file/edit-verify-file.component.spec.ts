@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AlumnusEditVerifyFileComponent } from './alumnus-edit-verify-file.component';
+import { EditVerifyFileComponent } from './edit-verify-file.component';
 
-describe('AlumnusEditVerifyFileComponent', () => {
-  let component: AlumnusEditVerifyFileComponent;
-  let fixture: ComponentFixture<AlumnusEditVerifyFileComponent>;
+describe('EditVerifyFileComponent', () => {
+  let component: EditVerifyFileComponent;
+  let fixture: ComponentFixture<EditVerifyFileComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AlumnusEditVerifyFileComponent ],
+      declarations: [ EditVerifyFileComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AlumnusEditVerifyFileComponent);
+    fixture = TestBed.createComponent(EditVerifyFileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

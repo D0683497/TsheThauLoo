@@ -15,6 +15,7 @@ import { IServerError } from '../../../../models/error/server-error.model';
 import { IDocument } from '../../../../models/document/document.model';
 import { saveAs } from 'file-saver';
 import { ModalService } from '../../../../services/modal/modal.service';
+import { RoleType } from '../../../../enums/role-type.enum';
 
 @Component({
   selector: 'app-student-verify',
@@ -199,7 +200,7 @@ export class StudentVerifyComponent implements OnInit {
   }
 
   async editFile(file: IDocument): Promise<void> {
-    const data = await this.modalService.editStudentVerifyFile(file);
+    const data = await this.modalService.editVerifyFile(RoleType.student, file);
     if (data !== undefined) {
       const index = this.verify.files.findIndex(x => x.id === data.id);
       this.verify.files[index] = data;

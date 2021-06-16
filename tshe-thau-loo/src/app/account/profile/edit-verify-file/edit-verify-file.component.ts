@@ -1,23 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IDocument } from '../../../models/document/document.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IDocument } from '../../../../models/document/document.model';
 import { ModalController } from '@ionic/angular';
-import { LoadingService } from '../../../../services/loading/loading.service';
-import { NotificationService } from '../../../../services/notification/notification.service';
-import { StudentService } from '../../../../services/account/student/student.service';
+import { LoadingService } from '../../../services/loading/loading.service';
+import { StudentService } from '../../../services/account/student/student.service';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { IDocumentEdit } from '../../../models/document/document-edit.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SweetAlertIcon } from '../../../../enums/sweet-alert-icon.enum';
-import { IFormError } from '../../../../models/error/form-error.model';
-import { IServerError } from '../../../../models/error/server-error.model';
-import { IDocumentEdit } from '../../../../models/document/document-edit.model';
+import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
+import { IFormError } from '../../../models/error/form-error.model';
+import { IServerError } from '../../../models/error/server-error.model';
+import { RoleType } from '../../../enums/role-type.enum';
+import { AlumnusService } from '../../../services/account/alumnus/alumnus.service';
 
 @Component({
-  selector: 'app-student-edit-verify-file',
-  templateUrl: './student-edit-verify-file.component.html',
-  styleUrls: ['./student-edit-verify-file.component.scss'],
+  selector: 'app-edit-verify-file',
+  templateUrl: './edit-verify-file.component.html',
+  styleUrls: ['./edit-verify-file.component.scss'],
 })
-export class StudentEditVerifyFileComponent implements OnInit {
+export class EditVerifyFileComponent implements OnInit {
 
+  @Input() role: RoleType;
   @Input() file: IDocument;
   date = Date.now();
   editForm: FormGroup;
@@ -26,6 +29,7 @@ export class StudentEditVerifyFileComponent implements OnInit {
     private modalController: ModalController,
     private fb: FormBuilder,
     private loadingService: LoadingService,
+    private alumnusService: AlumnusService,
     private studentService: StudentService,
     private notificationService: NotificationService) { }
 
@@ -38,10 +42,20 @@ export class StudentEditVerifyFileComponent implements OnInit {
 
   async onSubmit(data: IDocumentEdit): Promise<void> {
     await this.loadingService.start('修改中...');
-    this.studentService.editVerifyFile(this.file.id, data).subscribe(
-      (res: IDocument) => { this.editSuccess(res); },
-      (err: HttpErrorResponse) => { this.editFail(err); }
-    );
+    switch (this.role) {
+      case RoleType.alumnus:
+        this.alumnusService.editVerifyFile(this.file.id, data).subscribe(
+          (res: IDocument) => { this.editSuccess(res); },
+          (err: HttpErrorResponse) => { this.editFail(err); }
+        );
+        break;
+      case RoleType.student:
+        this.studentService.editVerifyFile(this.file.id, data).subscribe(
+          (res: IDocument) => { this.editSuccess(res); },
+          (err: HttpErrorResponse) => { this.editFail(err); }
+        );
+        break;
+    }
   }
 
   async editSuccess(res: IDocument): Promise<void> {

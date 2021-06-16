@@ -33,9 +33,9 @@ import { AdministratorEditResponsibilityComponent } from './profile/administrato
 import { AdministratorCreateResponsibilityComponent } from './profile/administrator/administrator-create-responsibility/administrator-create-responsibility.component';
 import { ManagerSubstituteComponent } from './profile/manager/manager-substitute/manager-substitute.component';
 import { StudentVerifyComponent } from './profile/student/student-verify/student-verify.component';
-import { StudentEditVerifyFileComponent } from './profile/student/student-edit-verify-file/student-edit-verify-file.component';
 import { AlumnusVerifyComponent } from './profile/alumnus/alumnus-verify/alumnus-verify.component';
-import { AlumnusEditVerifyFileComponent } from './profile/alumnus/alumnus-edit-verify-file/alumnus-edit-verify-file.component';
+import { EditVerifyFileComponent } from './profile/edit-verify-file/edit-verify-file.component';
+
 
 @NgModule({
   declarations: [
@@ -65,9 +65,8 @@ import { AlumnusEditVerifyFileComponent } from './profile/alumnus/alumnus-edit-v
     AdministratorCreateResponsibilityComponent,
     ManagerSubstituteComponent,
     StudentVerifyComponent,
-    StudentEditVerifyFileComponent,
     AlumnusVerifyComponent,
-    AlumnusEditVerifyFileComponent
+    EditVerifyFileComponent
   ],
   imports: [
     CommonModule,

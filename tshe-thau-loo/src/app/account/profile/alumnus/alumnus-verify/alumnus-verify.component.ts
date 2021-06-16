@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import { IAlumnusVerify } from '../../../../models/account/profile/alumnus/alumnus-verify.model';
 import { AlumnusService } from '../../../../services/account/alumnus/alumnus.service';
 import { IAlumnusEditVerify } from '../../../../models/account/profile/alumnus/alumnus-edit-verify.model';
+import { RoleType } from '../../../../enums/role-type.enum';
 
 @Component({
   selector: 'app-alumnus-verify',
@@ -199,7 +200,7 @@ export class AlumnusVerifyComponent implements OnInit {
   }
 
   async editFile(file: IDocument): Promise<void> {
-    const data = await this.modalService.editAlumnusVerifyFile(file);
+    const data = await this.modalService.editVerifyFile(RoleType.alumnus, file);
     if (data !== undefined) {
       const index = this.verify.files.findIndex(x => x.id === data.id);
       this.verify.files[index] = data;
