@@ -15,18 +15,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using MimeKit;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Account;
-using TsheThauLoo.Dtos.Account.Email;
 using TsheThauLoo.Dtos.Account.Login;
-using TsheThauLoo.Dtos.Account.Password;
 using TsheThauLoo.Entities.User;
-using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Account;
-using TsheThauLoo.Validator.Account.Email;
-using TsheThauLoo.Validator.Account.Password;
 
 namespace TsheThauLoo.Controllers.Account
 {
@@ -42,7 +36,6 @@ namespace TsheThauLoo.Controllers.Account
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
         private readonly TsheThauLooDbContext _dbContext;
-        private readonly IMailService _mailService;
 
         public AccountController(
             ILogger<AccountController> logger, 
@@ -51,8 +44,7 @@ namespace TsheThauLoo.Controllers.Account
             RoleManager<ApplicationRole> roleManager, 
             IConfiguration configuration, 
             IWebHostEnvironment environment, 
-            TsheThauLooDbContext dbContext, 
-            IMailService mailService)
+            TsheThauLooDbContext dbContext)
         {
             _logger = logger;
             _userManager = userManager;
@@ -61,7 +53,6 @@ namespace TsheThauLoo.Controllers.Account
             _configuration = configuration;
             _environment = environment;
             _dbContext = dbContext;
-            _mailService = mailService;
         }
         
         [AllowAnonymous]
@@ -197,141 +188,7 @@ namespace TsheThauLoo.Controllers.Account
             }
             return BadRequest(result.Errors);
         }
-        
-        [AuthAuthorize]
-        [HttpPost("email", Name = nameof(ChangeEmail))]
-        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailDto dto)
-        {
-            ChangeEmailDtoValidator validator = new ChangeEmailDtoValidator();
-            ValidationResult result = await validator.ValidateAsync(dto);
-            if (result.IsValid)
-            {
-                #region 驗證重複
 
-                if (await _userManager.Users.AnyAsync(x => x.Email == dto.NewEmail))
-                {
-                    result.Errors.Add(new ValidationFailure("newEmail", "新的電子郵件已經被使用"));
-                    return BadRequest(result.Errors);
-                }
-
-                #endregion
-                
-                var userId = User.Claims
-                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
-                var user = await _userManager.FindByIdAsync(userId);
-
-                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        var oldEmail = user.Email;
-                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Email, oldEmail), new Claim(ClaimTypes.Email, dto.NewEmail)) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        user.Email = dto.NewEmail;
-                        user.NormalizedEmail = dto.NewEmail.ToUpper();
-                        user.EmailConfirmed = false;
-                        _dbContext.Users.Update(user);
-                        if (await _dbContext.SaveChangesAsync() < 0)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        
-                        #region UpdateSecurity
-
-                        var oldSecurityStamp = user.SecurityStamp;
-                        if (await _userManager.UpdateSecurityStampAsync(user) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-
-                        #endregion
-                        
-                        await transaction.CommitAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-                }
-                
-                #region 寄信
-
-                var link = $"{_configuration["FrontendUrl"]}/account/email/confirm" + 
-                           $"?userId={Uri.EscapeDataString(user.Id)}" + 
-                           $"&token={Uri.EscapeDataString(await _userManager.GenerateEmailConfirmationTokenAsync(user))}";
-
-                await _mailService.SendLinkEmailAsync(MessageImportance.High, user.Email, user.Email, 
-                    "用戶電子郵件驗證",
-                    "<p>請點擊下方按鈕驗證您的電子郵件</p>", 
-                    link, "立即驗證",
-                    $"<p>若您無法直接點擊連結，請複製以下網址，在瀏覽器網址列中貼上：</p>" +
-                    $"<p><a href=\"{link}\">{link}</a></p>");
-
-                #endregion
-                
-                return NoContent();
-            }
-            return BadRequest(result.Errors);
-        }
-        
-        [AllowAnonymous]
-        [HttpPost("email/confirm", Name = nameof(ConfirmEmail))]
-        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailDto dto)
-        {
-            ConfirmEmailDtoValidator validator = new ConfirmEmailDtoValidator();
-            ValidationResult result = await validator.ValidateAsync(dto);
-            if (result.IsValid)
-            {
-                var user = await _userManager.FindByIdAsync(dto.UserId);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-                
-                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        if (await _userManager.ConfirmEmailAsync(user, dto.Token) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        
-                        #region UpdateSecurity
-
-                        var oldSecurityStamp = user.SecurityStamp;
-                        if (await _userManager.UpdateSecurityStampAsync(user) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-
-                        #endregion
-                        
-                        await transaction.CommitAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-                }
-
-                return NoContent();
-            }
-            return BadRequest(result.Errors);
-        }
-        
         [AuthAuthorize]
         [HttpPost("phone", Name = nameof(ChangePhone))]
         public async Task<IActionResult> ChangePhone([FromBody] ChangePhoneDto dto)
@@ -380,161 +237,6 @@ namespace TsheThauLoo.Controllers.Account
 
                         #endregion
                         
-                        await transaction.CommitAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-                }
-
-                return NoContent();
-            }
-            return BadRequest(result.Errors);
-        }
-        
-        [AuthAuthorize]
-        [HttpPost("password", Name = nameof(ChangePassword))]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
-        {
-            ChangePasswordDtoValidator validator = new ChangePasswordDtoValidator();
-            ValidationResult result = await validator.ValidateAsync(dto);
-            if (result.IsValid)
-            {
-                var userId = User.Claims
-                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
-                var user = await _userManager.FindByIdAsync(userId);
-                
-                #region 驗證密碼
-
-                if (!await _userManager.CheckPasswordAsync(user, dto.CurrentPassword))
-                {
-                    result.Errors.Add(new ValidationFailure("currentPassword", "目前密碼錯誤"));
-                    return BadRequest(result.Errors);
-                }
-
-                #endregion
-                
-                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        var oldSecurityStamp = user.SecurityStamp;
-                        
-                        if (await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        
-                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-
-                        await transaction.CommitAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-                }
-
-                return NoContent();
-            }
-            return BadRequest(result.Errors);
-        }
-        
-        [AllowAnonymous]
-        [HttpPost("password/forget", Name = nameof(ForgetPassword))]
-        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordDto dto)
-        {
-            ForgetPasswordDtoValidator validator = new ForgetPasswordDtoValidator();
-            ValidationResult result = await validator.ValidateAsync(dto);
-            if (result.IsValid)
-            {
-                var user = await _userManager.FindByEmailAsync(dto.Email);
-                if (user == null)
-                {
-                    result.Errors.Add(new ValidationFailure("email", "此電子郵件尚未被註冊"));
-                    return BadRequest(result.Errors);
-                }
-                
-                #region UpdateSecurity
-
-                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        var oldSecurityStamp = user.SecurityStamp;
-                        if (await _userManager.UpdateSecurityStampAsync(user) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        
-                        await transaction.CommitAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-                }
-
-                #endregion
-
-                #region 寄信
-
-                var link = $"{_configuration["FrontendUrl"]}/account/password/reset" +
-                           $"?userId={Uri.EscapeDataString(user.Id)}" +
-                           $"&token={Uri.EscapeDataString(await _userManager.GeneratePasswordResetTokenAsync(user))}";
-
-                await _mailService.SendLinkEmailAsync(MessageImportance.High, user.Email, user.Email,
-                    "用戶重設密碼",
-                    "<p><b>請點擊下方按鈕重設您的密碼</b></p>",
-                    link, "重設密碼",
-                    $"<p>若您無法直接點擊連結，請複製以下網址，在瀏覽器網址列中貼上：</p>" +
-                    $"<p><a href=\"{link}\">{link}</a></p>");
-
-                #endregion
-                
-                return NoContent();
-            }
-            return BadRequest(result.Errors);
-        }
-        
-        [AllowAnonymous]
-        [HttpPost("password/reset", Name = nameof(ResetPassword))]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
-        {
-            ResetPasswordDtoValidator validator = new ResetPasswordDtoValidator();
-            ValidationResult result = await validator.ValidateAsync(dto);
-            if (result.IsValid)
-            {
-                var user = await _userManager.FindByIdAsync(dto.UserId);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-
-                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        var oldSecurityStamp = user.SecurityStamp;
-                        if (await _userManager.ResetPasswordAsync(user, dto.Token, dto.Password) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
-                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
-                        {
-                            throw new DbUpdateException();
-                        }
                         await transaction.CommitAsync();
                     }
                     catch (DbUpdateException)
