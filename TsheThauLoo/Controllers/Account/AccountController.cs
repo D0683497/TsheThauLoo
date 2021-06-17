@@ -445,6 +445,109 @@ namespace TsheThauLoo.Controllers.Account
             }
             return BadRequest(result.Errors);
         }
+        
+        [AllowAnonymous]
+        [HttpPost("password/forget", Name = nameof(ForgetPassword))]
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordDto dto)
+        {
+            ForgetPasswordDtoValidator validator = new ForgetPasswordDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(dto.Email);
+                if (user == null)
+                {
+                    result.Errors.Add(new ValidationFailure("email", "此電子郵件尚未被註冊"));
+                    return BadRequest(result.Errors);
+                }
+                
+                #region UpdateSecurity
+
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        var oldSecurityStamp = user.SecurityStamp;
+                        if (await _userManager.UpdateSecurityStampAsync(user) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        
+                        await transaction.CommitAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+
+                #endregion
+
+                #region 寄信
+
+                var link = $"{_configuration["FrontendUrl"]}/account/password/reset" +
+                           $"?userId={Uri.EscapeDataString(user.Id)}" +
+                           $"&token={Uri.EscapeDataString(await _userManager.GeneratePasswordResetTokenAsync(user))}";
+
+                await _mailService.SendLinkEmailAsync(MessageImportance.High, user.Email, user.Email,
+                    "用戶重設密碼",
+                    "<p><b>請點擊下方按鈕重設您的密碼</b></p>",
+                    link, "重設密碼",
+                    $"<p>若您無法直接點擊連結，請複製以下網址，在瀏覽器網址列中貼上：</p>" +
+                    $"<p><a href=\"{link}\">{link}</a></p>");
+
+                #endregion
+                
+                return NoContent();
+            }
+            return BadRequest(result.Errors);
+        }
+        
+        [AllowAnonymous]
+        [HttpPost("password/reset", Name = nameof(ResetPassword))]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            ResetPasswordDtoValidator validator = new ResetPasswordDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(dto.UserId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        var oldSecurityStamp = user.SecurityStamp;
+                        if (await _userManager.ResetPasswordAsync(user, dto.Token, dto.Password) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        await transaction.CommitAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+            return BadRequest(result.Errors);
+        }
 
         private string GenerateJwtToken(IList<Claim> claims)
         {

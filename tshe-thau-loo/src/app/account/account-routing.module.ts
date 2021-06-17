@@ -32,6 +32,8 @@ import { ChangeEmailComponent } from './email/change-email/change-email.componen
 import { ConfirmEmailComponent } from './email/confirm-email/confirm-email.component';
 import { ChangePhoneComponent } from './change-phone/change-phone.component';
 import { ChangePasswordComponent } from './password/change-password/change-password.component';
+import { ForgetPasswordComponent } from './password/forget-password/forget-password.component';
+import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -111,7 +113,9 @@ const routes: Routes = [
   {
     path: 'password',
     children: [
-      { path: '', component: ChangePasswordComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] }
+      { path: '', component: ChangePasswordComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] },
+      { path: 'forget', component: ForgetPasswordComponent, pathMatch: 'full' },
+      { path: 'reset', component: ResetPasswordComponent, pathMatch: 'full' }
     ]
   },
   { path: '', pathMatch: 'full', canActivate: [AccountRedirectGuard], runGuardsAndResolvers: 'always' }

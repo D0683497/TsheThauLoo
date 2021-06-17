@@ -40,6 +40,8 @@ import { ChangeEmailComponent } from './email/change-email/change-email.componen
 import { ConfirmEmailComponent } from './email/confirm-email/confirm-email.component';
 import { ChangePhoneComponent } from './change-phone/change-phone.component';
 import { ChangePasswordComponent } from './password/change-password/change-password.component';
+import { ForgetPasswordComponent } from './password/forget-password/forget-password.component';
+import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
 
 
 @NgModule({
@@ -76,7 +78,9 @@ import { ChangePasswordComponent } from './password/change-password/change-passw
     ChangeEmailComponent,
     ConfirmEmailComponent,
     ChangePhoneComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ForgetPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,

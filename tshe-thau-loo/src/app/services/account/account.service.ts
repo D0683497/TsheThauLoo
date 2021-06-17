@@ -11,6 +11,8 @@ import { IChangeEmail } from '../../models/account/email/change-email.model';
 import { IConfirmEmail } from '../../models/account/email/confirm-email.model';
 import { IChangePhone } from '../../models/account/change-phone.models';
 import { IChangePassword } from '../../models/account/password/change-password.models';
+import { IForgetPassword } from '../../models/account/password/forget-password.models';
+import { IResetPassword } from '../../models/account/password/reset-password.models';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +64,16 @@ export class AccountService {
 
   changePassword(data: IChangePassword): Observable<void> {
     const url = `${this.urlRoot}/account/password`;
+    return this.http.post<void>(url, data, this.httpOptions);
+  }
+
+  forgetPassword(data: IForgetPassword): Observable<void> {
+    const url = `${this.urlRoot}/account/password/forget`;
+    return this.http.post<void>(url, data, this.httpOptions);
+  }
+
+  resetPassword(data: IResetPassword): Observable<void> {
+    const url = `${this.urlRoot}/account/password/reset`;
     return this.http.post<void>(url, data, this.httpOptions);
   }
 
