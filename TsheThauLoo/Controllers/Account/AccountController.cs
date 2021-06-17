@@ -15,12 +15,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using MimeKit;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Account;
+using TsheThauLoo.Dtos.Account.Email;
 using TsheThauLoo.Dtos.Account.Login;
 using TsheThauLoo.Entities.User;
+using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Account;
+using TsheThauLoo.Validator.Account.Email;
 
 namespace TsheThauLoo.Controllers.Account
 {
@@ -36,6 +40,7 @@ namespace TsheThauLoo.Controllers.Account
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
         private readonly TsheThauLooDbContext _dbContext;
+        private readonly IMailService _mailService;
 
         public AccountController(
             ILogger<AccountController> logger, 
@@ -44,7 +49,8 @@ namespace TsheThauLoo.Controllers.Account
             RoleManager<ApplicationRole> roleManager, 
             IConfiguration configuration, 
             IWebHostEnvironment environment, 
-            TsheThauLooDbContext dbContext)
+            TsheThauLooDbContext dbContext, 
+            IMailService mailService)
         {
             _logger = logger;
             _userManager = userManager;
@@ -53,6 +59,7 @@ namespace TsheThauLoo.Controllers.Account
             _configuration = configuration;
             _environment = environment;
             _dbContext = dbContext;
+            _mailService = mailService;
         }
         
         [AllowAnonymous]
@@ -143,19 +150,130 @@ namespace TsheThauLoo.Controllers.Account
                 var userId = User.Claims
                     .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
                 var user = await _userManager.FindByIdAsync(userId);
-                user.UserName = dto.NewUserName;
-                user.NormalizedUserName = dto.NewUserName.ToUpper();
-                _dbContext.Users.Update(user);
-                await _dbContext.SaveChangesAsync();
 
-                #region UpdateSecurity
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        var oldUserName = user.UserName;
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Name, oldUserName), new Claim(ClaimTypes.Name, dto.NewUserName)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        user.UserName = dto.NewUserName;
+                        user.NormalizedUserName = dto.NewUserName.ToUpper();
+                        _dbContext.Users.Update(user);
+                        if (await _dbContext.SaveChangesAsync() < 0)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        
+                        #region UpdateSecurity
 
-                var oldSecurityStamp = user.SecurityStamp;
-                await _userManager.UpdateSecurityStampAsync(user);
-                await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp));
+                        var oldSecurityStamp = user.SecurityStamp;
+                        if (await _userManager.UpdateSecurityStampAsync(user) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+
+                        #endregion
+                        
+                        await transaction.CommitAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+            return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize]
+        [HttpPost("email", Name = nameof(ChangeEmail))]
+        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailDto dto)
+        {
+            ChangeEmailDtoValidator validator = new ChangeEmailDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                #region 驗證重複
+
+                if (await _userManager.Users.AnyAsync(x => x.Email == dto.NewEmail))
+                {
+                    result.Errors.Add(new ValidationFailure("newEmail", "新的電子郵件已經被使用"));
+                    return BadRequest(result.Errors);
+                }
 
                 #endregion
+                
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var user = await _userManager.FindByIdAsync(userId);
 
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        var oldEmail = user.Email;
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Email, oldEmail), new Claim(ClaimTypes.Email, dto.NewEmail)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        user.Email = dto.NewEmail;
+                        user.NormalizedEmail = dto.NewEmail.ToUpper();
+                        user.EmailConfirmed = false;
+                        _dbContext.Users.Update(user);
+                        if (await _dbContext.SaveChangesAsync() < 0)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        
+                        #region UpdateSecurity
+
+                        var oldSecurityStamp = user.SecurityStamp;
+                        if (await _userManager.UpdateSecurityStampAsync(user) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+
+                        #endregion
+                        
+                        await transaction.CommitAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+                
+                #region 寄信
+
+                var link = $"{_configuration["FrontendUrl"]}/account/email/confirm" + 
+                           $"?userId={Uri.EscapeDataString(user.Id)}" + 
+                           $"&token={Uri.EscapeDataString(await _userManager.GenerateEmailConfirmationTokenAsync(user))}";
+
+                await _mailService.SendLinkEmailAsync(MessageImportance.High, user.Email, user.Email, 
+                    "用戶電子郵件驗證",
+                    "<p>請點擊下方按鈕驗證您的電子郵件</p>", 
+                    link, "立即驗證",
+                    $"<p>若您無法直接點擊連結，請複製以下網址，在瀏覽器網址列中貼上：</p>" +
+                    $"<p><a href=\"{link}\">{link}</a></p>");
+
+                #endregion
+                
                 return NoContent();
             }
             return BadRequest(result.Errors);

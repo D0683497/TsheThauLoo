@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IChangeUserName } from '../../models/account/change-user-name.models';
-import { LoadingService } from '../../services/loading/loading.service';
-import { AccountService } from '../../services/account/account.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { IFormError } from '../../models/error/form-error.model';
-import { SweetAlertIcon } from '../../enums/sweet-alert-icon.enum';
-import { NotificationService } from '../../services/notification/notification.service';
+import { LoadingService } from '../../../services/loading/loading.service';
+import { AccountService } from '../../../services/account/account.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
+import { IFormError } from '../../../models/error/form-error.model';
+import { IChangeEmail } from '../../../models/account/email/change-email.model';
 
 @Component({
-  selector: 'app-change-user-name',
-  templateUrl: './change-user-name.component.html',
-  styleUrls: ['./change-user-name.component.scss'],
+  selector: 'app-change-email',
+  templateUrl: './change-email.component.html',
+  styleUrls: ['./change-email.component.scss'],
 })
-export class ChangeUserNameComponent implements OnInit {
+export class ChangeEmailComponent implements OnInit {
 
   date = new Date().toISOString();
   changeForm: FormGroup;
@@ -28,20 +28,13 @@ export class ChangeUserNameComponent implements OnInit {
 
   ngOnInit(): void {
     this.changeForm = this.fb.group({
-      newUserName: [
-        null,
-        [
-          Validators.required,
-          Validators.maxLength(100),
-          Validators.pattern('^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+\\-=_.]+$')
-        ]
-      ]
+      newEmail: [null, [Validators.required, Validators.email, Validators.maxLength(320)]],
     });
   }
 
-  async onSubmit(data: IChangeUserName): Promise<void> {
+  async onSubmit(data: IChangeEmail): Promise<void> {
     await this.loadingService.start('修改中...');
-    this.accountService.changeUserName(data).subscribe(
+    this.accountService.changeEmail(data).subscribe(
       () => { this.changeSuccess(); },
       (err: HttpErrorResponse) => { this.changeFail(err); }
     );
@@ -51,7 +44,7 @@ export class ChangeUserNameComponent implements OnInit {
     await this.loadingService.end();
     await this.accountService.logout();
     await this.router.navigate(['/account/login']);
-    await this.notificationService.notify('修改成功', '請重新登入', SweetAlertIcon.success);
+    await this.notificationService.notify('修改成功', '請前往您的信箱收取驗證信', SweetAlertIcon.success);
   }
 
   async changeFail(err: HttpErrorResponse): Promise<void> {

@@ -28,6 +28,7 @@ import { ManagerSubstituteComponent } from './profile/manager/manager-substitute
 import { StudentVerifyComponent } from './profile/student/student-verify/student-verify.component';
 import { AlumnusVerifyComponent } from './profile/alumnus/alumnus-verify/alumnus-verify.component';
 import { ChangeUserNameComponent } from './change-user-name/change-user-name.component';
+import { ChangeEmailComponent } from './email/change-email/change-email.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -96,6 +97,12 @@ const routes: Routes = [
     canActivate: [RequiredLoginGuard]
   },
   { path: 'username', component: ChangeUserNameComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] },
+  {
+    path: 'email',
+    children: [
+      { path: '', component: ChangeEmailComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] }
+    ]
+  },
   { path: '', pathMatch: 'full', canActivate: [AccountRedirectGuard], runGuardsAndResolvers: 'always' }
 ];
 

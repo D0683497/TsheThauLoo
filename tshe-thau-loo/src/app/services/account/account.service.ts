@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { ILoginResponse } from '../../models/account/login/login-response.model';
 import { map } from 'rxjs/operators';
 import { IChangeUserName } from '../../models/account/change-user-name.models';
+import { IChangeEmail } from '../../models/account/email/change-email.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,11 @@ export class AccountService {
 
   changeUserName(data: IChangeUserName): Observable<void> {
     const url = `${this.urlRoot}/account/username`;
+    return this.http.post<void>(url, data, this.httpOptions);
+  }
+
+  changeEmail(data: IChangeEmail): Observable<void> {
+    const url = `${this.urlRoot}/account/email`;
     return this.http.post<void>(url, data, this.httpOptions);
   }
 
