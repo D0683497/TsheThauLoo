@@ -38,6 +38,7 @@ import { EditVerifyFileComponent } from './profile/edit-verify-file/edit-verify-
 import { ChangeUserNameComponent } from './change-user-name/change-user-name.component';
 import { ChangeEmailComponent } from './email/change-email/change-email.component';
 import { ConfirmEmailComponent } from './email/confirm-email/confirm-email.component';
+import { ChangePhoneComponent } from './change-phone/change-phone.component';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { ConfirmEmailComponent } from './email/confirm-email/confirm-email.compo
     EditVerifyFileComponent,
     ChangeUserNameComponent,
     ChangeEmailComponent,
-    ConfirmEmailComponent
+    ConfirmEmailComponent,
+    ChangePhoneComponent
   ],
   imports: [
     CommonModule,

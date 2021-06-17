@@ -329,6 +329,68 @@ namespace TsheThauLoo.Controllers.Account
             }
             return BadRequest(result.Errors);
         }
+        
+        [AuthAuthorize]
+        [HttpPost("phone", Name = nameof(ChangePhone))]
+        public async Task<IActionResult> ChangePhone([FromBody] ChangePhoneDto dto)
+        {
+            ChangePhoneDtoValidator validator = new ChangePhoneDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                #region 驗證重複
+
+                if (await _userManager.Users.AnyAsync(x => x.PhoneNumber == dto.NewPhoneNumber))
+                {
+                    result.Errors.Add(new ValidationFailure("newPhoneNumber", "新的手機號碼已經被使用"));
+                    return BadRequest(result.Errors);
+                }
+
+                #endregion
+                
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var user = await _userManager.FindByIdAsync(userId);
+
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        user.PhoneNumber = dto.NewPhoneNumber;
+                        user.PhoneNumberConfirmed = false;
+                        _dbContext.Users.Update(user);
+                        if (await _dbContext.SaveChangesAsync() < 0)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        
+                        #region UpdateSecurity
+
+                        var oldSecurityStamp = user.SecurityStamp;
+                        if (await _userManager.UpdateSecurityStampAsync(user) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+
+                        #endregion
+                        
+                        await transaction.CommitAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+            return BadRequest(result.Errors);
+        }
 
         private string GenerateJwtToken(IList<Claim> claims)
         {

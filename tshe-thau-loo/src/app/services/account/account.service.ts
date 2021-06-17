@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { IChangeUserName } from '../../models/account/change-user-name.models';
 import { IChangeEmail } from '../../models/account/email/change-email.model';
 import { IConfirmEmail } from '../../models/account/email/confirm-email.model';
+import { IChangePhone } from '../../models/account/change-phone.models';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,11 @@ export class AccountService {
 
   confirmEmail(data: IConfirmEmail): Observable<void> {
     const url = `${this.urlRoot}/account/email/confirm`;
+    return this.http.post<void>(url, data, this.httpOptions);
+  }
+
+  changePhone(data: IChangePhone): Observable<void> {
+    const url = `${this.urlRoot}/account/phone`;
     return this.http.post<void>(url, data, this.httpOptions);
   }
 
