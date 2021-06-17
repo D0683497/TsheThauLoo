@@ -278,6 +278,57 @@ namespace TsheThauLoo.Controllers.Account
             }
             return BadRequest(result.Errors);
         }
+        
+        [AllowAnonymous]
+        [HttpPost("email/confirm", Name = nameof(ConfirmEmail))]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailDto dto)
+        {
+            ConfirmEmailDtoValidator validator = new ConfirmEmailDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(dto.UserId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        if (await _userManager.ConfirmEmailAsync(user, dto.Token) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        
+                        #region UpdateSecurity
+
+                        var oldSecurityStamp = user.SecurityStamp;
+                        if (await _userManager.UpdateSecurityStampAsync(user) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+
+                        #endregion
+                        
+                        await transaction.CommitAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+            return BadRequest(result.Errors);
+        }
 
         private string GenerateJwtToken(IList<Claim> claims)
         {

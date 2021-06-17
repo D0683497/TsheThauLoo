@@ -37,6 +37,7 @@ import { AlumnusVerifyComponent } from './profile/alumnus/alumnus-verify/alumnus
 import { EditVerifyFileComponent } from './profile/edit-verify-file/edit-verify-file.component';
 import { ChangeUserNameComponent } from './change-user-name/change-user-name.component';
 import { ChangeEmailComponent } from './email/change-email/change-email.component';
+import { ConfirmEmailComponent } from './email/confirm-email/confirm-email.component';
 
 
 @NgModule({
@@ -70,7 +71,8 @@ import { ChangeEmailComponent } from './email/change-email/change-email.componen
     AlumnusVerifyComponent,
     EditVerifyFileComponent,
     ChangeUserNameComponent,
-    ChangeEmailComponent
+    ChangeEmailComponent,
+    ConfirmEmailComponent
   ],
   imports: [
     CommonModule,

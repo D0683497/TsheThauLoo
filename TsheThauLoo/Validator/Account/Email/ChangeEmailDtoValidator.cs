@@ -8,6 +8,7 @@ namespace TsheThauLoo.Validator.Account.Email
         public ChangeEmailDtoValidator()
         {
             RuleFor(x => x.NewEmail)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithName("新的電子郵件")
                 .WithMessage("{PropertyName}是必填的")

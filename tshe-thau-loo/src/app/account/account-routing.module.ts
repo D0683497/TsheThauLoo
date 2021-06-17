@@ -29,6 +29,7 @@ import { StudentVerifyComponent } from './profile/student/student-verify/student
 import { AlumnusVerifyComponent } from './profile/alumnus/alumnus-verify/alumnus-verify.component';
 import { ChangeUserNameComponent } from './change-user-name/change-user-name.component';
 import { ChangeEmailComponent } from './email/change-email/change-email.component';
+import { ConfirmEmailComponent } from './email/confirm-email/confirm-email.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -100,7 +101,8 @@ const routes: Routes = [
   {
     path: 'email',
     children: [
-      { path: '', component: ChangeEmailComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] }
+      { path: '', component: ChangeEmailComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] },
+      { path: 'confirm', component: ConfirmEmailComponent, pathMatch: 'full' }
     ]
   },
   { path: '', pathMatch: 'full', canActivate: [AccountRedirectGuard], runGuardsAndResolvers: 'always' }
