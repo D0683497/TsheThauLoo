@@ -80,5 +80,41 @@ namespace TsheThauLoo.Utilities
                 .WithMessage("{PropertyName}至少需要一位小寫字母")
                 .OverridePropertyName("password");     
         }
+        
+        public static IRuleBuilderOptions<T, string> CurrentPassword<T>(this IRuleBuilder<T, string> ruleBuilder)     
+        {
+            // (?=.*[a-z])  // RequireLowercase
+            // (?=.*[A-Z])  // RequireUppercase
+            // (?=.*\d) // RequireDigit
+            // (?=.*\W]) // RequireNonAlphanumeric
+            
+            return ruleBuilder
+                .Matches(@"(?=.*\d)")
+                .WithName("目前密碼")
+                .WithMessage("{PropertyName}至少需要一位數字")
+                .OverridePropertyName("currentPassword")
+                .Matches(@"(?=.*[a-z])")
+                .WithName("目前密碼")
+                .WithMessage("{PropertyName}至少需要一位小寫字母")
+                .OverridePropertyName("currentPassword");     
+        }
+        
+        public static IRuleBuilderOptions<T, string> NewPassword<T>(this IRuleBuilder<T, string> ruleBuilder)     
+        {
+            // (?=.*[a-z])  // RequireLowercase
+            // (?=.*[A-Z])  // RequireUppercase
+            // (?=.*\d) // RequireDigit
+            // (?=.*\W]) // RequireNonAlphanumeric
+            
+            return ruleBuilder
+                .Matches(@"(?=.*\d)")
+                .WithName("新密碼")
+                .WithMessage("{PropertyName}至少需要一位數字")
+                .OverridePropertyName("newPassword")
+                .Matches(@"(?=.*[a-z])")
+                .WithName("新密碼")
+                .WithMessage("{PropertyName}至少需要一位小寫字母")
+                .OverridePropertyName("newPassword");     
+        }
     }
 }

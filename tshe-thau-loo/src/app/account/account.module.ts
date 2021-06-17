@@ -39,6 +39,7 @@ import { ChangeUserNameComponent } from './change-user-name/change-user-name.com
 import { ChangeEmailComponent } from './email/change-email/change-email.component';
 import { ConfirmEmailComponent } from './email/confirm-email/confirm-email.component';
 import { ChangePhoneComponent } from './change-phone/change-phone.component';
+import { ChangePasswordComponent } from './password/change-password/change-password.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { ChangePhoneComponent } from './change-phone/change-phone.component';
     ChangeUserNameComponent,
     ChangeEmailComponent,
     ConfirmEmailComponent,
-    ChangePhoneComponent
+    ChangePhoneComponent,
+    ChangePasswordComponent
   ],
   imports: [
     CommonModule,

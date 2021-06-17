@@ -20,11 +20,13 @@ using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Account;
 using TsheThauLoo.Dtos.Account.Email;
 using TsheThauLoo.Dtos.Account.Login;
+using TsheThauLoo.Dtos.Account.Password;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Account;
 using TsheThauLoo.Validator.Account.Email;
+using TsheThauLoo.Validator.Account.Password;
 
 namespace TsheThauLoo.Controllers.Account
 {
@@ -378,6 +380,58 @@ namespace TsheThauLoo.Controllers.Account
 
                         #endregion
                         
+                        await transaction.CommitAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+            return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize]
+        [HttpPost("password", Name = nameof(ChangePassword))]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            ChangePasswordDtoValidator validator = new ChangePasswordDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var user = await _userManager.FindByIdAsync(userId);
+                
+                #region 驗證密碼
+
+                if (!await _userManager.CheckPasswordAsync(user, dto.CurrentPassword))
+                {
+                    result.Errors.Add(new ValidationFailure("currentPassword", "目前密碼錯誤"));
+                    return BadRequest(result.Errors);
+                }
+
+                #endregion
+                
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        var oldSecurityStamp = user.SecurityStamp;
+                        
+                        if (await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+                        
+                        if (await _userManager.ReplaceClaimAsync(user, new Claim(ClaimTypes.Sid, oldSecurityStamp), new Claim(ClaimTypes.Sid, user.SecurityStamp)) != IdentityResult.Success)
+                        {
+                            throw new DbUpdateException();
+                        }
+
                         await transaction.CommitAsync();
                     }
                     catch (DbUpdateException)

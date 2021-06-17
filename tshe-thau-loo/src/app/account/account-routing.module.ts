@@ -31,6 +31,7 @@ import { ChangeUserNameComponent } from './change-user-name/change-user-name.com
 import { ChangeEmailComponent } from './email/change-email/change-email.component';
 import { ConfirmEmailComponent } from './email/confirm-email/confirm-email.component';
 import { ChangePhoneComponent } from './change-phone/change-phone.component';
+import { ChangePasswordComponent } from './password/change-password/change-password.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -107,6 +108,12 @@ const routes: Routes = [
     ]
   },
   { path: 'phone', component: ChangePhoneComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] },
+  {
+    path: 'password',
+    children: [
+      { path: '', component: ChangePasswordComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] }
+    ]
+  },
   { path: '', pathMatch: 'full', canActivate: [AccountRedirectGuard], runGuardsAndResolvers: 'always' }
 ];
 

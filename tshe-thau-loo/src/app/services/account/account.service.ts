@@ -10,6 +10,7 @@ import { IChangeUserName } from '../../models/account/change-user-name.models';
 import { IChangeEmail } from '../../models/account/email/change-email.model';
 import { IConfirmEmail } from '../../models/account/email/confirm-email.model';
 import { IChangePhone } from '../../models/account/change-phone.models';
+import { IChangePassword } from '../../models/account/password/change-password.models';
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +57,11 @@ export class AccountService {
 
   changePhone(data: IChangePhone): Observable<void> {
     const url = `${this.urlRoot}/account/phone`;
+    return this.http.post<void>(url, data, this.httpOptions);
+  }
+
+  changePassword(data: IChangePassword): Observable<void> {
+    const url = `${this.urlRoot}/account/password`;
     return this.http.post<void>(url, data, this.httpOptions);
   }
 
