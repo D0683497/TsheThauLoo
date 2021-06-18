@@ -132,4 +132,23 @@ export class AccountService {
     return this.http.delete<void>(url, this.httpOptions);
   }
 
+  getPhoto(): Observable<Blob> {
+    const url = `${this.urlRoot}/account/photo`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
+  createPhoto(file: File): Observable<IDocument> {
+    const url = `${this.urlRoot}/account/photo`;
+    const form = new FormData();
+    form.append('type', file.type);
+    form.append('name', file.name);
+    form.append('fileData', file);
+    return this.http.post<IDocument>(url, form);
+  }
+
+  deletePhoto(): Observable<void> {
+    const url = `${this.urlRoot}/account/photo`;
+    return this.http.delete<void>(url, this.httpOptions);
+  }
+
 }

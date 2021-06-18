@@ -176,6 +176,7 @@ namespace TsheThauLoo.Controllers.Account
                 .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
             var entity = await _dbContext.Users
                 .AsNoTracking()
+                .Include(x => x.UserPhoto)
                 .Include(x => x.Administrator)
                 .Include(x => x.Administrator.Responsibilities)
                 .SingleOrDefaultAsync(x => x.Id == userId);

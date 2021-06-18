@@ -10,6 +10,10 @@ namespace TsheThauLoo.Dtos.Account.Profile
         [JsonPropertyName("id")]
         [Display(Name = "使用者識別碼")]
         public string Id { get; set; }
+
+        [JsonPropertyName("hasPhoto")]
+        [Display(Name = "使用者照片")]
+        public bool HasPhoto { get; set; }
         
         [JsonPropertyName("userName")]
         [Display(Name = "使用者名稱")]

@@ -98,7 +98,11 @@ namespace TsheThauLoo.Mappers.Account
                 .ForPath(dest => dest.ContactEmail,
                     opt => opt.MapFrom(src => src.Administrator.ContactEmail))
                 .ForPath(dest => dest.Responsibilities,
-                    opt => opt.MapFrom(src => src.Administrator.Responsibilities));
+                    opt => opt.MapFrom(src => src.Administrator.Responsibilities))
+                .AfterMap((src, dest) =>
+                {
+                    dest.HasPhoto = src.UserPhoto != null;
+                });
             
             #endregion
 

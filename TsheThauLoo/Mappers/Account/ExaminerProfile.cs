@@ -78,7 +78,11 @@ namespace TsheThauLoo.Mappers.Account
                 .ForPath(dest => dest.DivisionName,
                     opt => opt.MapFrom(src => src.Examiner.DivisionName))
                 .ForPath(dest => dest.JobTitle,
-                    opt => opt.MapFrom(src => src.Examiner.JobTitle));
+                    opt => opt.MapFrom(src => src.Examiner.JobTitle))
+                .AfterMap((src, dest) =>
+                {
+                    dest.HasPhoto = src.UserPhoto != null;
+                });
 
             #endregion
             

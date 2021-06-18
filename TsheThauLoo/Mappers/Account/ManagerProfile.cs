@@ -113,7 +113,11 @@ namespace TsheThauLoo.Mappers.Account
                 .ForPath(dest => dest.ContactAddress,
                     opt => opt.MapFrom(src => src.Manager.ContactAddress))
                 .ForPath(dest => dest.Substitute,
-                    opt => opt.MapFrom(src => src.Manager.Substitute));
+                    opt => opt.MapFrom(src => src.Manager.Substitute))
+                .AfterMap((src, dest) =>
+                {
+                    dest.HasPhoto = src.UserPhoto != null;
+                });
 
             #endregion
 

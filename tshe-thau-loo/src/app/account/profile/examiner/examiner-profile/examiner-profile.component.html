@@ -22,6 +22,23 @@
     <ng-container *ngIf="(loadingError$ | async) === false; else error">
       <ion-card>
         <ion-item lines="none">
+          <ion-label>使用者照片</ion-label>
+          <ion-avatar slot="end">
+            <ion-img *ngIf="profile.hasPhoto" src="{{photo}}"></ion-img>
+            <ion-img *ngIf="!profile.hasPhoto" src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg"></ion-img>
+          </ion-avatar>
+        </ion-item>
+        <ion-card-content>
+          <ion-item *ngIf="profile.hasPhoto" lines="none" color="light">
+            <ion-label class="ion-text-wrap">若要編輯使用者照片請先點擊刪除在上傳新的照片</ion-label>
+          </ion-item>
+        </ion-card-content>
+        <ion-button *ngIf="!profile.hasPhoto" (click)="file.click()" class="ion-margin" color="primary" shape="round" expand="block">上傳</ion-button>
+        <input (change)="upload($event.target.files)" class="ion-hide" type="file" #file>
+        <ion-button *ngIf="profile.hasPhoto" (click)="delete()" class="ion-margin" color="danger" shape="round" expand="block">刪除</ion-button>
+      </ion-card>
+      <ion-card>
+        <ion-item lines="none">
           <ion-label>基本資訊</ion-label>
           <ion-badge slot="end" [color]="profile.isEnable ? 'success' : 'light'">
             {{profile.isEnable ? '帳戶已啟用' : '帳戶尚未啟用'}}

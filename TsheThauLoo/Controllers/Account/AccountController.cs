@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -18,9 +20,11 @@ using Microsoft.IdentityModel.Tokens;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Account;
 using TsheThauLoo.Dtos.Account.Login;
+using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Account;
+using TsheThauLoo.Validator.Account.File;
 
 namespace TsheThauLoo.Controllers.Account
 {
@@ -36,6 +40,7 @@ namespace TsheThauLoo.Controllers.Account
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
         private readonly TsheThauLooDbContext _dbContext;
+        private readonly IMapper _mapper;
 
         public AccountController(
             ILogger<AccountController> logger, 
@@ -44,7 +49,8 @@ namespace TsheThauLoo.Controllers.Account
             RoleManager<ApplicationRole> roleManager, 
             IConfiguration configuration, 
             IWebHostEnvironment environment, 
-            TsheThauLooDbContext dbContext)
+            TsheThauLooDbContext dbContext, 
+            IMapper mapper)
         {
             _logger = logger;
             _userManager = userManager;
@@ -53,6 +59,7 @@ namespace TsheThauLoo.Controllers.Account
             _configuration = configuration;
             _environment = environment;
             _dbContext = dbContext;
+            _mapper = mapper;
         }
         
         [AllowAnonymous]
@@ -249,6 +256,122 @@ namespace TsheThauLoo.Controllers.Account
                 return NoContent();
             }
             return BadRequest(result.Errors);
+        }
+
+        [AuthAuthorize]
+        [HttpGet("photo", Name = nameof(Photo))]
+        public async Task<IActionResult> Photo()
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.UserPhotos
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            // 路徑、型態、下載的名稱
+            return File(System.IO.File.OpenRead(entity.Path), entity.Type, $"{entity.Name}{entity.Extension}");
+        }
+        
+        [AuthAuthorize]
+        [RequestFormLimits(ValueLengthLimit  = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
+        [HttpPost("photo", Name = nameof(CreatePhoto))]
+        public async Task<IActionResult> CreatePhoto([FromForm] FileCreateDto dto)
+        {
+            FileCreateDtoValidator validator = new FileCreateDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var user = await _dbContext.Users
+                    .Include(x => x.UserPhoto)
+                    .SingleOrDefaultAsync(x => x.Id == userId);
+                if (user.UserPhoto != null)
+                {
+                    return Problem(title: "禁止修改", detail: "使用者照片已存在", statusCode: 403);
+                }
+                
+                var entity = _mapper.Map(dto, user.UserPhoto);
+
+                #region 處理檔案
+
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        using (var stream = new FileStream(entity.Path, FileMode.Create))
+                        {
+                            await dto.FileData.CopyToAsync(stream);
+                        }
+                        user.UserPhoto = entity;
+                        _dbContext.Users.Update(user);
+                        await _dbContext.SaveChangesAsync();
+                        await transaction.CommitAsync();
+                    }
+                    catch (IOException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                    catch (DbUpdateException)
+                    {
+                        System.IO.File.Delete(entity.Path);
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+
+                #endregion
+
+                var returnDto = _mapper.Map<FileDto>(user.UserPhoto);
+                return CreatedAtAction(nameof(Photo), null, returnDto);
+            }
+            return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize]
+        [HttpDelete("photo", Name = nameof(DeletePhoto))]
+        public async Task<IActionResult> DeletePhoto()
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.UserPhotos
+                .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            #region 處理檔案
+
+            await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _dbContext.UserPhotos.Remove(entity);
+                    await _dbContext.SaveChangesAsync();
+                    System.IO.File.Delete(entity.Path);
+                    await transaction.CommitAsync();
+                }
+                catch (IOException)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+                catch (DbUpdateException)
+                {
+                    System.IO.File.Delete(entity.Path);
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
+            #endregion
+            
+            return NoContent();
         }
 
         private string GenerateJwtToken(IList<Claim> claims)

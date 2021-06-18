@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace TsheThauLoo.Entities.User
@@ -11,7 +12,7 @@ namespace TsheThauLoo.Entities.User
         /// 使用者照片識別碼
         /// </summary>
         [Key]
-        public string UserPhotoId { get; set; }
+        public string UserPhotoId { get; set; } = Guid.NewGuid().ToString();
         
         public string ApplicationUserId { get; set; }
         
