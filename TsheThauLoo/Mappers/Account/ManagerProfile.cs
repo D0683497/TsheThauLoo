@@ -44,6 +44,10 @@ namespace TsheThauLoo.Mappers.Account
                 {
                     dest.Manager.ApplicationUserId = dest.Id;
                     dest.Manager.ApplicationUser = dest;
+                    dest.NationalVerify = new NationalVerify
+                    {
+                        ApplicationUserId = dest.Id
+                    };
                     dest.Manager.Substitute.ManagerId = dest.Manager.ManagerId;
                 });
 

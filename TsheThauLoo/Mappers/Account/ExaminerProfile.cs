@@ -36,6 +36,10 @@ namespace TsheThauLoo.Mappers.Account
                 {
                     dest.Examiner.ApplicationUserId = dest.Id;
                     dest.Examiner.ApplicationUser = dest;
+                    dest.NationalVerify = new NationalVerify
+                    {
+                        ApplicationUserId = dest.Id
+                    };
                 });
 
             #endregion

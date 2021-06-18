@@ -96,6 +96,50 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Extension));
 
             #endregion
+
+            #region NationalVerifyFile 轉換成 FileDto
+
+            CreateMap<NationalVerifyFile, FileDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.NationalVerifyFileId))
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+
+            #region FileCreateDto 轉換成 NationalVerifyFile
+
+            CreateMap<FileCreateDto, NationalVerifyFile>()
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .AfterMap((src, dest) =>
+                {
+                    var name = Path.GetFileNameWithoutExtension(src.Name);
+                    dest.Name = name;
+                    var extension = Path.GetExtension(src.Name);
+                    dest.Extension = extension == string.Empty ? null : extension;
+                    dest.Path = $@"wwwroot{Path.DirectorySeparatorChar}"+
+                                $"users{Path.DirectorySeparatorChar}"+
+                                $"verify{Path.DirectorySeparatorChar}" +
+                                $"national{Path.DirectorySeparatorChar}" +
+                                $"{Path.GetRandomFileName()}";
+                });
+
+            #endregion
+            
+            #region FileEditDto 轉換成 NationalVerifyFile
+
+            CreateMap<FileEditDto, NationalVerifyFile>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
         }
     }
 }

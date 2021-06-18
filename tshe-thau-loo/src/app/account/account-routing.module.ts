@@ -34,6 +34,8 @@ import { ChangePhoneComponent } from './change-phone/change-phone.component';
 import { ChangePasswordComponent } from './password/change-password/change-password.component';
 import { ForgetPasswordComponent } from './password/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
+import { NationalEditComponent } from './national/national-edit/national-edit.component';
+import { NationalVerifyComponent } from './national/national-verify/national-verify.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
@@ -117,6 +119,14 @@ const routes: Routes = [
       { path: 'forget', component: ForgetPasswordComponent, pathMatch: 'full' },
       { path: 'reset', component: ResetPasswordComponent, pathMatch: 'full' }
     ]
+  },
+  {
+    path: 'national',
+    children: [
+      { path: '', component: NationalEditComponent, pathMatch: 'full' },
+      { path: 'verify', component: NationalVerifyComponent, pathMatch: 'full' }
+    ],
+    canActivate: [RequiredLoginGuard]
   },
   { path: '', pathMatch: 'full', canActivate: [AccountRedirectGuard], runGuardsAndResolvers: 'always' }
 ];

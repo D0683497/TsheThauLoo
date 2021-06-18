@@ -40,6 +40,10 @@ namespace TsheThauLoo.Mappers.Account
                 {
                     dest.Student.ApplicationUserId = dest.Id;
                     dest.Student.ApplicationUser = dest;
+                    dest.NationalVerify = new NationalVerify
+                    {
+                        ApplicationUserId = dest.Id
+                    };
                     dest.Student.StudentVerify = new StudentVerify
                     {
                         StudentId = dest.Student.StudentId

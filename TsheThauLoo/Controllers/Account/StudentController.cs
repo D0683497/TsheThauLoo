@@ -275,7 +275,6 @@ namespace TsheThauLoo.Controllers.Account
                 await _dbContext.SaveChangesAsync();
                 var returnDto = _mapper.Map<StudentVerifyDto>(student);
                 return CreatedAtAction(nameof(StudentVerify), null, returnDto);
-                
             }
             return BadRequest(result.Errors);
         }

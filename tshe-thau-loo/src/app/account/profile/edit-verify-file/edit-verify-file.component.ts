@@ -12,6 +12,7 @@ import { IFormError } from '../../../models/error/form-error.model';
 import { IServerError } from '../../../models/error/server-error.model';
 import { RoleType } from '../../../enums/role-type.enum';
 import { AlumnusService } from '../../../services/account/alumnus/alumnus.service';
+import { AccountService } from '../../../services/account/account.service';
 
 @Component({
   selector: 'app-edit-verify-file',
@@ -31,7 +32,8 @@ export class EditVerifyFileComponent implements OnInit {
     private loadingService: LoadingService,
     private alumnusService: AlumnusService,
     private studentService: StudentService,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService,
+    private accountService: AccountService) { }
 
   ngOnInit(): void {
     this.editForm = this.fb.group({
@@ -51,6 +53,12 @@ export class EditVerifyFileComponent implements OnInit {
         break;
       case RoleType.student:
         this.studentService.editVerifyFile(this.file.id, data).subscribe(
+          (res: IDocument) => { this.editSuccess(res); },
+          (err: HttpErrorResponse) => { this.editFail(err); }
+        );
+        break;
+      default:
+        this.accountService.editNationalVerifyFile(this.file.id, data).subscribe(
           (res: IDocument) => { this.editSuccess(res); },
           (err: HttpErrorResponse) => { this.editFail(err); }
         );

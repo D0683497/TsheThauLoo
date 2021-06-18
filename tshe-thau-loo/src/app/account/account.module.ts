@@ -42,6 +42,8 @@ import { ChangePhoneComponent } from './change-phone/change-phone.component';
 import { ChangePasswordComponent } from './password/change-password/change-password.component';
 import { ForgetPasswordComponent } from './password/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
+import { NationalEditComponent } from './national/national-edit/national-edit.component';
+import { NationalVerifyComponent } from './national/national-verify/national-verify.component';
 
 
 @NgModule({
@@ -80,7 +82,9 @@ import { ResetPasswordComponent } from './password/reset-password/reset-password
     ChangePhoneComponent,
     ChangePasswordComponent,
     ForgetPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    NationalEditComponent,
+    NationalVerifyComponent
   ],
   imports: [
     CommonModule,
