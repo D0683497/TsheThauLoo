@@ -5,12 +5,14 @@ import { DashboardHomeComponent } from './dashboard-home/dashboard-home.componen
 import { DashboardAboutComponent } from './dashboard-about/dashboard-about.component';
 import { DashboardPrivacyComponent } from './dashboard-privacy/dashboard-privacy.component';
 import { IonicModule } from '@ionic/angular';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     DashboardHomeComponent,
     DashboardAboutComponent,
-    DashboardPrivacyComponent
+    DashboardPrivacyComponent,
+    PageNotFoundComponent
   ],
   imports: [
     CommonModule,
