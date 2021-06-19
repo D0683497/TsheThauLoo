@@ -16,28 +16,29 @@ export class AuthService {
 
   constructor(private storage: Storage) { }
 
-  async init(): Promise<void> {
-    await this.storage.create();
-    const token = await this.storage.get('access_token');
-    if (token !== null) {
-      await this.setLoginStatus(token);
-    }
-    if (this.isTokenExpired()) {
-      await this.removeLoginStatus();
-    }
+  init(): void {
+    this.storage.create().then();
+    this.storage.get('access_token').then((res: string) => {
+      if (res !== null) {
+        this.setLoginStatus(res);
+      }
+      if (this.isTokenExpired()) {
+        this.removeLoginStatus();
+      }
+    });
   }
 
   // 設置登入狀態
-  async setLoginStatus(token: string): Promise<void> {
-    await this.storage.set('access_token', token);
+  setLoginStatus(token: string): void {
+    this.storage.set('access_token', token).then();
     this.token = token;
     const decodeToken = this.helper.decodeToken(token);
     this.userInfo$.next(new UserInfo(decodeToken));
   }
 
   // 移除登入狀態 (登出)
-  async removeLoginStatus(): Promise<void> {
-    await this.storage.remove('access_token');
+  removeLoginStatus(): void {
+    this.storage.remove('access_token').then();
     this.userInfo$.next(null);
   }
 

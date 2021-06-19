@@ -24,5 +24,9 @@ namespace TsheThauLoo.Dtos.Account.Register
         [JsonPropertyName("contactAddress")]
         [Display(Name = "聯絡用地址")]
         public string ContactAddress { get; set; }
+        
+        [JsonPropertyName("substitute")]
+        [Display(Name = "職務代理人")]
+        public SubstituteRegisterDto Substitute { get; set; }
     }
 }

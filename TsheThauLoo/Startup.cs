@@ -67,10 +67,6 @@ namespace TsheThauLoo
             #endregion
 
             services.AddControllers()
-                .AddJsonOptions(opts =>
-                {
-                    opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                })
                 .AddFluentValidation();
             
             #region Service

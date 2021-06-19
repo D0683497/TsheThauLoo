@@ -15,7 +15,7 @@ export class TermsRegisterComponent implements OnInit {
   ngOnInit() {}
 
   async dismiss(agree: boolean): Promise<void> {
-    await this.modalController.dismiss({agree});
+    await this.modalController.dismiss(agree);
   }
 
 }

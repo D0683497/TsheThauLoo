@@ -68,6 +68,10 @@ namespace TsheThauLoo.Validator.Account.Register
                 .WithName("聯絡用地址")
                 .WithMessage("{PropertyName}最多{MaxLength}")
                 .OverridePropertyName("contactAddress");
+            RuleFor(x => x.Substitute)
+                .SetValidator(new SubstituteRegisterDtoValidator())
+                .WithName("職務代理人")
+                .OverridePropertyName("substitute");
         }
     }
 }

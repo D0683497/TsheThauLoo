@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>修改電子郵件</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">修改電子郵件</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <form [formGroup]="changeForm" (ngSubmit)="onSubmit(changeForm.value)" novalidate>
+    <ion-list lines="full">
+      <ion-item lines="none" color="light">
+        <ion-label>
+          <ion-text color="danger">*</ion-text>為必填項目
+        </ion-label>
+      </ion-item>
+      <!-- newEmail -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>新的電子郵件</ion-label>
+        <ion-input formControlName="newEmail" type="email" inputmode="email" autocomplete="email" placeholder="新的電子郵件" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="changeForm.controls['newEmail'].hasError('required') && (changeForm.controls['newEmail'].dirty || changeForm.controls['newEmail'].touched)">
+          新的電子郵件是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="changeForm.controls['newEmail'].hasError('email') && (changeForm.controls['newEmail'].dirty || changeForm.controls['newEmail'].touched)">
+          新的電子郵件<strong>格式錯誤</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="changeForm.controls['newEmail'].hasError('maxlength') && (changeForm.controls['newEmail'].dirty || changeForm.controls['newEmail'].touched)">
+          新的電子郵件<strong>最多320位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="changeForm.controls['newEmail'].hasError('server') && (changeForm.controls['newEmail'].dirty || changeForm.controls['newEmail'].touched)">
+          {{ changeForm.controls['newEmail'].getError('server') }}
+        </ion-text>
+      </div>
+    </ion-list>
+    <ion-button class="ion-margin" [disabled]="changeForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+  </ion-toolbar>
+</ion-footer>

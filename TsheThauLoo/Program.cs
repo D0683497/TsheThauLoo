@@ -18,7 +18,11 @@ namespace TsheThauLoo
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel((context, options) =>
+                        {
+                            options.Limits.MaxRequestBodySize = int.MaxValue;
+                        })
+                        .UseStartup<Startup>();
                 });
     }
 }

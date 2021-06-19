@@ -79,11 +79,28 @@ export class ManagerRegisterComponent implements OnInit {
           PhoneNumberValidator('TW')
         ]
       ],
-      contactAddress: [null, [Validators.required, Validators.maxLength(200)]]
+      contactAddress: [null, [Validators.required, Validators.maxLength(200)]],
+      // 職務代理人資料
+      substitute: this.fb.group({
+        name: [null, [Validators.required, Validators.maxLength(50)]],
+        divisionName: [null, [Validators.required, Validators.maxLength(30)]],
+        jobTitle: [null, [Validators.required, Validators.maxLength(30)]],
+        contactEmail: [null, [Validators.required, Validators.email, Validators.maxLength(320)]],
+        contactPhone: [
+          null,
+          [
+            Validators.required,
+            Validators.maxLength(30),
+            PhoneNumberValidator('TW')
+          ]
+        ],
+        contactAddress: [null, [Validators.required, Validators.maxLength(200)]]
+      })
     },{ validators: MustMatch('password', 'passwordConfirm') });
   }
 
   async onSubmit(data: IManagerRegister): Promise<void> {
+    console.log(data);
     if (await this.modalService.registerTerms()) {
       await this.loadingService.start('註冊中...');
       this.managerService.register(data).subscribe(
@@ -100,6 +117,7 @@ export class ManagerRegisterComponent implements OnInit {
   }
 
   async registerFail(err: HttpErrorResponse): Promise<void> {
+    console.log(err);
     await this.loadingService.end();
     if (err.status === 400) {
       const errors: IFormError[] = err.error;
