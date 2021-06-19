@@ -24,7 +24,7 @@ using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Account;
-using TsheThauLoo.Validator.Account.File;
+using TsheThauLoo.Validator.File;
 
 namespace TsheThauLoo.Controllers.Account
 {
