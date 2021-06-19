@@ -11,6 +11,8 @@ import { ActionSheetController } from '@ionic/angular';
 import { IDocument } from '../../../../models/document/document.model';
 import { IServerError } from '../../../../models/error/server-error.model';
 import { LoadingService } from '../../../../services/loading/loading.service';
+import { createAvatar } from '@dicebear/avatars';
+import * as style from '@dicebear/avatars-jdenticon-sprites';
 
 @Component({
   selector: 'app-administrator-profile',
@@ -52,6 +54,10 @@ export class AdministratorProfileComponent implements OnInit {
     if (res.hasPhoto) {
       await this.downloadPhoto();
     } else {
+      this.photo = createAvatar(style, {
+        seed: res.id,
+        dataUri: true
+      });
       this.loading$.next(false);
       this.loadingError$.next(false);
     }
@@ -141,7 +147,10 @@ export class AdministratorProfileComponent implements OnInit {
 
   async deleteSuccess(): Promise<void> {
     this.profile.hasPhoto = false;
-    this.photo = null;
+    this.photo = createAvatar(style, {
+      seed: this.profile.id,
+      dataUri: true
+    });
     await this.loadingService.end();
     await this.notificationService.toast('刪除成功', 2000, SweetAlertIcon.success);
   }

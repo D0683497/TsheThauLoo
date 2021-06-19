@@ -43,7 +43,9 @@
               "./node_modules/quill-blot-formatter/dist/quill-blot-formatter.min.js"
             ],
             "allowedCommonJsDependencies": [
-              "quill-blot-formatter"
+              "quill-blot-formatter",
+              "@dicebear/avatars",
+              "@dicebear/avatars-jdenticon-sprites"
             ],
             "aot": false,
             "vendorChunk": true,
