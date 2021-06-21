@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using PhoneNumbers;
 
@@ -115,6 +116,68 @@ namespace TsheThauLoo.Utilities
                 .WithName("新密碼")
                 .WithMessage("{PropertyName}至少需要一位小寫字母")
                 .OverridePropertyName("newPassword");     
+        }
+
+        public static IRuleBuilderOptions<T, string> RegistrationNumber<T>(this IRuleBuilder<T, string> ruleBuilder)     
+        {
+            // (?=.*[a-z])  // RequireLowercase
+            // (?=.*[A-Z])  // RequireUppercase
+            // (?=.*\d) // RequireDigit
+            // (?=.*\W]) // RequireNonAlphanumeric
+            
+            return ruleBuilder
+                .Must(VerifyGUI)
+                .WithName("統一編號")
+                .WithMessage("{PropertyName}格式錯誤")
+                .OverridePropertyName("registrationNumber");     
+        }
+
+        private static bool VerifyGUI(string input)
+        {
+            // 假設統一編號為 A B C D E F G H
+            // A - G 為編號, H 為檢查碼
+            // A - G 個別乘上特定倍數, 若乘出來的值為二位數則將十位數和個位數相加
+            // A x 1
+            // B x 2
+            // C x 1
+            // D x 2
+            // E x 1
+            // F x 2
+            // G x 4
+            // H x 1
+            // 最後將所有數值加總, 被 10 整除就為正確
+            // 若上述演算不正確並且 G 為 7 得話, 再加上 1 被 10 整除也為正確
+            
+            if (input == null)
+            {
+                return false;
+            }
+            
+            var regex = new Regex(@"^\d{8}$");
+            var match = regex.Match(input);
+            if (!match.Success)
+            {
+                return false;
+            }
+            
+            var idNoArray = input.ToCharArray().Select(c => Convert.ToInt32(c.ToString())).ToArray();
+            var weight = new int[] { 1, 2, 1, 2, 1, 2, 4, 1 };
+
+            int subSum;     //小和
+            var sum = 0;    //總和
+            var sumFor7 = 1;
+            for (var i = 0; i < idNoArray.Length; i++)
+            {
+                subSum = idNoArray[i] * weight[i];
+                sum += (subSum / 10)   //商數
+                       + (subSum % 10);  //餘數                
+            }
+            if (idNoArray[6] == 7)
+            {
+                //若第7碼=7，則會出現兩種數值都算對，因此要特別處理。
+                sumFor7 = sum + 1;
+            }
+            return (sum % 10 == 0) || (sumFor7 % 10 == 0);
         }
     }
 }
