@@ -45,7 +45,8 @@
             "allowedCommonJsDependencies": [
               "quill-blot-formatter",
               "@dicebear/avatars",
-              "@dicebear/avatars-jdenticon-sprites"
+              "@dicebear/avatars-jdenticon-sprites",
+              "@dicebear/avatars-identicon-sprites"
             ],
             "aot": false,
             "vendorChunk": true,

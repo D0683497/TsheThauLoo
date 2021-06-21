@@ -7,11 +7,15 @@ import { CompanyCreateComponent } from './company-create/company-create.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import * as QuillBlotFormatter from 'quill-blot-formatter';
+import { CompanyDisplayComponent } from './company-display/company-display.component';
+import { CompanyEditComponent } from './company-edit/company-edit.component';
 
 @NgModule({
   declarations: [
     CompanyHomeComponent,
-    CompanyCreateComponent
+    CompanyCreateComponent,
+    CompanyDisplayComponent,
+    CompanyEditComponent
   ],
   imports: [
     CommonModule,

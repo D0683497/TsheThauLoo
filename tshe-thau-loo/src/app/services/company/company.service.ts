@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ICompany } from '../../models/company/company.model';
 import { ICompanyCreate } from '../../models/company/company-create.model';
+import { ICompanyEdit } from '../../models/company/company-edit.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,11 @@ export class CompanyService {
 
   create(data: ICompanyCreate): Observable<ICompany> {
     const url = `${this.urlRoot}/companies`;
+    return this.http.post<ICompany>(url, data, this.httpOptions);
+  }
+
+  edit(companyId: string, data: ICompanyEdit): Observable<ICompany> {
+    const url = `${this.urlRoot}/companies/${companyId}`;
     return this.http.post<ICompany>(url, data, this.httpOptions);
   }
 

@@ -55,6 +55,20 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Website));
 
             #endregion
+
+            #region CompanyEditDto 轉換成 Company
+
+            CreateMap<CompanyEditDto, Company>()
+                .ForMember(dest => dest.RegistrationNumber,
+                    opt => opt.MapFrom(src => src.RegistrationNumber))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Introduction,
+                    opt => opt.MapFrom(src => src.Introduction))
+                .ForMember(dest => dest.Website,
+                    opt => opt.MapFrom(src => src.Website));
+
+            #endregion
         }
     }
 }

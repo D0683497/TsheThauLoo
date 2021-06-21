@@ -88,5 +88,69 @@ namespace TsheThauLoo.Controllers.Business
             var dto = _mapper.Map<CompanyDto>(entity);
             return Ok(dto);
         }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [HttpPost("{companyId}", Name = nameof(CompanyEdit))]
+        public async Task<ActionResult<CompanyDto>> CompanyEdit([FromRoute] string companyId, [FromBody] CompanyEditDto dto)
+        {
+            CompanyEditDtoValidator validator = new CompanyEditDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var company = await _dbContext.Companies
+                    .Include(x => x.Managers)
+                    .SingleOrDefaultAsync(x => x.CompanyId == companyId);
+                var manager = company.Managers
+                    .SingleOrDefault(x => x.ApplicationUserId == userId);
+
+                #region 驗證
+
+                if (manager == null)
+                {
+                    return Problem(title: "禁止修改", detail: "非該公司管理者", statusCode: 403);
+                }
+                if (!manager.ManagerConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "企業使用者尚未驗證", statusCode: 403);
+                }
+                if (company.CompanyConfirmed)
+                {
+                    if (company.Name != dto.Name)
+                    {
+                        result.Errors.Add(new ValidationFailure("name", "名稱禁止修改"));
+                    }
+                    if (company.RegistrationNumber != dto.RegistrationNumber)
+                    {
+                        result.Errors.Add(new ValidationFailure("registrationNumber", "統一編號禁止修改"));
+                    }
+                }
+                else
+                {
+                    if (company.RegistrationNumber != dto.RegistrationNumber)
+                    {
+                        if (await _dbContext.Companies.AnyAsync(x => x.RegistrationNumber == dto.RegistrationNumber))
+                        {
+                            result.Errors.Add(new ValidationFailure("registrationNumber", "統一編號已經被使用"));
+                        }
+                    }
+                }
+                if (!result.IsValid)
+                {
+                    return BadRequest(result.Errors);
+                }
+
+                #endregion
+                
+                var updateEntity = _mapper.Map(dto, company);
+                _dbContext.Companies.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var routeValues = new {companyId = updateEntity.CompanyId};
+                var returnDto = _mapper.Map<CompanyDto>(updateEntity);
+                return CreatedAtAction(nameof(GetCompany), routeValues, returnDto);
+            }
+            return BadRequest(result.Errors);
+        }
     }
 }

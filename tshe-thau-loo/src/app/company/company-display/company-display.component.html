@@ -1,0 +1,106 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/company" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (loading$ | async)===false && (loadingError$ | async)===false ? company.name : "公司" }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        {{ (loading$ | async)===false && (loadingError$ | async)===false ? company.name : "公司" }}
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ng-container *ngIf="(loading$ | async) === false; else loading">
+    <ng-container *ngIf="(loadingError$ | async) === false; else error">
+      <ion-card>
+        <ion-item lines="none">
+          <ion-thumbnail slot="start">
+            <ion-img src="{{photo}}"></ion-img>
+          </ion-thumbnail>
+          <ion-badge slot="end" [color]="company.companyConfirmed ? 'success' : 'light'">
+            {{company.companyConfirmed ? '已驗證' : '尚未驗證'}}
+          </ion-badge>
+        </ion-item>
+        <ion-card-content>
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>統一編號</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{company.registrationNumber}}</ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>網站</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none" [href]="company.website" target="_blank" detail detail-icon="open">
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">{{company.website}}</ion-text>
+              </ion-label>
+            </ion-item>
+          </ion-item-group>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="company.introduction">
+        <ion-item lines="none">
+          <ion-label>簡介</ion-label>
+        </ion-item>
+        <ion-card-content>
+          <quill-view-html [content]="company.introduction"></quill-view-html>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="company.industrialClassifications.length !== 0">
+        <ion-item lines="none">
+          <ion-label>產業類別</ion-label>
+        </ion-item>
+        <ion-card-content>
+          <!-- TODO: 產業類別 -->
+        </ion-card-content>
+      </ion-card>
+      <ion-grid class="ion-margin-horizontal">
+        <ion-row>
+          <ion-col *ngIf="!company.companyConfirmed">
+            <ion-button [routerLink]="['/company', company.id, 'verify']" color="secondary" shape="round" expand="block">驗證</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button [routerLink]="['/company', company.id, 'edit']" shape="round" expand="block">編輯</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+    <ng-template #error>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>發生錯誤</ion-card-title>
+        </ion-card-header>
+        <ion-img src="assets/Feeling-angry-amico.svg" alt="錯誤"></ion-img>
+        <ion-button (click)="getData()" class="ion-margin" color="primary" expand="block" shape="round">重新整理</ion-button>
+      </ion-card>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <ion-card>
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <ion-card-header>
+        <ion-card-title>載入中...</ion-card-title>
+      </ion-card-header>
+      <ion-img src="assets/Loading-bro.svg" alt="載入中"></ion-img>
+    </ion-card>
+  </ng-template>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>
