@@ -239,5 +239,61 @@ namespace TsheThauLoo.Controllers.Business
             }
             return BadRequest(result.Errors);
         }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [HttpDelete("{companyId}/logo", Name = nameof(DeleteCompanyLogo))]
+        public async Task<IActionResult> DeleteCompanyLogo([FromRoute] string companyId)
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var company = await _dbContext.Companies
+                .Include(x => x.CompanyLogo)
+                .Include(x => x.Managers)
+                .SingleOrDefaultAsync(x => x.CompanyId == companyId);
+            if (company == null)
+            {
+                return NotFound();
+            }
+            var manager = company.Managers
+                .SingleOrDefault(x => x.ApplicationUserId == userId);
+            if (manager == null)
+            {
+                return Problem(title: "禁止修改", detail: "非該公司管理者", statusCode: 403);
+            }
+            if (!manager.ManagerConfirmed)
+            {
+                return Problem(title: "禁止修改", detail: "企業使用者尚未驗證", statusCode: 403);
+            }
+
+            var entity = company.CompanyLogo;
+
+            #region 處理檔案
+
+            await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _dbContext.CompanyLogos.Remove(entity);
+                    await _dbContext.SaveChangesAsync();
+                    System.IO.File.Delete(entity.Path);
+                    await transaction.CommitAsync();
+                }
+                catch (IOException)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+                catch (DbUpdateException)
+                {
+                    System.IO.File.Delete(entity.Path);
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
+            #endregion
+            
+            return NoContent();
+        }
     }
 }

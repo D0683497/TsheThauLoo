@@ -189,6 +189,36 @@ export class CompanyEditComponent implements OnInit {
     }
   }
 
+  async delete(): Promise<void> {
+    await this.loadingService.start('刪除中…');
+    this.companyService.deleteLogo(this.companyId).subscribe(
+      () => { this.deleteSuccess(); },
+      (err: HttpErrorResponse) => { this.deleteFail(err); }
+    );
+  }
+
+  async deleteSuccess(): Promise<void> {
+    this.company.hasLogo = false;
+    this.photo = createAvatar(style, {
+      seed: this.company.id,
+      dataUri: true
+    });
+    await this.loadingService.end();
+    await this.notificationService.toast('刪除成功', 2000, SweetAlertIcon.success);
+  }
+
+  async deleteFail(err: HttpErrorResponse): Promise<void> {
+    await this.loadingService.end();
+    switch (err.status) {
+      case 404:
+        await this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error);
+        break;
+      case 400:
+        await this.notificationService.toast('刪除失敗', 2000, SweetAlertIcon.error);
+        break;
+    }
+  }
+
   async logout(): Promise<void> {
     await this.accountService.logout();
     await this.notificationService.message('登出成功', SweetAlertIcon.success);

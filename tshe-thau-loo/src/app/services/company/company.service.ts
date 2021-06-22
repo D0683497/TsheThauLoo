@@ -49,4 +49,9 @@ export class CompanyService {
     return this.http.post<IDocument>(url, form);
   }
 
+  deleteLogo(companyId: string): Observable<void> {
+    const url = `${this.urlRoot}/companies/${companyId}/logo`;
+    return this.http.delete<void>(url, this.httpOptions);
+  }
+
 }
