@@ -128,7 +128,7 @@
             </ion-item>
             <ion-item-sliding *ngFor="let sic of company.industrialClassifications; let i = index;">
               <ion-item-options side="start">
-                <ion-item-option color="primary" (click)="edit(sic)">編輯</ion-item-option>
+                <ion-item-option color="primary" (click)="editSIC(sic)">編輯</ion-item-option>
               </ion-item-options>
               <ion-item class="sic">
                 <ion-note slot="start">{{i+1 + '.'}}</ion-note>

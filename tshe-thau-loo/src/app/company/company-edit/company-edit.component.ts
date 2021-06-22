@@ -17,6 +17,7 @@ import { IFormError } from '../../models/error/form-error.model';
 import { IServerError } from '../../models/error/server-error.model';
 import { IDocument } from '../../models/document/document.model';
 import { ModalService } from '../../services/modal/modal.service';
+import { IIndustrialClassification } from '../../models/company/industrial-classification.model';
 
 @Component({
   selector: 'app-company-edit',
@@ -223,6 +224,13 @@ export class CompanyEditComponent implements OnInit {
 
   async create(): Promise<void> {
     const data = await this.modalService.createSIC(this.companyId);
+    if (data !== undefined) {
+      this.company = data;
+    }
+  }
+
+  async editSIC(industrialClassification: IIndustrialClassification): Promise<void> {
+    const data = await this.modalService.editSIC(this.companyId, industrialClassification);
     if (data !== undefined) {
       this.company = data;
     }

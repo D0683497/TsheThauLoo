@@ -335,5 +335,50 @@ namespace TsheThauLoo.Controllers.Business
             }
             return BadRequest(result.Errors);
         }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [HttpPost("{companyId}/sic/{industrialClassificationId}", Name = nameof(EditIndustrialClassification))]
+        public async Task<IActionResult> EditIndustrialClassification([FromRoute] string companyId, [FromRoute] string industrialClassificationId, [FromBody] IndustrialClassificationEditDto dto)
+        {
+            IndustrialClassificationEditDtoValidator validator = new IndustrialClassificationEditDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var company = await _dbContext.Companies
+                    .Include(x => x.CompanyLogo)
+                    .Include(x => x.IndustrialClassifications)
+                    .Include(x => x.Managers)
+                    .SingleOrDefaultAsync(x => x.CompanyId == companyId);
+                if (company == null)
+                {
+                    return NotFound();
+                }
+                var manager = company.Managers
+                    .SingleOrDefault(x => x.ApplicationUserId == userId);
+                if (manager == null)
+                {
+                    return Problem(title: "禁止修改", detail: "非該公司管理者", statusCode: 403);
+                }
+                if (!manager.ManagerConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "企業使用者尚未驗證", statusCode: 403);
+                }
+                var entity = company.IndustrialClassifications
+                    .SingleOrDefault(x => x.IndustrialClassificationId == industrialClassificationId);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+                var updateEntity = _mapper.Map(dto, entity);
+                _dbContext.IndustrialClassifications.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var routeValues = new {companyId = company.CompanyId};
+                var returnDto = _mapper.Map<CompanyDto>(company);
+                return CreatedAtAction(nameof(GetCompany), routeValues, returnDto);
+            }
+            return BadRequest(result.Errors);
+        }
     }
 }

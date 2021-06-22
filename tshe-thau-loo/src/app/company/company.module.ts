@@ -10,6 +10,7 @@ import * as QuillBlotFormatter from 'quill-blot-formatter';
 import { CompanyDisplayComponent } from './company-display/company-display.component';
 import { CompanyEditComponent } from './company-edit/company-edit.component';
 import { IndustrialClassificationCreateComponent } from './industrial-classification-create/industrial-classification-create.component';
+import { IndustrialClassificationEditComponent } from './industrial-classification-edit/industrial-classification-edit.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { IndustrialClassificationCreateComponent } from './industrial-classifica
     CompanyCreateComponent,
     CompanyDisplayComponent,
     CompanyEditComponent,
-    IndustrialClassificationCreateComponent
+    IndustrialClassificationCreateComponent,
+    IndustrialClassificationEditComponent
   ],
   imports: [
     CommonModule,

@@ -7,6 +7,7 @@ import { ICompanyCreate } from '../../models/company/company-create.model';
 import { ICompanyEdit } from '../../models/company/company-edit.model';
 import { IDocument } from '../../models/document/document.model';
 import { IIndustrialClassificationCreate } from '../../models/company/industrial-classification-create.model';
+import { IIndustrialClassificationEdit } from '../../models/company/industrial-classification-edit.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,11 @@ export class CompanyService {
 
   createSIC(companyId: string, data: IIndustrialClassificationCreate): Observable<ICompany> {
     const url = `${this.urlRoot}/companies/${companyId}/sic`;
+    return this.http.post<ICompany>(url, data, this.httpOptions);
+  }
+
+  editSIC(companyId: string, sicId: string, data: IIndustrialClassificationEdit): Observable<ICompany> {
+    const url = `${this.urlRoot}/companies/${companyId}/sic/${sicId}`;
     return this.http.post<ICompany>(url, data, this.httpOptions);
   }
 
