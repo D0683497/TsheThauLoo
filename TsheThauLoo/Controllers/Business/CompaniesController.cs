@@ -295,5 +295,45 @@ namespace TsheThauLoo.Controllers.Business
             
             return NoContent();
         }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [HttpPost("{companyId}/sic", Name = nameof(CreateIndustrialClassification))]
+        public async Task<IActionResult> CreateIndustrialClassification([FromRoute] string companyId, [FromBody] IndustrialClassificationCreateDto dto)
+        {
+            IndustrialClassificationCreateDtoValidator validator = new IndustrialClassificationCreateDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var company = await _dbContext.Companies
+                    .Include(x => x.CompanyLogo)
+                    .Include(x => x.IndustrialClassifications)
+                    .Include(x => x.Managers)
+                    .SingleOrDefaultAsync(x => x.CompanyId == companyId);
+                if (company == null)
+                {
+                    return NotFound();
+                }
+                var manager = company.Managers
+                    .SingleOrDefault(x => x.ApplicationUserId == userId);
+                if (manager == null)
+                {
+                    return Problem(title: "禁止修改", detail: "非該公司管理者", statusCode: 403);
+                }
+                if (!manager.ManagerConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "企業使用者尚未驗證", statusCode: 403);
+                }
+                var entity = _mapper.Map<IndustrialClassification>(dto);
+                company.IndustrialClassifications.Add(entity);
+                _dbContext.Companies.Update(company);
+                await _dbContext.SaveChangesAsync();
+                var routeValues = new {companyId = company.CompanyId};
+                var returnDto = _mapper.Map<CompanyDto>(company);
+                return CreatedAtAction(nameof(GetCompany), routeValues, returnDto);
+            }
+            return BadRequest(result.Errors);
+        }
     }
 }

@@ -69,6 +69,14 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Website));
 
             #endregion
+
+            #region IndustrialClassificationCreateDto 轉換成 IndustrialClassification
+
+            CreateMap<IndustrialClassificationCreateDto, IndustrialClassification>()
+                .ForMember(dest => dest.Description,
+                    opt => opt.MapFrom(src => src.Description));
+
+            #endregion
         }
     }
 }

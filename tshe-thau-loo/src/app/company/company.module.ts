@@ -9,13 +9,15 @@ import { QuillModule } from 'ngx-quill';
 import * as QuillBlotFormatter from 'quill-blot-formatter';
 import { CompanyDisplayComponent } from './company-display/company-display.component';
 import { CompanyEditComponent } from './company-edit/company-edit.component';
+import { IndustrialClassificationCreateComponent } from './industrial-classification-create/industrial-classification-create.component';
 
 @NgModule({
   declarations: [
     CompanyHomeComponent,
     CompanyCreateComponent,
     CompanyDisplayComponent,
-    CompanyEditComponent
+    CompanyEditComponent,
+    IndustrialClassificationCreateComponent
   ],
   imports: [
     CommonModule,

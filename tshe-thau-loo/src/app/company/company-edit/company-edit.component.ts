@@ -16,6 +16,7 @@ import { LoadingService } from '../../services/loading/loading.service';
 import { IFormError } from '../../models/error/form-error.model';
 import { IServerError } from '../../models/error/server-error.model';
 import { IDocument } from '../../models/document/document.model';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-company-edit',
@@ -40,7 +41,8 @@ export class CompanyEditComponent implements OnInit {
     private fb: FormBuilder,
     private companyService: CompanyService,
     private route: ActivatedRoute,
-    private loadingService: LoadingService) { }
+    private loadingService: LoadingService,
+    private modalService: ModalService) { }
 
   ngOnInit(): void {}
 
@@ -216,6 +218,13 @@ export class CompanyEditComponent implements OnInit {
       case 400:
         await this.notificationService.toast('刪除失敗', 2000, SweetAlertIcon.error);
         break;
+    }
+  }
+
+  async create(): Promise<void> {
+    const data = await this.modalService.createSIC(this.companyId);
+    if (data !== undefined) {
+      this.company = data;
     }
   }
 
