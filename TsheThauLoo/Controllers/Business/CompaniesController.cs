@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
@@ -8,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Company;
+using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.Business;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Company;
+using TsheThauLoo.Validator.File;
 
 namespace TsheThauLoo.Controllers.Business
 {
@@ -149,6 +152,90 @@ namespace TsheThauLoo.Controllers.Business
                 var routeValues = new {companyId = updateEntity.CompanyId};
                 var returnDto = _mapper.Map<CompanyDto>(updateEntity);
                 return CreatedAtAction(nameof(GetCompany), routeValues, returnDto);
+            }
+            return BadRequest(result.Errors);
+        }
+        
+        [AllowAnonymous]
+        [HttpGet("{companyId}/logo", Name = nameof(CompanyLogo))]
+        public async Task<IActionResult> CompanyLogo([FromRoute] string companyId)
+        {
+            var entity = await _dbContext.CompanyLogos
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.CompanyId == companyId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            // 路徑、型態、下載的名稱
+            return File(System.IO.File.OpenRead(entity.Path), entity.Type, $"{entity.Name}{entity.Extension}");
+        }
+        
+        [AuthAuthorize(Roles = "Manager")]
+        [RequestFormLimits(ValueLengthLimit  = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
+        [HttpPost("{companyId}/logo", Name = nameof(CreateCompanyLogo))]
+        public async Task<IActionResult> CreateCompanyLogo([FromRoute] string companyId, [FromForm] FileCreateDto dto)
+        {
+            FileCreateDtoValidator validator = new FileCreateDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var company = await _dbContext.Companies
+                    .Include(x => x.CompanyLogo)
+                    .Include(x => x.Managers)
+                    .SingleOrDefaultAsync(x => x.CompanyId == companyId);
+                if (company == null)
+                {
+                    return NotFound();
+                }
+                var manager = company.Managers
+                    .SingleOrDefault(x => x.ApplicationUserId == userId);
+                if (manager == null)
+                {
+                    return Problem(title: "禁止修改", detail: "非該公司管理者", statusCode: 403);
+                }
+                if (!manager.ManagerConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "企業使用者尚未驗證", statusCode: 403);
+                }
+
+                var entity = _mapper.Map(dto, company.CompanyLogo);
+
+                #region 處理檔案
+
+                await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        using (var stream = new FileStream(entity.Path, FileMode.Create))
+                        {
+                            await dto.FileData.CopyToAsync(stream);
+                        }
+                        company.CompanyLogo = entity;
+                        _dbContext.Companies.Update(company);
+                        await _dbContext.SaveChangesAsync();
+                        await transaction.CommitAsync();
+                    }
+                    catch (IOException)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                    catch (DbUpdateException)
+                    {
+                        System.IO.File.Delete(entity.Path);
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+
+                #endregion
+
+                var routeValues = new {companyId = entity.CompanyId};
+                var returnDto = _mapper.Map<FileDto>(entity);
+                return CreatedAtAction(nameof(CompanyLogo), routeValues, returnDto);
             }
             return BadRequest(result.Errors);
         }

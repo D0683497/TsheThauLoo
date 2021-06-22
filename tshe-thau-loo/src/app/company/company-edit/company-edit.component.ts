@@ -15,6 +15,7 @@ import { ICompanyEdit } from '../../models/company/company-edit.model';
 import { LoadingService } from '../../services/loading/loading.service';
 import { IFormError } from '../../models/error/form-error.model';
 import { IServerError } from '../../models/error/server-error.model';
+import { IDocument } from '../../models/document/document.model';
 
 @Component({
   selector: 'app-company-edit',
@@ -54,11 +55,11 @@ export class CompanyEditComponent implements OnInit {
     );
   }
 
-  getSuccess(res: ICompany): void {
+  async getSuccess(res: ICompany): Promise<void> {
     this.company = res;
     this.buildForm(res);
     if (res.hasLogo) {
-      // await this.downloadPhoto();
+      await this.downloadPhoto();
     } else {
       this.photo = createAvatar(style, {
         seed: res.id,
@@ -122,6 +123,69 @@ export class CompanyEditComponent implements OnInit {
         await this.notificationService.notify(errors.title, errors.detail, SweetAlertIcon.error);
         break;
       }
+    }
+  }
+
+  async upload(files: File[]): Promise<void> {
+    if (files.length > 0) {
+      const file = files[0];
+      if (file.size > 2147483647) {
+        await this.notificationService.message('檔案過大', SweetAlertIcon.info);
+        return;
+      }
+      await this.loadingService.start('上傳中...');
+      this.companyService.createLogo(this.companyId, file).subscribe(
+        (res: IDocument) => { this.uploadSuccess(file); },
+        (err: HttpErrorResponse) => { this.uploadFail(err); }
+      );
+    }
+  }
+
+  async uploadSuccess(file: Blob): Promise<void> {
+    this.company.hasLogo = true;
+    this.photo = URL.createObjectURL(file);
+    await this.loadingService.end();
+    await this.notificationService.toast('上傳成功', 2000, SweetAlertIcon.success);
+  }
+
+  async uploadFail(err: HttpErrorResponse): Promise<void> {
+    await this.loadingService.end();
+    switch (err.status) {
+      case 403:
+        const error: IServerError = err.error;
+        await this.notificationService.notify(error.title, error.detail, SweetAlertIcon.warning);
+        break;
+      case 400:
+        await this.notificationService.toast('上傳失敗', 2000, SweetAlertIcon.error);
+        break;
+    }
+  }
+
+  async downloadPhoto(): Promise<void> {
+    this.companyService.getLogo(this.companyId).subscribe(
+      (res: Blob) => { this.downloadSuccess(res); },
+      (err: HttpErrorResponse) => { this.downloadFail(err); }
+    );
+    this.loading$.next(false);
+    this.loadingError$.next(false);
+  }
+
+  async downloadSuccess(res: Blob): Promise<void> {
+    this.photo = URL.createObjectURL(res);
+    this.loading$.next(false);
+    this.loadingError$.next(false);
+  }
+
+  async downloadFail(err: HttpErrorResponse): Promise<void> {
+    this.loading$.next(false);
+    this.loadingError$.next(true);
+    switch (err.status) {
+      case 404:
+        this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error).then();
+        break;
+      case 400:
+        this.notificationService.message('發生未知錯誤', SweetAlertIcon.error).then();
+        break;
     }
   }
 

@@ -44,11 +44,10 @@ export class CompanyDisplayComponent implements OnInit {
     );
   }
 
-  getSuccess(res: ICompany): void {
+  async getSuccess(res: ICompany): Promise<void> {
     this.company = res;
     if (res.hasLogo) {
-      // await this.downloadPhoto();
-      // TODO: LOGO
+      await this.downloadPhoto();
     } else {
       this.photo = createAvatar(style, {
         seed: res.id,
@@ -62,6 +61,34 @@ export class CompanyDisplayComponent implements OnInit {
   async getFail(err: HttpErrorResponse): Promise<void> {
     this.loadingError$.next(true);
     this.loading$.next(false);
+  }
+
+  async downloadPhoto(): Promise<void> {
+    this.companyService.getLogo(this.companyId).subscribe(
+      (res: Blob) => { this.downloadSuccess(res); },
+      (err: HttpErrorResponse) => { this.downloadFail(err); }
+    );
+    this.loading$.next(false);
+    this.loadingError$.next(false);
+  }
+
+  async downloadSuccess(res: Blob): Promise<void> {
+    this.photo = URL.createObjectURL(res);
+    this.loading$.next(false);
+    this.loadingError$.next(false);
+  }
+
+  async downloadFail(err: HttpErrorResponse): Promise<void> {
+    this.loading$.next(false);
+    this.loadingError$.next(true);
+    switch (err.status) {
+      case 404:
+        this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error).then();
+        break;
+      case 400:
+        this.notificationService.message('發生未知錯誤', SweetAlertIcon.error).then();
+        break;
+    }
   }
 
   async logout(): Promise<void> {

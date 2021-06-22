@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ICompany } from '../../models/company/company.model';
 import { ICompanyCreate } from '../../models/company/company-create.model';
 import { ICompanyEdit } from '../../models/company/company-edit.model';
+import { IDocument } from '../../models/document/document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,20 @@ export class CompanyService {
   edit(companyId: string, data: ICompanyEdit): Observable<ICompany> {
     const url = `${this.urlRoot}/companies/${companyId}`;
     return this.http.post<ICompany>(url, data, this.httpOptions);
+  }
+
+  getLogo(companyId: string): Observable<Blob> {
+    const url = `${this.urlRoot}/companies/${companyId}/logo`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
+  createLogo(companyId: string, file: File): Observable<IDocument> {
+    const url = `${this.urlRoot}/companies/${companyId}/logo`;
+    const form = new FormData();
+    form.append('type', file.type);
+    form.append('name', file.name);
+    form.append('fileData', file);
+    return this.http.post<IDocument>(url, form);
   }
 
 }

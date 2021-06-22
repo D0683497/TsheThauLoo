@@ -119,7 +119,17 @@
 
       </ng-container>
       <ng-container *ngIf="segment === 'logo'">
-
+        <ion-card>
+          <ion-img src="{{photo}}"></ion-img>
+          <ion-card-content>
+            <ion-item *ngIf="company.hasLogo" lines="none" color="light">
+              <ion-label class="ion-text-wrap">若要編輯公司標識請先點擊刪除在上傳新的照片</ion-label>
+            </ion-item>
+          </ion-card-content>
+          <ion-button *ngIf="!company.hasLogo" (click)="file.click()" class="ion-margin" color="primary" shape="round" expand="block">上傳</ion-button>
+          <input (change)="upload($event.target.files)" class="ion-hide" type="file" #file>
+          <ion-button *ngIf="company.hasLogo" (click)="delete()" class="ion-margin" color="danger" shape="round" expand="block">刪除</ion-button>
+        </ion-card>
       </ng-container>
     </ng-container>
     <ng-template #error>
