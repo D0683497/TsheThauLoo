@@ -152,7 +152,8 @@
       </ng-container>
       <ng-container *ngIf="segment === 'logo'">
         <ion-card>
-          <ion-img src="{{photo}}"></ion-img>
+          <ion-img *ngIf="company.hasLogo" src="{{urlRoot+'/companies/'+company.id+'/logo'}}"></ion-img>
+          <ion-img *ngIf="!company.hasLogo" [src]="createPhoto(company.id)"></ion-img>
           <ion-card-content>
             <ion-item *ngIf="company.hasLogo" lines="none" color="light">
               <ion-label class="ion-text-wrap">若要編輯公司標識請先點擊刪除在上傳新的照片</ion-label>

@@ -9,6 +9,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CompanyService } from '../../services/company/company.service';
 import { createAvatar } from '@dicebear/avatars';
 import * as style from '@dicebear/avatars-identicon-sprites';
+import { environment } from '../../../environments/environment';
+import { RoleType } from '../../enums/role-type.enum';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-company-display',
@@ -22,14 +25,16 @@ export class CompanyDisplayComponent implements OnInit {
   company: ICompany;
   loading$ = new BehaviorSubject<boolean>(true);
   loadingError$ = new BehaviorSubject<boolean>(false);
-  photo: string;
+  urlRoot = environment.apiUrl;
+  type = RoleType;
 
   constructor(
     private accountService: AccountService,
     private notificationService: NotificationService,
     private router: Router,
     private companyService: CompanyService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    public authService: AuthService) { }
 
   ngOnInit(): void {}
 
@@ -46,16 +51,8 @@ export class CompanyDisplayComponent implements OnInit {
 
   async getSuccess(res: ICompany): Promise<void> {
     this.company = res;
-    if (res.hasLogo) {
-      await this.downloadPhoto();
-    } else {
-      this.photo = createAvatar(style, {
-        seed: res.id,
-        dataUri: true
-      });
-      this.loading$.next(false);
-      this.loadingError$.next(false);
-    }
+    this.loading$.next(false);
+    this.loadingError$.next(false);
   }
 
   async getFail(err: HttpErrorResponse): Promise<void> {
@@ -63,32 +60,11 @@ export class CompanyDisplayComponent implements OnInit {
     this.loading$.next(false);
   }
 
-  async downloadPhoto(): Promise<void> {
-    this.companyService.getLogo(this.companyId).subscribe(
-      (res: Blob) => { this.downloadSuccess(res); },
-      (err: HttpErrorResponse) => { this.downloadFail(err); }
-    );
-    this.loading$.next(false);
-    this.loadingError$.next(false);
-  }
-
-  async downloadSuccess(res: Blob): Promise<void> {
-    this.photo = URL.createObjectURL(res);
-    this.loading$.next(false);
-    this.loadingError$.next(false);
-  }
-
-  async downloadFail(err: HttpErrorResponse): Promise<void> {
-    this.loading$.next(false);
-    this.loadingError$.next(true);
-    switch (err.status) {
-      case 404:
-        this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error).then();
-        break;
-      case 400:
-        this.notificationService.message('發生未知錯誤', SweetAlertIcon.error).then();
-        break;
-    }
+  createPhoto(id: string): string {
+    return createAvatar(style, {
+      seed: id,
+      dataUri: true
+    });
   }
 
   async logout(): Promise<void> {

@@ -18,6 +18,7 @@ import { IServerError } from '../../models/error/server-error.model';
 import { IDocument } from '../../models/document/document.model';
 import { ModalService } from '../../services/modal/modal.service';
 import { IIndustrialClassification } from '../../models/company/industrial-classification.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-company-edit',
@@ -32,8 +33,8 @@ export class CompanyEditComponent implements OnInit {
   editForm: FormGroup;
   loading$ = new BehaviorSubject<boolean>(true);
   loadingError$ = new BehaviorSubject<boolean>(false);
-  photo: string;
   segment = 'info';
+  urlRoot = environment.apiUrl;
 
   constructor(
     private accountService: AccountService,
@@ -61,16 +62,8 @@ export class CompanyEditComponent implements OnInit {
   async getSuccess(res: ICompany): Promise<void> {
     this.company = res;
     this.buildForm(res);
-    if (res.hasLogo) {
-      await this.downloadPhoto();
-    } else {
-      this.photo = createAvatar(style, {
-        seed: res.id,
-        dataUri: true
-      });
-      this.loading$.next(false);
-      this.loadingError$.next(false);
-    }
+    this.loading$.next(false);
+    this.loadingError$.next(false);
   }
 
   async getFail(err: HttpErrorResponse): Promise<void> {
@@ -91,6 +84,13 @@ export class CompanyEditComponent implements OnInit {
           Validators.pattern(new RegExp('https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)'))
         ]
       ]
+    });
+  }
+
+  createPhoto(id: string): string {
+    return createAvatar(style, {
+      seed: id,
+      dataUri: true
     });
   }
 
@@ -146,7 +146,6 @@ export class CompanyEditComponent implements OnInit {
 
   async uploadSuccess(file: Blob): Promise<void> {
     this.company.hasLogo = true;
-    this.photo = URL.createObjectURL(file);
     await this.loadingService.end();
     await this.notificationService.toast('上傳成功', 2000, SweetAlertIcon.success);
   }
@@ -164,34 +163,6 @@ export class CompanyEditComponent implements OnInit {
     }
   }
 
-  async downloadPhoto(): Promise<void> {
-    this.companyService.getLogo(this.companyId).subscribe(
-      (res: Blob) => { this.downloadSuccess(res); },
-      (err: HttpErrorResponse) => { this.downloadFail(err); }
-    );
-    this.loading$.next(false);
-    this.loadingError$.next(false);
-  }
-
-  async downloadSuccess(res: Blob): Promise<void> {
-    this.photo = URL.createObjectURL(res);
-    this.loading$.next(false);
-    this.loadingError$.next(false);
-  }
-
-  async downloadFail(err: HttpErrorResponse): Promise<void> {
-    this.loading$.next(false);
-    this.loadingError$.next(true);
-    switch (err.status) {
-      case 404:
-        this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error).then();
-        break;
-      case 400:
-        this.notificationService.message('發生未知錯誤', SweetAlertIcon.error).then();
-        break;
-    }
-  }
-
   async delete(): Promise<void> {
     await this.loadingService.start('刪除中…');
     this.companyService.deleteLogo(this.companyId).subscribe(
@@ -202,10 +173,6 @@ export class CompanyEditComponent implements OnInit {
 
   async deleteSuccess(): Promise<void> {
     this.company.hasLogo = false;
-    this.photo = createAvatar(style, {
-      seed: this.company.id,
-      dataUri: true
-    });
     await this.loadingService.end();
     await this.notificationService.toast('刪除成功', 2000, SweetAlertIcon.success);
   }

@@ -11,6 +11,7 @@ import { CompanyDisplayComponent } from './company-display/company-display.compo
 import { CompanyEditComponent } from './company-edit/company-edit.component';
 import { IndustrialClassificationCreateComponent } from './industrial-classification-create/industrial-classification-create.component';
 import { IndustrialClassificationEditComponent } from './industrial-classification-edit/industrial-classification-edit.component';
+import { CompanyListComponent } from './company-list/company-list.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { IndustrialClassificationEditComponent } from './industrial-classificati
     CompanyDisplayComponent,
     CompanyEditComponent,
     IndustrialClassificationCreateComponent,
-    IndustrialClassificationEditComponent
+    IndustrialClassificationEditComponent,
+    CompanyListComponent
   ],
   imports: [
     CommonModule,

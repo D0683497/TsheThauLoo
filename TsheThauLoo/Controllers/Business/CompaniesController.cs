@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
@@ -11,6 +13,7 @@ using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Company;
 using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.Business;
+using TsheThauLoo.Parameters;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Company;
 using TsheThauLoo.Validator.File;
@@ -34,6 +37,36 @@ namespace TsheThauLoo.Controllers.Business
             _logger = logger;
             _dbContext = dbContext;
             _mapper = mapper;
+        }
+
+        [AllowAnonymous]
+        [HttpGet(Name = nameof(CompanyList))]
+        public async Task<IActionResult> CompanyList([FromQuery] PaginationResourceParameters parameters)
+        {
+            var entities = await _dbContext.Companies
+                .AsNoTracking()
+                .Include(x => x.CompanyLogo)
+                .Include(x => x.IndustrialClassifications)
+                .OrderBy(x => x.RegistrationNumber)
+                .Skip(parameters.PageIndex * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToListAsync();
+            var dtos = _mapper.Map<IEnumerable<CompanyDto>>(entities);
+            
+            #region 分頁資訊
+
+            var length = await _dbContext.Companies.CountAsync();
+            var paginationMetadata = new
+            {
+                pageLength = length, // 總資料數
+                pageSize = parameters.PageSize, // 一頁的項目數
+                pageIndex = parameters.PageIndex, // 目前頁碼
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+            #endregion
+            
+            return Ok(dtos);
         }
 
         [AuthAuthorize(Roles = "Manager")]
