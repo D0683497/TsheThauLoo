@@ -66,4 +66,9 @@ export class CompanyService {
     return this.http.post<ICompany>(url, data, this.httpOptions);
   }
 
+  deleteSIC(companyId: string, sicId: string): Observable<void> {
+    const url = `${this.urlRoot}/companies/${companyId}/sic/${sicId}`;
+    return this.http.delete<void>(url, this.httpOptions);
+  }
+
 }

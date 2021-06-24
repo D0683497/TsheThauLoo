@@ -236,6 +236,42 @@ export class CompanyEditComponent implements OnInit {
     }
   }
 
+  async deleteSIC(industrialClassificationId: string): Promise<void> {
+    await this.loadingService.start('刪除中...');
+    this.companyService.deleteSIC(this.companyId, industrialClassificationId).subscribe(
+      () => { this.deleteSICSuccess(industrialClassificationId); },
+      (err: HttpErrorResponse) => { this.deleteSICFail(err); }
+    );
+  }
+
+  async deleteSICSuccess(industrialClassificationId: string): Promise<void> {
+    const index = this.company.industrialClassifications.findIndex(x => x.id === industrialClassificationId);
+    this.company.industrialClassifications.splice(index, 1);
+    await this.loadingService.end();
+    await this.notificationService.toast('刪除成功', 2000, SweetAlertIcon.success);
+  }
+
+  async deleteSICFail(err: HttpErrorResponse): Promise<void> {
+    await this.loadingService.end();
+    switch (err.status) {
+      case 403: {
+        const error: IServerError = err.error;
+        await this.notificationService.notify(error.title, error.detail, SweetAlertIcon.warning);
+        break;
+      }
+      case 404:
+      {
+        await this.notificationService.message('查無此項目', SweetAlertIcon.question);
+        break;
+      }
+      case 400:
+      {
+        await this.notificationService.message('刪除失敗', SweetAlertIcon.error);
+        break;
+      }
+    }
+  }
+
   async logout(): Promise<void> {
     await this.accountService.logout();
     await this.notificationService.message('登出成功', SweetAlertIcon.success);
