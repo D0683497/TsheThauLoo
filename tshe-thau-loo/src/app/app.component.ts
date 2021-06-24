@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from './services/auth/auth.service';
+import { RoleType } from './enums/role-type.enum';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
-  constructor() {}
+  type = RoleType;
+
+  constructor(public authService: AuthService) {}
 
   ngOnInit(): void {}
 

@@ -20,9 +20,9 @@ using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
-using TsheThauLoo.Validator.Account.File;
 using TsheThauLoo.Validator.Account.Profile;
 using TsheThauLoo.Validator.Account.Register;
+using TsheThauLoo.Validator.File;
 
 namespace TsheThauLoo.Controllers.Account
 {

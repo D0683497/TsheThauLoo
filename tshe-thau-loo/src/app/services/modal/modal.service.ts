@@ -10,6 +10,12 @@ import { AdministratorEditResponsibilityComponent } from '../../account/profile/
 import { IDocument } from '../../models/document/document.model';
 import { EditVerifyFileComponent } from '../../account/profile/edit-verify-file/edit-verify-file.component';
 import { RoleType } from '../../enums/role-type.enum';
+// eslint-disable-next-line max-len
+import { IndustrialClassificationCreateComponent } from '../../company/industrial-classification-create/industrial-classification-create.component';
+import { ICompany } from '../../models/company/company.model';
+import { IIndustrialClassification } from '../../models/company/industrial-classification.model';
+// eslint-disable-next-line max-len
+import { IndustrialClassificationEditComponent } from '../../company/industrial-classification-edit/industrial-classification-edit.component';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +65,28 @@ export class ModalService {
     });
     await this.modal.present();
     const { data } = await this.modal.onDidDismiss<IDocument>();
+    return data;
+  }
+
+  async createSIC(companyId: string): Promise<ICompany> {
+    this.modal = await this.modalController.create({
+      component: IndustrialClassificationCreateComponent,
+      componentProps: {companyId},
+      swipeToClose: true
+    });
+    await this.modal.present();
+    const { data } = await this.modal.onDidDismiss<ICompany>();
+    return data;
+  }
+
+  async editSIC(companyId: string, industrialClassification: IIndustrialClassification): Promise<ICompany> {
+    this.modal = await this.modalController.create({
+      component: IndustrialClassificationEditComponent,
+      componentProps: {companyId, industrialClassification},
+      swipeToClose: true
+    });
+    await this.modal.present();
+    const { data } = await this.modal.onDidDismiss<ICompany>();
     return data;
   }
 

@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">取消</ion-button>
+    </ion-buttons>
+    <ion-title>建立產業類別</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">建立產業類別</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit(createForm.value)" novalidate>
+    <ion-list lines="full">
+      <ion-item lines="none" color="light">
+        <ion-label>
+          <ion-text color="danger">*</ion-text>為必填項目
+        </ion-label>
+      </ion-item>
+      <!-- description -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>描述</ion-label>
+        <ion-textarea formControlName="description" auto-grow="true" inputmode="text" placeholder="描述" required></ion-textarea>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['description'].hasError('required') && (createForm.controls['description'].dirty || createForm.controls['description'].touched)">
+          描述是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['description'].hasError('maxlength') && (createForm.controls['description'].dirty || createForm.controls['description'].touched)">
+          描述<strong>最多50位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['description'].hasError('server') && (createForm.controls['description'].dirty || createForm.controls['description'].touched)">
+          {{ createForm.controls['description'].getError('server') }}
+        </ion-text>
+      </div>
+    </ion-list>
+    <ion-button class="ion-margin" [disabled]="createForm.invalid" type="submit" shape="round" expand="block">建立</ion-button>
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+  </ion-toolbar>
+</ion-footer>

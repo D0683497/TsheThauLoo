@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using AutoMapper;
 using TsheThauLoo.Dtos.File;
+using TsheThauLoo.Entities.Business;
 using TsheThauLoo.Entities.User;
 
 namespace TsheThauLoo.Mappers
@@ -165,6 +166,39 @@ namespace TsheThauLoo.Mappers
             CreateMap<UserPhoto, FileDto>()
                 .ForMember(dest => dest.Id,
                     opt => opt.MapFrom(src => src.UserPhotoId))
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+            
+            #region FileCreateDto 轉換成 CompanyLogo
+
+            CreateMap<FileCreateDto, CompanyLogo>()
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .AfterMap((src, dest) =>
+                {
+                    var name = Path.GetFileNameWithoutExtension(src.Name);
+                    dest.Name = name;
+                    var extension = Path.GetExtension(src.Name);
+                    dest.Extension = extension == string.Empty ? null : extension;
+                    dest.Path = $@"wwwroot{Path.DirectorySeparatorChar}"+
+                                $"companies{Path.DirectorySeparatorChar}"+
+                                $"logo{Path.DirectorySeparatorChar}" +
+                                $"{Path.GetRandomFileName()}";
+                });
+
+            #endregion
+            
+            #region CompanyLogo 轉換成 FileDto
+
+            CreateMap<CompanyLogo, FileDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.CompanyLogoId))
                 .ForMember(dest => dest.Type,
                     opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.Name,

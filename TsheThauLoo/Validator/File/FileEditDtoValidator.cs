@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using TsheThauLoo.Dtos.File;
 
-namespace TsheThauLoo.Validator.Account.File
+namespace TsheThauLoo.Validator.File
 {
     public class FileEditDtoValidator : AbstractValidator<FileEditDto>
     {

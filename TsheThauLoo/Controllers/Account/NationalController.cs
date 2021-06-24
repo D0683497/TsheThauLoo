@@ -11,8 +11,8 @@ using TsheThauLoo.Dtos.Account.National;
 using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.User;
 using TsheThauLoo.Utilities;
-using TsheThauLoo.Validator.Account.File;
 using TsheThauLoo.Validator.Account.National;
+using TsheThauLoo.Validator.File;
 
 namespace TsheThauLoo.Controllers.Account
 {

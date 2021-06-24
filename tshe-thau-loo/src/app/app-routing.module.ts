@@ -9,7 +9,12 @@ const routes: Routes = [
   {
     path: 'account',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
-  }
+  },
+  {
+    path: 'company',
+    loadChildren: () => import('./company/company.module').then(m => m.CompanyModule)
+  },
+  { path: '**', redirectTo: 'page-not-found' }
 ];
 @NgModule({
   imports: [
