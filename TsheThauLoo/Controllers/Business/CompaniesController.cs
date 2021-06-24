@@ -41,7 +41,7 @@ namespace TsheThauLoo.Controllers.Business
 
         [AllowAnonymous]
         [HttpGet(Name = nameof(CompanyList))]
-        public async Task<IActionResult> CompanyList([FromQuery] PaginationResourceParameters parameters)
+        public async Task<ActionResult<IEnumerable<CompanyDto>>> CompanyList([FromQuery] PaginationResourceParameters parameters)
         {
             var entities = await _dbContext.Companies
                 .AsNoTracking()
