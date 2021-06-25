@@ -14,6 +14,10 @@ const routes: Routes = [
     path: 'company',
     loadChildren: () => import('./company/company.module').then(m => m.CompanyModule)
   },
+  {
+    path: 'resume',
+    loadChildren: () => import('./resume/resume.module').then(m => m.ResumeModule)
+  },
   { path: '**', redirectTo: 'page-not-found' }
 ];
 @NgModule({

@@ -28,7 +28,7 @@ export class CompanyService {
   constructor(private http: HttpClient) { }
 
   getCompanies(pageIndex: number, pageSize: number): Observable<HttpResponse<ICompany[]>> {
-    const url = `${this.urlRoot}/companies/?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const url = `${this.urlRoot}/companies?pageIndex=${pageIndex}&pageSize=${pageSize}`;
     return this.http.get<ICompany[]>(url, this.httpResponseOptions);
   }
 
