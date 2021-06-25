@@ -53,6 +53,12 @@ export class AuthService {
     return user !== null ? user.role : null;
   }
 
+  // 獲取使用者識別碼
+  getUserId(): string | null {
+    const user = this.userInfo$.getValue();
+    return user !== null ? user.nameId : null;
+  }
+
   isTokenExpired = (): boolean => this.helper.isTokenExpired(this.token);
 
 }

@@ -4,6 +4,7 @@ import { ResumeHomeComponent } from './resume-home/resume-home.component';
 import { ResumeFileListComponent } from './resume-file-list/resume-file-list.component';
 import { ResumeOnlineListComponent } from './resume-online-list/resume-online-list.component';
 import { RequiredLoginGuard } from '../guards/required-login/required-login.guard';
+
 const routes: Routes = [
   { path: '', component: ResumeHomeComponent, pathMatch: 'full', canActivate: [RequiredLoginGuard] },
   {

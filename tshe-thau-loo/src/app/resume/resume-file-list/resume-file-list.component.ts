@@ -11,6 +11,8 @@ import { Pagination } from '../../models/pagination/pagination';
 import { ModalService } from '../../services/modal/modal.service';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-resume-file-list',
@@ -25,6 +27,8 @@ export class ResumeFileListComponent implements OnInit {
   loading$ = new BehaviorSubject<boolean>(true);
   loadingError$ = new BehaviorSubject<boolean>(false);
   pagination = new Pagination();
+  urlRoot = environment.apiUrl;
+  userId = this.authService.getUserId();
 
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +36,8 @@ export class ResumeFileListComponent implements OnInit {
     private notificationService: NotificationService,
     private loadingService: LoadingService,
     private modalService: ModalService,
-    private actionSheetController: ActionSheetController) { }
+    private actionSheetController: ActionSheetController,
+    private authService: AuthService) { }
 
   ngOnInit(): void { }
 
@@ -110,6 +115,13 @@ export class ResumeFileListComponent implements OnInit {
           text: '下載',
           handler: () => {
             this.download(data.id, data.name+data.extension);
+          }
+        },
+        {
+          text: '預覽',
+          handler: () => {
+            const url = `https://docs.google.com/viewer?url=${this.urlRoot}/resumes/${data.id}?userId=${this.userId}`;
+            window.open(url, '_blank');
           }
         },
         {

@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -69,11 +70,11 @@ namespace TsheThauLoo.Controllers
             return Ok(dtos);
         }
 
-        [AuthAuthorize]
+        [AllowAnonymous]
         [HttpGet("{resumeId}", Name = nameof(GetResume))]
-        public async Task<IActionResult> GetResume([FromRoute] string resumeId)
+        public async Task<IActionResult> GetResume([FromRoute] string resumeId, [FromQuery] string userId)
         {
-            var userId = User.Claims
+            userId ??= User.Claims
                 .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
             var entity = await _dbContext.FileResumes
                 .AsNoTracking()
