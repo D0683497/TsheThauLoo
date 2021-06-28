@@ -21,12 +21,12 @@
   <ng-container *ngIf="(loading$ | async) === false; else loading">
     <ng-container *ngIf="(loadingError$ | async) === false; else error">
       <ion-card *ngFor="let company of companies" [routerLink]="['/company', company.id]">
-        <ion-item lines="none">
+        <ion-item lines="none" color="light">
           <ion-thumbnail slot="start">
             <ion-img *ngIf="company.hasLogo" src="{{urlRoot+'/companies/'+company.id+'/logo'}}"></ion-img>
             <ion-img *ngIf="!company.hasLogo" [src]="createPhoto(company.id)"></ion-img>
           </ion-thumbnail>
-          <ion-label class="ion-text-wrap">台灣積體電路股份有限公司</ion-label>
+          <ion-label class="ion-text-wrap">{{company.name}}</ion-label>
         </ion-item>
       </ion-card>
     </ng-container>
