@@ -89,10 +89,12 @@
               </ion-text>
             </div>
             <!-- introduction -->
-            <ion-item>
-              <ion-label position="stacked">簡介</ion-label>
-              <quill-editor class="ion-margin-bottom" formControlName="introduction" format="html" [styles]="{'height': '70vh'}" placeholder="簡介"></quill-editor>
-            </ion-item>
+            <ion-list-header>
+              <ion-label color="tertiary">簡介</ion-label>
+            </ion-list-header>
+            <div class="ion-margin">
+              <quill-editor formControlName="introduction" format="html" [styles]="{'height': '50vh'}" placeholder="簡介"></quill-editor>
+            </div>
             <div class="validation-errors">
               <ion-text color="danger" class="error-message" *ngIf="editForm.controls['introduction'].hasError('server') && (editForm.controls['introduction'].dirty || editForm.controls['introduction'].touched)">
                 {{ editForm.controls['introduction'].getError('server') }}

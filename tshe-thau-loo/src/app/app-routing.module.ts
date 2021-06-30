@@ -18,6 +18,10 @@ const routes: Routes = [
     path: 'resume',
     loadChildren: () => import('./resume/resume.module').then(m => m.ResumeModule)
   },
+  {
+    path: 'act',
+    loadChildren: () => import('./activity/activity.module').then(m => m.ActivityModule)
+  },
   { path: '**', redirectTo: 'page-not-found' }
 ];
 @NgModule({
