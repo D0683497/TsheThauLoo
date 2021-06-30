@@ -7,12 +7,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { QuillModule } from 'ngx-quill';
 import * as QuillBlotFormatter from 'quill-blot-formatter';
+import { EventListComponent } from './event/event-list/event-list.component';
 import { EventCreateComponent } from './event/event-create/event-create.component';
 
 @NgModule({
   declarations: [
     ActivityHomeComponent,
-    EventCreateComponent
+    EventCreateComponent,
+    EventListComponent
   ],
   imports: [
     CommonModule,

@@ -61,6 +61,38 @@ namespace TsheThauLoo.Mappers.Activity
                 });
 
             #endregion
+
+            #region Event 轉換成 EventDto
+
+            CreateMap<Event, EventDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.EventId))
+                .ForMember(dest => dest.Title,
+                    opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.Content,
+                    opt => opt.MapFrom(src => src.Content))
+                .ForMember(dest => dest.Declaration,
+                    opt => opt.MapFrom(src => src.Declaration))
+                .ForMember(dest => dest.Venue,
+                    opt => opt.MapFrom(src => src.Venue))
+                .ForMember(dest => dest.RegistrationStartTime,
+                    opt => opt.MapFrom(src => src.RegistrationStartTime))
+                .ForMember(dest => dest.RegistrationEndTime,
+                    opt => opt.MapFrom(src => src.RegistrationEndTime))
+                .ForMember(dest => dest.StartTime,
+                    opt => opt.MapFrom(src => src.StartTime))
+                .ForMember(dest => dest.EndTime,
+                    opt => opt.MapFrom(src => src.EndTime))
+                .ForMember(dest => dest.LimitNumberOfPeople,
+                    opt => opt.MapFrom(src => src.LimitNumberOfPeople))
+                .ForMember(dest => dest.EnableVerify,
+                    opt => opt.MapFrom(src => src.EnableVerify))
+                .ForMember(dest => dest.EnableIdentityConfirmed,
+                    opt => opt.MapFrom(src => src.EnableIdentityConfirmed))
+                .ForPath(dest => dest.Files,
+                    opt => opt.MapFrom(src => src.EventFiles));
+
+            #endregion
         }
     }
 }

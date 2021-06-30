@@ -1,11 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Activity.Event;
 using TsheThauLoo.Entities.Activity;
+using TsheThauLoo.Enums;
+using TsheThauLoo.Parameters;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Activity.Event;
 
@@ -28,6 +36,52 @@ namespace TsheThauLoo.Controllers.Activity
             _logger = logger;
             _mapper = mapper;
             _dbContext = dbContext;
+        }
+        
+        [AllowAnonymous]
+        [HttpGet(Name = nameof(GetEvents))]
+        public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents([FromQuery] PaginationResourceParameters parameters, [FromQuery] ActivityStatus status)
+        {
+            var query = _dbContext.Events.AsNoTracking();
+
+            switch (status)
+            {
+                case ActivityStatus.Coming:
+                    query = query.Where(x => x.RegistrationEndTime != null && x.RegistrationEndTime > DateTime.Now);
+                    break;
+                case ActivityStatus.Ing:
+                    query = query
+                        .Where(x => 
+                            (x.RegistrationEndTime != null && x.RegistrationEndTime <= DateTime.Now) || 
+                            (x.RegistrationEndTime == null && x.EndTime > DateTime.Now));
+                    break;
+                case ActivityStatus.End:
+                    query = query.Where(x => x.EndTime <= DateTime.Now);
+                    break;
+            }
+            
+            var entities = await query
+                .OrderBy(x => x.StartTime)
+                .Include(x => x.EventFiles)
+                .Skip(parameters.PageIndex * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToListAsync();
+            var dtos = _mapper.Map<IEnumerable<EventDto>>(entities);
+            
+            #region 分頁資訊
+
+            var length = await query.CountAsync();
+            var paginationMetadata = new
+            {
+                pageLength = length, // 總資料數
+                pageSize = parameters.PageSize, // 一頁的項目數
+                pageIndex = parameters.PageIndex, // 目前頁碼
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+            #endregion
+            
+            return Ok(dtos);
         }
 
         [AuthAuthorize(Roles = "Administrator")]

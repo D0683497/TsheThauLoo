@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { IEvent } from '../../../models/activity/event/event.model';
+import { ActivityStatus } from '../../../enums/activity-status.enum';
 import { IEventCreate } from '../../../models/activity/event/event-create.model';
 
 @Injectable({
@@ -22,9 +24,14 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
 
-  createEvent(data: IEventCreate): Observable<void> {
+  getEvents(pageIndex: number, pageSize: number, status: ActivityStatus): Observable<HttpResponse<IEvent[]>> {
+    const url = `${this.urlRoot}/events?pageIndex=${pageIndex}&pageSize=${pageSize}&status=${status}`;
+    return this.http.get<IEvent[]>(url, this.httpResponseOptions);
+  }
+
+  createEvent(data: IEventCreate): Observable<IEvent> {
     const url = `${this.urlRoot}/events`;
-    return this.http.post<void>(url, data, this.httpOptions);
+    return this.http.post<IEvent>(url, data, this.httpOptions);
   }
 
 }
