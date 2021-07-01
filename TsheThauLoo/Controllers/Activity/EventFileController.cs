@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -96,14 +97,27 @@ namespace TsheThauLoo.Controllers.Activity
                 }
 
                 #endregion
-
-                return NoContent();
-
-                // var routeValues = new {eventId = act.EventId, fileId = entity.EventFileId};
-                // var returnDto = _mapper.Map<FileDto>(entity);
-                // return CreatedAtAction(nameof(EventFile), routeValues, returnDto);
+                
+                var routeValues = new {eventId = act.EventId, fileId = entity.EventFileId};
+                var returnDto = _mapper.Map<FileDto>(entity);
+                return CreatedAtAction(nameof(EventFile), routeValues, returnDto);
             }
             return BadRequest(result.Errors);
+        }
+        
+        [AllowAnonymous]
+        [HttpGet("{fileId}", Name = nameof(EventFile))]
+        public async Task<IActionResult> EventFile([FromRoute] string eventId, [FromRoute] string fileId)
+        {
+            var entity = await _dbContext.EventFiles
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.EventId == eventId && x.EventFileId == fileId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            // 路徑、型態、下載的名稱
+            return File(System.IO.File.OpenRead(entity.Path), entity.Type, $"{entity.Name}{entity.Extension}");
         }
     }
 }

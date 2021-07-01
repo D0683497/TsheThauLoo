@@ -55,4 +55,9 @@ export class EventService {
     return this.http.post<IDocument>(url, form);
   }
 
+  getEventFile(eventId: string, fileId: string): Observable<Blob> {
+    const url = `${this.urlRoot}/events/${eventId}/files/${fileId}`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
 }

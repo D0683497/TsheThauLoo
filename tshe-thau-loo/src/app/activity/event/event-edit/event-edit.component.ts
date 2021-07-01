@@ -14,6 +14,7 @@ import { IEventEdit } from '../../../models/activity/event/event-edit.model';
 import { IDocument } from '../../../models/document/document.model';
 import { environment } from '../../../../environments/environment';
 import { ActionSheetController } from '@ionic/angular';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-event-edit',
@@ -202,8 +203,30 @@ export class EventEditComponent implements OnInit {
 
   }
 
-  download(id: string, name: string): void {
+  async download(fileId: string, fileName: string): Promise<void> {
+    await this.loadingService.start('下載中...');
+    this.eventService.getEventFile(this.eventId, fileId).subscribe(
+      (res: Blob) => { this.downloadSuccess(res, fileName); },
+      (err: HttpErrorResponse) => { this.downloadFail(err); }
+    );
+  }
 
+  async downloadSuccess(res: Blob, fileName: string): Promise<void> {
+    await this.loadingService.end();
+    saveAs(res, fileName);
+    await this.notificationService.toast('下載成功', 2000, SweetAlertIcon.success);
+  }
+
+  async downloadFail(err: HttpErrorResponse): Promise<void> {
+    await this.loadingService.end();
+    switch (err.status) {
+      case 404:
+        await this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error);
+        break;
+      case 400:
+        await this.notificationService.message('發生未知錯誤', SweetAlertIcon.error);
+        break;
+    }
   }
 
   deleteFile(id: string): void {
