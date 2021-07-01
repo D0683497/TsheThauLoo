@@ -50,7 +50,6 @@ export class EventCreateComponent implements OnInit {
   }
 
   async onSubmit(data: IEventCreate): Promise<void> {
-    console.log(data);
     await this.loadingService.start('建立中...');
     this.eventService.createEvent(data).subscribe(
       (res: IEvent) => { this.registerSuccess(res); },

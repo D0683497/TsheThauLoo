@@ -104,65 +104,29 @@ namespace TsheThauLoo.Validator.Activity.Event
                         }
                     });
             });
-            // 活動報名開始時間 早於等於 活動報名結束時間
-            When(x => x.RegistrationStartTime != null && x.RegistrationEndTime != null, () =>
-            {
-                RuleFor(x => new {x.RegistrationStartTime, x.RegistrationEndTime})
-                    .Custom((parameters, context) =>
-                    {
-                        if (CompareTime((DateTime) parameters.RegistrationStartTime, (DateTime) parameters.RegistrationEndTime))
-                        {
-                            context.AddFailure("registrationEndTime", "活動報名開始時間必須早於等於活動報名結束時間");
-                        }
-                    });
-            });
-            
+
             // 活動報名結束日期 早於等於 活動開始日期
             When(x => x.RegistrationEndDate != null && x.StartDate != null, () =>
             {
                 RuleFor(x => new {x.RegistrationEndDate, x.StartDate})
                     .Custom((parameters, context) =>
                     {
-                        if (CompareTime((DateTime) parameters.RegistrationEndDate, parameters.StartDate))
+                        if (CompareDate((DateTime) parameters.RegistrationEndDate, parameters.StartDate))
                         {
                             context.AddFailure("startDate", "活動報名結束日期必須早於等於活動開始日期");
                         }
                     });
             });
-            // 活動報名結束時間 早於等於 活動開始時間
-            When(x => x.RegistrationEndTime != null && x.StartTime != null, () =>
-            {
-                RuleFor(x => new {x.RegistrationEndTime, x.StartTime})
-                    .Custom((parameters, context) =>
-                    {
-                        if (CompareTime((DateTime) parameters.RegistrationEndTime, parameters.StartTime))
-                        {
-                            context.AddFailure("startTime", "活動報名結束時間必須早於等於活動開始時間");
-                        }
-                    });
-            });
-            
+
             // 活動開始日期 早於等於 活動結束日期
             When(x => x.StartDate != null && x.EndDate != null, () =>
             {
                 RuleFor(x => new {x.StartDate, x.EndDate})
                     .Custom((parameters, context) =>
                     {
-                        if (CompareTime(parameters.StartDate, parameters.EndDate))
+                        if (CompareDate(parameters.StartDate, parameters.EndDate))
                         {
                             context.AddFailure("endDate", "活動開始日期必須早於等於活動結束日期");
-                        }
-                    });
-            });
-            // 活動開始時間 早於等於 活動結束時間
-            When(x => x.StartTime != null && x.EndTime != null, () =>
-            {
-                RuleFor(x => new {x.StartTime, x.EndTime})
-                    .Custom((parameters, context) =>
-                    {
-                        if (CompareTime(parameters.StartTime, parameters.EndTime))
-                        {
-                            context.AddFailure("endTime", "活動開始時間必須早於等於活動結束時間");
                         }
                     });
             });
@@ -173,24 +137,6 @@ namespace TsheThauLoo.Validator.Activity.Event
             DateTime date1 = new DateTime(firstDate.Year, firstDate.Month, firstDate.Day, 1, 1, 1);
             DateTime date2 = new DateTime(secondDate.Year, secondDate.Month, secondDate.Day, 1, 1, 1);
             var result = (TimeComparisonStatus) DateTime.Compare(date1, date2);
-            switch (result)
-            {
-                case TimeComparisonStatus.Earlier:
-                    return false;
-                case TimeComparisonStatus.Same:
-                    return false;
-                case TimeComparisonStatus.Later:
-                    return true;
-                default:
-                    return true;
-            }
-        }
-        
-        private bool CompareTime(DateTime firstTime, DateTime secondTime)
-        {
-            DateTime time1 = new DateTime(1, 1, 1, firstTime.Hour, firstTime.Minute, 0);
-            DateTime time2 = new DateTime(1, 1, 1, secondTime.Hour, secondTime.Minute, 0);
-            var result = (TimeComparisonStatus) DateTime.Compare(time1, time2);
             switch (result)
             {
                 case TimeComparisonStatus.Earlier:
