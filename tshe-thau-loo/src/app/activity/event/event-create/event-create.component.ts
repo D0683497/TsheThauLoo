@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AccountService } from '../../../services/account/account.service';
 import { NotificationService } from '../../../services/notification/notification.service';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../../services/loading/loading.service';
@@ -10,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { IFormError } from '../../../models/error/form-error.model';
 import { IEventCreate } from '../../../models/activity/event/event-create.model';
 import { IEvent } from '../../../models/activity/event/event.model';
+import { IServerError } from '../../../models/error/server-error.model';
 
 @Component({
   selector: 'app-event-create',
@@ -22,7 +22,6 @@ export class EventCreateComponent implements OnInit {
   createForm: FormGroup;
 
   constructor(
-    private accountService: AccountService,
     private notificationService: NotificationService,
     private router: Router,
     private fb: FormBuilder,
@@ -65,19 +64,24 @@ export class EventCreateComponent implements OnInit {
 
   async registerFail(err: HttpErrorResponse): Promise<void> {
     await this.loadingService.end();
-    if (err.status === 400) {
-      const errors: IFormError[] = err.error;
-      errors.forEach(element => {
-        this.createForm.get(element.propertyName)?.setErrors({server: element.errorMessage});
-      });
-      await this.notificationService.message('註冊失敗', SweetAlertIcon.error);
+    switch (err.status) {
+      case 400:
+      {
+        const errors: IFormError[] = err.error;
+        errors.forEach(element => {
+          this.createForm.get(element.propertyName)?.setErrors({server: element.errorMessage});
+        });
+        await this.notificationService.message('建立失敗', SweetAlertIcon.error);
+        break;
+      }
+      case 403:
+      {
+        const errors: IServerError = err.error;
+        await this.router.navigate(['/act']);
+        await this.notificationService.notify(errors.title, errors.detail, SweetAlertIcon.error);
+        break;
+      }
     }
-  }
-
-  async logout(): Promise<void> {
-    await this.accountService.logout();
-    await this.notificationService.message('登出成功', SweetAlertIcon.success);
-    await this.router.navigate(['/']);
   }
 
 }

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { IEvent } from '../../../models/activity/event/event.model';
 import { ActivityStatus } from '../../../enums/activity-status.enum';
 import { IEventCreate } from '../../../models/activity/event/event-create.model';
+import { IEventEdit } from '../../../models/activity/event/event-edit.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,11 @@ export class EventService {
 
   createEvent(data: IEventCreate): Observable<IEvent> {
     const url = `${this.urlRoot}/events`;
+    return this.http.post<IEvent>(url, data, this.httpOptions);
+  }
+
+  editEvent(eventId: string, data: IEventEdit): Observable<IEvent> {
+    const url = `${this.urlRoot}/events/${eventId}`;
     return this.http.post<IEvent>(url, data, this.httpOptions);
   }
 

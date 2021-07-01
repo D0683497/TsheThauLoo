@@ -9,6 +9,7 @@ import { QuillModule } from 'ngx-quill';
 import * as QuillBlotFormatter from 'quill-blot-formatter';
 import { EventListComponent } from './event/event-list/event-list.component';
 import { EventCreateComponent } from './event/event-create/event-create.component';
+import { EventEditComponent } from './event/event-edit/event-edit.component';
 import { EventDisplayComponent } from './event/event-display/event-display.component';
 
 @NgModule({
@@ -16,7 +17,8 @@ import { EventDisplayComponent } from './event/event-display/event-display.compo
     ActivityHomeComponent,
     EventCreateComponent,
     EventListComponent,
-    EventDisplayComponent
+    EventDisplayComponent,
+    EventEditComponent,
   ],
   imports: [
     CommonModule,

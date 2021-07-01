@@ -92,6 +92,21 @@ namespace TsheThauLoo.Controllers.Activity
             ValidationResult result = await validator.ValidateAsync(dto);
             if (result.IsValid)
             {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var administrator = await _dbContext.Administrators
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                
+                #region 驗證
+                
+                if (!administrator.AdministratorConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "管理員尚未驗證", statusCode: 403);
+                }
+
+                #endregion
+                
                 var entity = _mapper.Map<Event>(dto);
                 _dbContext.Events.Add(entity);
                 await _dbContext.SaveChangesAsync();
@@ -116,6 +131,46 @@ namespace TsheThauLoo.Controllers.Activity
             }
             var dto = _mapper.Map<EventDto>(entity);
             return Ok(dto);
+        }
+        
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpPost("{eventId}", Name = nameof(EditEvent))]
+        public async Task<ActionResult<EventDto>> EditEvent([FromRoute] string eventId, [FromBody] EventEditDto dto)
+        {
+            EventEditDtoValidator validator = new EventEditDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var administrator = await _dbContext.Administrators
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                
+                #region 驗證
+                
+                if (!administrator.AdministratorConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "管理員尚未驗證", statusCode: 403);
+                }
+
+                #endregion
+                
+                var entity = await _dbContext.Events
+                    .SingleOrDefaultAsync(x => x.EventId == eventId);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+                var updateEntity = _mapper.Map(dto, entity);
+                _dbContext.Events.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var routeValues = new {eventId = updateEntity.EventId};
+                var returnDto = _mapper.Map<EventDto>(updateEntity);
+                return CreatedAtAction(nameof(GetEvent), routeValues, returnDto);
+                
+            }
+            return BadRequest(result.Errors);
         }
     }
 }
