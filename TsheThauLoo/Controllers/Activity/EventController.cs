@@ -95,9 +95,27 @@ namespace TsheThauLoo.Controllers.Activity
                 var entity = _mapper.Map<Event>(dto);
                 _dbContext.Events.Add(entity);
                 await _dbContext.SaveChangesAsync();
-                return NoContent();
+                var routeValues = new {eventId = entity.EventId};
+                var returnDto = _mapper.Map<EventDto>(entity);
+                return CreatedAtAction(nameof(GetEvent), routeValues, returnDto);
             }
             return BadRequest(result.Errors);
+        }
+        
+        [AllowAnonymous]
+        [HttpGet("{eventId}", Name = nameof(GetEvent))]
+        public async Task<ActionResult<EventDto>> GetEvent([FromRoute] string eventId)
+        {
+            var entity = await _dbContext.Events
+                .AsNoTracking()
+                .Include(x => x.EventFiles)
+                .SingleOrDefaultAsync(x => x.EventId == eventId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            var dto = _mapper.Map<EventDto>(entity);
+            return Ok(dto);
         }
     }
 }

@@ -24,6 +24,11 @@ export class EventService {
 
   constructor(private http: HttpClient) { }
 
+  getEvent(eventId: string): Observable<IEvent> {
+    const url = `${this.urlRoot}/events/${eventId}`;
+    return this.http.get<IEvent>(url, this.httpOptions);
+  }
+
   getEvents(pageIndex: number, pageSize: number, status: ActivityStatus): Observable<HttpResponse<IEvent[]>> {
     const url = `${this.urlRoot}/events?pageIndex=${pageIndex}&pageSize=${pageSize}&status=${status}`;
     return this.http.get<IEvent[]>(url, this.httpResponseOptions);
