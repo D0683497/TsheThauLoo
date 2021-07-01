@@ -265,6 +265,25 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Extension));
 
             #endregion
+            
+            #region FileCreateDto 轉換成 EventFile
+
+            CreateMap<FileCreateDto, EventFile>()
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .AfterMap((src, dest) =>
+                {
+                    var name = Path.GetFileNameWithoutExtension(src.Name);
+                    dest.Name = name;
+                    var extension = Path.GetExtension(src.Name);
+                    dest.Extension = extension == string.Empty ? null : extension;
+                    dest.Path = $@"wwwroot{Path.DirectorySeparatorChar}"+
+                                $"activities{Path.DirectorySeparatorChar}"+
+                                $"event{Path.DirectorySeparatorChar}"+
+                                $"{Path.GetRandomFileName()}";
+                });
+
+            #endregion
         }
     }
 }

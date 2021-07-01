@@ -6,6 +6,7 @@ import { IEvent } from '../../../models/activity/event/event.model';
 import { ActivityStatus } from '../../../enums/activity-status.enum';
 import { IEventCreate } from '../../../models/activity/event/event-create.model';
 import { IEventEdit } from '../../../models/activity/event/event-edit.model';
+import { IDocument } from '../../../models/document/document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,15 @@ export class EventService {
   editEvent(eventId: string, data: IEventEdit): Observable<IEvent> {
     const url = `${this.urlRoot}/events/${eventId}`;
     return this.http.post<IEvent>(url, data, this.httpOptions);
+  }
+
+  createEventFile(eventId: string, date: File): Observable<IDocument> {
+    const url = `${this.urlRoot}/events/${eventId}/files`;
+    const form = new FormData();
+    form.append('type', date.type);
+    form.append('name', date.name);
+    form.append('fileData', date);
+    return this.http.post<IDocument>(url, form);
   }
 
 }

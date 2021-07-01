@@ -5,12 +5,17 @@
     </ion-buttons>
     <ion-title>編輯一般活動</ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/account">
+      <ion-button *ngIf="segment !== 'file'" routerLink="/account">
         <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="segment === 'file'" (click)="file.click()">
+        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
+<input (change)="createFile($event.target.files)" class="ion-hide" type="file" #file>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
@@ -243,7 +248,24 @@
           <ion-button class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>
         </form>
       </ng-container>
-      <ng-container *ngIf="segment === 'file'"></ng-container>
+      <ng-container *ngIf="segment === 'file'">
+        <ng-container *ngIf="event.files.length !== 0; else empty">
+          <ion-list lines="full">
+            <ion-item *ngFor="let file of event.files" (click)="option(file)" detail>
+              <ion-label class="ion-text-wrap">{{file.name+file.extension}}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ng-container>
+        <ng-template #empty>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>無資料</ion-card-title>
+            </ion-card-header>
+            <ion-img src="assets/No-data-rafiki.svg" alt="無資料"></ion-img>
+            <ion-button (click)="file.click()" class="ion-margin" color="primary" expand="block" shape="round">立即建立</ion-button>
+          </ion-card>
+        </ng-template>
+      </ng-container>
       <ng-container *ngIf="segment === 'other'"></ng-container>
     </ng-container>
     <ng-template #error>

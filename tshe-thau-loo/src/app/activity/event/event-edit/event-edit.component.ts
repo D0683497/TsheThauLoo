@@ -11,6 +11,9 @@ import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
 import { IFormError } from '../../../models/error/form-error.model';
 import { IServerError } from '../../../models/error/server-error.model';
 import { IEventEdit } from '../../../models/activity/event/event-edit.model';
+import { IDocument } from '../../../models/document/document.model';
+import { environment } from '../../../../environments/environment';
+import { ActionSheetController } from '@ionic/angular';
 
 @Component({
   selector: 'app-event-edit',
@@ -26,6 +29,7 @@ export class EventEditComponent implements OnInit {
   loading$ = new BehaviorSubject<boolean>(true);
   loadingError$ = new BehaviorSubject<boolean>(false);
   segment = 'info';
+  urlRoot = environment.apiUrl;
 
   constructor(
     private notificationService: NotificationService,
@@ -33,7 +37,8 @@ export class EventEditComponent implements OnInit {
     private fb: FormBuilder,
     private loadingService: LoadingService,
     private eventService: EventService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private actionSheetController: ActionSheetController) { }
 
   ngOnInit(): void {}
 
@@ -114,6 +119,95 @@ export class EventEditComponent implements OnInit {
         break;
       }
     }
+  }
+
+  async option(data: IDocument): Promise<void> {
+    const options = {
+      translucent: true,
+      header: '一般活動附檔',
+      buttons: [
+        {
+          text: '編輯',
+          handler: () => {
+            this.editFile(data);
+          }
+        },
+        {
+          text: '下載',
+          handler: () => {
+            this.download(data.id, data.name+data.extension);
+          }
+        },
+        {
+          text: '預覽',
+          handler: () => {
+            const url = `https://docs.google.com/viewer?url=${this.urlRoot}/events/${this.eventId}/files/${data.id}`;
+            window.open(url, '_blank');
+          }
+        },
+        {
+          text: '刪除',
+          role: 'destructive',
+          handler: () => {
+            this.deleteFile(data.id);
+          }
+        },
+        {
+          text: '取消',
+          icon: 'close',
+          role: 'cancel',
+        }
+      ]
+    };
+    const actionSheet = await this.actionSheetController.create(options);
+    await actionSheet.present();
+  }
+
+  async createFile(files: File[]): Promise<void> {
+    if (files.length > 0) {
+      const file = files[0];
+      if (file.size > 2147483647) {
+        await this.notificationService.message('檔案過大', SweetAlertIcon.info);
+        return;
+      }
+      await this.loadingService.start('上傳中...');
+      this.eventService.createEventFile(this.eventId, file).subscribe(
+        (res: IDocument) => { this.createFileSuccess(res); },
+        (err: HttpErrorResponse) => { this.createFileFail(err); }
+      );
+    }
+  }
+
+  async createFileSuccess(file: IDocument): Promise<void> {
+    this.event.files.push(file);
+    await this.loadingService.end();
+    await this.notificationService.toast('上傳成功', 2000, SweetAlertIcon.success);
+  }
+
+  async createFileFail(err: HttpErrorResponse): Promise<void> {
+    await this.loadingService.end();
+    switch (err.status) {
+      case 400:
+        await this.notificationService.toast('上傳失敗', 2000, SweetAlertIcon.error);
+        break;
+      case 403:
+        const errors: IServerError = err.error;
+        await this.router.navigate(['/act/event', this.eventId]);
+        await this.notificationService.notify(errors.title, errors.detail, SweetAlertIcon.error);
+        break;
+    }
+  }
+
+  editFile(data: IDocument): void {
+
+  }
+
+  download(id: string, name: string): void {
+
+  }
+
+  deleteFile(id: string): void {
+
   }
 
   segmentChanged = (ev: CustomEvent): void =>this.segment = ev.detail.value;
