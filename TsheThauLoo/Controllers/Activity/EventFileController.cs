@@ -159,5 +159,60 @@ namespace TsheThauLoo.Controllers.Activity
             }
             return BadRequest(result.Errors);
         }
+        
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpDelete("{fileId}", Name = nameof(DeleteEventFile))]
+        public async Task<IActionResult> DeleteEventFile([FromRoute] string eventId, [FromRoute] string fileId)
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var administrator = await _dbContext.Administrators
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                
+            #region 驗證
+                
+            if (!administrator.AdministratorConfirmed)
+            {
+                return Problem(title: "禁止修改", detail: "管理員尚未驗證", statusCode: 403);
+            }
+
+            #endregion
+            
+            var entity = await _dbContext.EventFiles
+                .SingleOrDefaultAsync(x => x.EventId == eventId && x.EventFileId == fileId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            
+            #region 處理檔案
+
+            await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _dbContext.EventFiles.Remove(entity);
+                    await _dbContext.SaveChangesAsync();
+                    System.IO.File.Delete(entity.Path);
+                    await transaction.CommitAsync();
+                }
+                catch (IOException)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+                catch (DbUpdateException)
+                {
+                    System.IO.File.Delete(entity.Path);
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
+            #endregion
+            
+            return NoContent();
+        }
     }
 }

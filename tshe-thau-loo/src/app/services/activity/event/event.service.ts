@@ -66,4 +66,9 @@ export class EventService {
     return this.http.post<IDocument>(url, data, this.httpOptions);
   }
 
+  deleteEventFile(eventId: string, fileId: string): Observable<void> {
+    const url = `${this.urlRoot}/events/${eventId}/files/${fileId}`;
+    return this.http.delete<void>(url, this.httpOptions);
+  }
+
 }

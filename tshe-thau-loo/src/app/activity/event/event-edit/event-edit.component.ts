@@ -236,8 +236,31 @@ export class EventEditComponent implements OnInit {
     }
   }
 
-  deleteFile(id: string): void {
+  async deleteFile(fileId: string): Promise<void> {
+    await this.loadingService.start('刪除中...');
+    this.eventService.deleteEventFile(this.eventId, fileId).subscribe(
+      () => { this.deleteSuccess(fileId); },
+      (err: HttpErrorResponse) => { this.deleteFail(err); }
+    );
+  }
 
+  async deleteSuccess(fileId: string): Promise<void> {
+    const index = this.event.files.findIndex(x => x.id === fileId);
+    this.event.files.splice(index, 1);
+    await this.loadingService.end();
+    await this.notificationService.toast('刪除成功', 2000, SweetAlertIcon.success);
+  }
+
+  async deleteFail(err: HttpErrorResponse): Promise<void> {
+    await this.loadingService.end();
+    switch (err.status) {
+      case 404:
+        await this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error);
+        break;
+      case 400:
+        await this.notificationService.toast('刪除失敗', 2000, SweetAlertIcon.error);
+        break;
+    }
   }
 
   segmentChanged = (ev: CustomEvent): void =>this.segment = ev.detail.value;

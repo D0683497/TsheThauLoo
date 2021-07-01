@@ -146,7 +146,6 @@ namespace TsheThauLoo.Controllers
                 var userId = User.Claims
                     .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
                 var entity = await _dbContext.FileResumes
-                    .AsNoTracking()
                     .Where(x => x.ApplicationUserId == userId)
                     .SingleOrDefaultAsync(x => x.FileResumeId == resumeId);
                 if (entity == null)
