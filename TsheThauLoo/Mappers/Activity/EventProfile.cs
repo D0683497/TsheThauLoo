@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using TsheThauLoo.Dtos.Activity.Event;
+using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.Activity;
 
 namespace TsheThauLoo.Mappers.Activity
@@ -144,6 +145,16 @@ namespace TsheThauLoo.Mappers.Activity
                     dest.StartTime = new DateTime(src.StartDate.Year, src.StartDate.Month, src.StartDate.Day, src.StartTime.Hour, src.StartTime.Minute, 0);
                     dest.EndTime = new DateTime(src.EndDate.Year, src.EndDate.Month, src.EndDate.Day, src.EndTime.Hour, src.EndTime.Minute, 0);
                 });
+
+            #endregion
+            
+            #region FileEditDto 轉換成 EventFile
+
+            CreateMap<FileEditDto, EventFile>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
 
             #endregion
         }

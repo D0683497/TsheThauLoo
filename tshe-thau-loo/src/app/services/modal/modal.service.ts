@@ -17,6 +17,8 @@ import { IIndustrialClassification } from '../../models/company/industrial-class
 // eslint-disable-next-line max-len
 import { IndustrialClassificationEditComponent } from '../../company/industrial-classification-edit/industrial-classification-edit.component';
 import { ResumeFileEditComponent } from '../../resume/resume-file-edit/resume-file-edit.component';
+import { ActivityFileEditComponent } from '../../activity/activity-file-edit/activity-file-edit.component';
+import { ActivityType } from '../../enums/activity-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -95,6 +97,17 @@ export class ModalService {
     this.modal = await this.modalController.create({
       component: ResumeFileEditComponent,
       componentProps: {resume},
+      swipeToClose: true
+    });
+    await this.modal.present();
+    const { data } = await this.modal.onDidDismiss<IDocument>();
+    return data;
+  }
+
+  async editActivityFile(type: ActivityType, activityId: string, file: IDocument): Promise<IDocument> {
+    this.modal = await this.modalController.create({
+      component: ActivityFileEditComponent,
+      componentProps: {type, activityId, file},
       swipeToClose: true
     });
     await this.modal.present();

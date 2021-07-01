@@ -15,6 +15,8 @@ import { IDocument } from '../../../models/document/document.model';
 import { environment } from '../../../../environments/environment';
 import { ActionSheetController } from '@ionic/angular';
 import { saveAs } from 'file-saver';
+import { ModalService } from '../../../services/modal/modal.service';
+import { ActivityType } from '../../../enums/activity-type.enum';
 
 @Component({
   selector: 'app-event-edit',
@@ -39,7 +41,8 @@ export class EventEditComponent implements OnInit {
     private loadingService: LoadingService,
     private eventService: EventService,
     private route: ActivatedRoute,
-    private actionSheetController: ActionSheetController) { }
+    private actionSheetController: ActionSheetController,
+    private modalService: ModalService) { }
 
   ngOnInit(): void {}
 
@@ -199,8 +202,12 @@ export class EventEditComponent implements OnInit {
     }
   }
 
-  editFile(data: IDocument): void {
-
+  async editFile(data: IDocument): Promise<void> {
+    const res = await this.modalService.editActivityFile(ActivityType.event, this.eventId, data);
+    if (res !== undefined) {
+      const index = this.event.files.findIndex(x => x.id === res.id);
+      this.event.files[index] = res;
+    }
   }
 
   async download(fileId: string, fileName: string): Promise<void> {

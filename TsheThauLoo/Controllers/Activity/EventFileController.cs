@@ -119,5 +119,45 @@ namespace TsheThauLoo.Controllers.Activity
             // 路徑、型態、下載的名稱
             return File(System.IO.File.OpenRead(entity.Path), entity.Type, $"{entity.Name}{entity.Extension}");
         }
+        
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpPost("{fileId}", Name = nameof(EditEventFile))]
+        public async Task<IActionResult> EditEventFile([FromRoute] string eventId, [FromRoute] string fileId, [FromBody] FileEditDto dto)
+        {
+            FileEditDtoValidator validator = new FileEditDtoValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            if (result.IsValid)
+            {
+                var userId = User.Claims
+                    .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+                var administrator = await _dbContext.Administrators
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+                
+                #region 驗證
+                
+                if (!administrator.AdministratorConfirmed)
+                {
+                    return Problem(title: "禁止修改", detail: "管理員尚未驗證", statusCode: 403);
+                }
+
+                #endregion
+                
+                var entity = await _dbContext.EventFiles
+                    .SingleOrDefaultAsync(x => x.EventId == eventId && x.EventFileId == fileId);
+                if (entity == null)
+                {
+                    return NotFound();
+                }
+                
+                var updateEntity = _mapper.Map(dto, entity);
+                _dbContext.EventFiles.Update(updateEntity);
+                await _dbContext.SaveChangesAsync();
+                var routeValues = new {eventId = entity.EventId, fileId = entity.EventFileId};
+                var returnDto = _mapper.Map<FileDto>(updateEntity);
+                return CreatedAtAction(nameof(EventFile), routeValues, returnDto);
+            }
+            return BadRequest(result.Errors);
+        }
     }
 }

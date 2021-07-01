@@ -7,6 +7,7 @@ import { ActivityStatus } from '../../../enums/activity-status.enum';
 import { IEventCreate } from '../../../models/activity/event/event-create.model';
 import { IEventEdit } from '../../../models/activity/event/event-edit.model';
 import { IDocument } from '../../../models/document/document.model';
+import { IDocumentEdit } from '../../../models/document/document-edit.model';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +59,11 @@ export class EventService {
   getEventFile(eventId: string, fileId: string): Observable<Blob> {
     const url = `${this.urlRoot}/events/${eventId}/files/${fileId}`;
     return this.http.get(url, { responseType: 'blob' });
+  }
+
+  editEventFile(eventId: string, fileId: string, data: IDocumentEdit): Observable<IDocument> {
+    const url = `${this.urlRoot}/events/${eventId}/files/${fileId}`;
+    return this.http.post<IDocument>(url, data, this.httpOptions);
   }
 
 }
