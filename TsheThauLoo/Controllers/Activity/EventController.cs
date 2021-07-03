@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -171,6 +172,66 @@ namespace TsheThauLoo.Controllers.Activity
                 
             }
             return BadRequest(result.Errors);
+        }
+        
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpDelete("{eventId}", Name = nameof(DeleteEvent))]
+        public async Task<ActionResult<EventDto>> DeleteEvent([FromRoute] string eventId)
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var administrator = await _dbContext.Administrators
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
+            
+            #region 驗證
+                
+            if (!administrator.AdministratorConfirmed)
+            {
+                return Problem(title: "禁止修改", detail: "管理員尚未驗證", statusCode: 403);
+            }
+
+            #endregion
+            
+            var entity = await _dbContext.Events
+                .Include(x => x.EventFiles)
+                .SingleOrDefaultAsync(x => x.EventId == eventId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            await using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    foreach (var file in entity.EventFiles)
+                    {
+                        _dbContext.EventFiles.Remove(file);
+                        await _dbContext.SaveChangesAsync();
+                        System.IO.File.Delete(file.Path);
+                    }
+                    
+                    _dbContext.Events.Remove(entity);
+                    await _dbContext.SaveChangesAsync();
+                    
+                    await transaction.CommitAsync();
+                }
+                catch (IOException)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+                catch (DbUpdateException)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+            
+            // TODO: 刪除已報名的使用者並寄信通知
+            
+            return NoContent();
         }
     }
 }

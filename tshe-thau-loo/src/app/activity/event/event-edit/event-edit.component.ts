@@ -13,7 +13,7 @@ import { IServerError } from '../../../models/error/server-error.model';
 import { IEventEdit } from '../../../models/activity/event/event-edit.model';
 import { IDocument } from '../../../models/document/document.model';
 import { environment } from '../../../../environments/environment';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { saveAs } from 'file-saver';
 import { ModalService } from '../../../services/modal/modal.service';
 import { ActivityType } from '../../../enums/activity-type.enum';
@@ -42,7 +42,8 @@ export class EventEditComponent implements OnInit {
     private eventService: EventService,
     private route: ActivatedRoute,
     private actionSheetController: ActionSheetController,
-    private modalService: ModalService) { }
+    private modalService: ModalService,
+    private alertController: AlertController) { }
 
   ngOnInit(): void {}
 
@@ -239,23 +240,67 @@ export class EventEditComponent implements OnInit {
   async deleteFile(fileId: string): Promise<void> {
     await this.loadingService.start('刪除中...');
     this.eventService.deleteEventFile(this.eventId, fileId).subscribe(
-      () => { this.deleteSuccess(fileId); },
-      (err: HttpErrorResponse) => { this.deleteFail(err); }
+      () => { this.deleteFileSuccess(fileId); },
+      (err: HttpErrorResponse) => { this.deleteFileFail(err); }
     );
   }
 
-  async deleteSuccess(fileId: string): Promise<void> {
+  async deleteFileSuccess(fileId: string): Promise<void> {
     const index = this.event.files.findIndex(x => x.id === fileId);
     this.event.files.splice(index, 1);
     await this.loadingService.end();
     await this.notificationService.toast('刪除成功', 2000, SweetAlertIcon.success);
   }
 
-  async deleteFail(err: HttpErrorResponse): Promise<void> {
+  async deleteFileFail(err: HttpErrorResponse): Promise<void> {
     await this.loadingService.end();
     switch (err.status) {
       case 404:
         await this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error);
+        break;
+      case 400:
+        await this.notificationService.toast('刪除失敗', 2000, SweetAlertIcon.error);
+        break;
+    }
+  }
+
+  async deleteEvent(): Promise<void>{
+    const alert = await this.alertController.create({
+      header: '您是否要刪除此活動?',
+      subHeader: '此操作無法復原',
+      message: '若您確定要刪除此活動，系統將會發送通知信給所有已報名的使用者，通知此活動已被取消，並且所有活動附檔將會一起刪除',
+      buttons: [
+        {
+          text: '刪除',
+          role: 'destructive',
+          handler: () => {
+            this.loadingService.start('刪除中...');
+            this.eventService.deleteEvent(this.eventId).subscribe(
+              () => { this.deleteEventSuccess(); },
+              (err: HttpErrorResponse) => { this.deleteEventFail(err); }
+            );
+          }
+        },
+        {
+          text: '取消',
+          role: 'cancel'
+        },
+      ]
+    });
+    await alert.present();
+  }
+
+  async deleteEventSuccess(): Promise<void> {
+    await this.loadingService.end();
+    await this.router.navigate(['/act']);
+    await this.notificationService.toast('刪除成功', 2000, SweetAlertIcon.success);
+  }
+
+  async deleteEventFail(err: HttpErrorResponse): Promise<void> {
+    await this.loadingService.end();
+    switch (err.status) {
+      case 404:
+        await this.notificationService.toast('查無此活動', 2000, SweetAlertIcon.error);
         break;
       case 400:
         await this.notificationService.toast('刪除失敗', 2000, SweetAlertIcon.error);
