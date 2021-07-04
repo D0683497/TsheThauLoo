@@ -48,13 +48,13 @@ namespace TsheThauLoo.Controllers.Activity
             switch (status)
             {
                 case ActivityStatus.Coming:
-                    query = query.Where(x => x.RegistrationEndTime != null && x.RegistrationEndTime > DateTime.Now);
+                    query = query.Where(x => x.RegistrationStartTime != null && x.RegistrationStartTime > DateTime.Now);
                     break;
                 case ActivityStatus.Ing:
                     query = query
                         .Where(x => 
-                            (x.RegistrationEndTime != null && x.RegistrationEndTime <= DateTime.Now) || 
-                            (x.RegistrationEndTime == null && x.EndTime > DateTime.Now));
+                            (x.RegistrationStartTime != null && x.RegistrationStartTime <= DateTime.Now && x.EndTime > DateTime.Now) ||
+                            (x.RegistrationStartTime == null && x.EndTime > DateTime.Now));
                     break;
                 case ActivityStatus.End:
                     query = query.Where(x => x.EndTime <= DateTime.Now);
@@ -195,6 +195,7 @@ namespace TsheThauLoo.Controllers.Activity
             
             var entity = await _dbContext.Events
                 .Include(x => x.EventFiles)
+                .Include(x => x.EventAttendees)
                 .SingleOrDefaultAsync(x => x.EventId == eventId);
             if (entity == null)
             {
@@ -205,6 +206,13 @@ namespace TsheThauLoo.Controllers.Activity
             {
                 try
                 {
+                    foreach (var attendee in entity.EventAttendees)
+                    {
+                        _dbContext.EventAttendees.Remove(attendee);
+                    }
+                    
+                    // TODO: 寄信通知
+                    
                     foreach (var file in entity.EventFiles)
                     {
                         _dbContext.EventFiles.Remove(file);
@@ -228,10 +236,88 @@ namespace TsheThauLoo.Controllers.Activity
                     throw;
                 }
             }
-            
-            // TODO: 刪除已報名的使用者並寄信通知
-            
+
             return NoContent();
+        }
+
+        [AuthAuthorize]
+        [HttpPost("{eventId}/attendee", Name = nameof(AttendeeEvent))]
+        public async Task<IActionResult> AttendeeEvent([FromRoute] string eventId)
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var user = await _dbContext.Users
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == userId);
+            var act = await _dbContext.Events
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.EventId == eventId);
+
+            #region 驗證
+
+            if (act.EnableIdentityConfirmed && !user.IdentityConfirmed)
+            {
+                return Problem(title: "報名失敗", detail: "需要實名驗證", statusCode: 403);
+            }
+            if (act.LimitNumberOfPeople != 0)
+            {
+                var count = await _dbContext.EventAttendees
+                    .Where(x => x.Status == AttendeeStatusType.SignUpSuccess)
+                    .Where(x => x.EventId == eventId)
+                    .CountAsync();
+                if (count >= act.LimitNumberOfPeople)
+                {
+                    return Problem(title: "報名失敗", detail: "已達人數上限", statusCode: 403);
+                }
+            }
+            var now = DateTime.Now;
+            if (CompareDate(now, act.EndTime) != TimeComparisonStatus.Earlier)
+            {
+                return Problem(title: "報名失敗", detail: "活動已結束", statusCode: 403);
+            }
+            if (CompareDate(now, act.StartTime) != TimeComparisonStatus.Earlier)
+            {
+                return Problem(title: "報名失敗", detail: "活動已開始", statusCode: 403);
+            }
+            if (act.RegistrationStartTime != null)
+            {
+                if (CompareDate((DateTime) act.RegistrationStartTime, now) != TimeComparisonStatus.Earlier)
+                {
+                    return Problem(title: "報名失敗", detail: "尚未開始報名", statusCode: 403);
+                }
+            }
+            if (act.RegistrationEndTime != null)
+            {
+                if (CompareDate((DateTime) act.RegistrationEndTime, now) != TimeComparisonStatus.Later)
+                {
+                    return Problem(title: "報名失敗", detail: "已結束報名", statusCode: 403);
+                }
+            }
+            if (await _dbContext.EventAttendees.AnyAsync(x => x.EventId == eventId && x.ApplicationUserId == userId))
+            {
+                return Problem(title: "報名失敗", detail: "已報名", statusCode: 403);
+            }
+
+            #endregion
+
+            var entity = new EventAttendee
+            {
+                Status = act.EnableVerify ? AttendeeStatusType.UnderReview : AttendeeStatusType.SignUpSuccess,
+                EventId = eventId,
+                ApplicationUserId = userId
+            };
+            _dbContext.EventAttendees.Add(entity);
+            await _dbContext.SaveChangesAsync();
+            
+            // TODO: 寄信通知
+
+            return NoContent();
+        }
+        
+        private TimeComparisonStatus CompareDate(DateTime firstDate, DateTime secondDate)
+        {
+            var result = (TimeComparisonStatus) DateTime.Compare(firstDate, secondDate);
+            return result;
         }
     }
 }

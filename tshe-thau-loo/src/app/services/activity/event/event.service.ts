@@ -76,4 +76,9 @@ export class EventService {
     return this.http.delete<void>(url, this.httpOptions);
   }
 
+  attendeeEvent(eventId: string): Observable<void> {
+    const url = `${this.urlRoot}/events/${eventId}/attendee`;
+    return this.http.post<void>(url, this.httpOptions);
+  }
+
 }

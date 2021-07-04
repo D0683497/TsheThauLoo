@@ -60,7 +60,7 @@
             <ion-button [routerLink]="['/act/event', event.id, 'edit']" color="secondary" shape="round" expand="block">編輯</ion-button>
           </ion-col>
           <ion-col *ngIf="canAttendee">
-            <ion-button shape="round" expand="block">報名</ion-button>
+            <ion-button (click)="attendee()" shape="round" expand="block">報名</ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
