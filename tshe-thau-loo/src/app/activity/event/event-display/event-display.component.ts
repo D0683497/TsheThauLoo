@@ -10,6 +10,7 @@ import { LoadingService } from '../../../services/loading/loading.service';
 import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
 import { NotificationService } from '../../../services/notification/notification.service';
 import { IServerError } from '../../../models/error/server-error.model';
+import { ModalService } from '../../../services/modal/modal.service';
 
 @Component({
   selector: 'app-event-display',
@@ -31,7 +32,8 @@ export class EventDisplayComponent implements OnInit {
     private eventService: EventService,
     public authService: AuthService,
     private loadingService: LoadingService,
-    private notificationService: NotificationService) { }
+    private notificationService: NotificationService,
+    private modalService: ModalService) { }
 
   ngOnInit(): void {}
 
@@ -66,12 +68,22 @@ export class EventDisplayComponent implements OnInit {
     this.loading$.next(false);
   }
 
+  async showDeclaration(): Promise<boolean> {
+    if (this.event.declaration !== null) {
+      return await this.modalService.activityDeclaration(this.event.declaration);
+    } else {
+      return true;
+    }
+  }
+
   async attendee(): Promise<void> {
-    await this.loadingService.start('報名中...');
-    this.eventService.attendeeEvent(this.eventId).subscribe(
-      () => { this.attendeeSuccess(); },
-      (err: HttpErrorResponse) => { this.attendeeFail(err); }
-    );
+    if (await this.showDeclaration()) {
+      await this.loadingService.start('報名中...');
+      this.eventService.attendeeEvent(this.eventId).subscribe(
+        () => { this.attendeeSuccess(); },
+        (err: HttpErrorResponse) => { this.attendeeFail(err); }
+      );
+    }
   }
 
   async attendeeSuccess(): Promise<void> {

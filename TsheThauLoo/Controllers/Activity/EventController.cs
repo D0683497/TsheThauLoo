@@ -6,37 +6,46 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Activity.Event;
 using TsheThauLoo.Entities.Activity;
 using TsheThauLoo.Enums;
 using TsheThauLoo.Parameters;
+using TsheThauLoo.Services.Interface;
 using TsheThauLoo.Utilities;
 using TsheThauLoo.Validator.Activity.Event;
 
 namespace TsheThauLoo.Controllers.Activity
 {
     [ApiController]
-    [AuthAuthorize(Roles = "Administrator")]
+    [AuthAuthorize]
     [Route("api/events")]
     public class EventController : ControllerBase
     {
         private readonly ILogger<EventController> _logger;
         private readonly IMapper _mapper;
         private readonly TsheThauLooDbContext _dbContext;
+        private readonly IMailService _mailService;
+        private readonly IConfiguration _configuration;
 
         public EventController(
             ILogger<EventController> logger, 
             IMapper mapper, 
-            TsheThauLooDbContext dbContext)
+            TsheThauLooDbContext dbContext, 
+            IMailService mailService, 
+            IConfiguration configuration)
         {
             _logger = logger;
             _mapper = mapper;
             _dbContext = dbContext;
+            _mailService = mailService;
+            _configuration = configuration;
         }
         
         [AllowAnonymous]
@@ -206,23 +215,29 @@ namespace TsheThauLoo.Controllers.Activity
             {
                 try
                 {
+                    var users = new List<string>();
                     foreach (var attendee in entity.EventAttendees)
                     {
+                        var user = await _dbContext.Users
+                            .AsNoTracking()
+                            .Select(x => new {x.Id, x.Email})
+                            .SingleOrDefaultAsync(x => x.Id == attendee.ApplicationUserId);
+                        users.Add(user.Email);
                         _dbContext.EventAttendees.Remove(attendee);
                     }
-                    
-                    // TODO: 寄信通知
-                    
+
                     foreach (var file in entity.EventFiles)
                     {
                         _dbContext.EventFiles.Remove(file);
                         await _dbContext.SaveChangesAsync();
                         System.IO.File.Delete(file.Path);
                     }
-                    
+
                     _dbContext.Events.Remove(entity);
                     await _dbContext.SaveChangesAsync();
                     
+                    await _mailService.SendActivityDeleteAsync(entity.Title, users);
+
                     await transaction.CommitAsync();
                 }
                 catch (IOException)
@@ -231,6 +246,11 @@ namespace TsheThauLoo.Controllers.Activity
                     throw;
                 }
                 catch (DbUpdateException)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+                catch (SmtpCommandException)
                 {
                     await transaction.RollbackAsync();
                     throw;
@@ -309,7 +329,13 @@ namespace TsheThauLoo.Controllers.Activity
             _dbContext.EventAttendees.Add(entity);
             await _dbContext.SaveChangesAsync();
             
-            // TODO: 寄信通知
+            #region 寄信
+
+            var link = $"{_configuration["FrontendUrl"]}/act/event/{eventId}";
+
+            await _mailService.SendActivityAttendeeAsync(user.Email, user.Email, link, act.Title, entity.Status);
+
+            #endregion
 
             return NoContent();
         }

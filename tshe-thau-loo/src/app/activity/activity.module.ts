@@ -12,6 +12,7 @@ import { EventCreateComponent } from './event/event-create/event-create.componen
 import { EventEditComponent } from './event/event-edit/event-edit.component';
 import { EventDisplayComponent } from './event/event-display/event-display.component';
 import { ActivityFileEditComponent } from './activity-file-edit/activity-file-edit.component';
+import { ActivityDeclarationComponent } from './activity-declaration/activity-declaration.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ActivityFileEditComponent } from './activity-file-edit/activity-file-ed
     EventListComponent,
     EventDisplayComponent,
     EventEditComponent,
-    ActivityFileEditComponent
+    ActivityFileEditComponent,
+    ActivityDeclarationComponent
   ],
   imports: [
     CommonModule,

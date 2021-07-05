@@ -19,6 +19,7 @@ import { IndustrialClassificationEditComponent } from '../../company/industrial-
 import { ResumeFileEditComponent } from '../../resume/resume-file-edit/resume-file-edit.component';
 import { ActivityFileEditComponent } from '../../activity/activity-file-edit/activity-file-edit.component';
 import { ActivityType } from '../../enums/activity-type.enum';
+import { ActivityDeclarationComponent } from '../../activity/activity-declaration/activity-declaration.component';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +113,17 @@ export class ModalService {
     });
     await this.modal.present();
     const { data } = await this.modal.onDidDismiss<IDocument>();
+    return data;
+  }
+
+  async activityDeclaration(declaration: string): Promise<boolean> {
+    this.modal = await this.modalController.create({
+      component: ActivityDeclarationComponent,
+      componentProps: {declaration},
+      swipeToClose: true
+    });
+    await this.modal.present();
+    const { data } = await this.modal.onDidDismiss<boolean>();
     return data;
   }
 
