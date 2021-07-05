@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Account.Password;
 using TsheThauLoo.Entities.User;
@@ -144,12 +143,7 @@ namespace TsheThauLoo.Controllers.Account
                            $"?userId={Uri.EscapeDataString(user.Id)}" +
                            $"&token={Uri.EscapeDataString(await _userManager.GeneratePasswordResetTokenAsync(user))}";
 
-                await _mailService.SendLinkEmailAsync(MessageImportance.High, user.Email, user.Email,
-                    "用戶重設密碼",
-                    "<p><b>請點擊下方按鈕重設您的密碼</b></p>",
-                    link, "重設密碼",
-                    $"<p>若您無法直接點擊連結，請複製以下網址，在瀏覽器網址列中貼上：</p>" +
-                    $"<p><a href=\"{link}\">{link}</a></p>");
+                await _mailService.SendResetPasswordAsync(user.Email, user.Email, link);
 
                 #endregion
                 
