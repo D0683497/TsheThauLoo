@@ -267,6 +267,8 @@
         </ng-template>
       </ng-container>
       <ng-container *ngIf="segment === 'other'">
+        <ion-button (click)="signInEvent()" class="ion-margin" expand="block" shape="round">活動簽到</ion-button>
+        <ion-button (click)="participant()" class="ion-margin" color="secondary" expand="block" shape="round">現場報名</ion-button>
         <ion-button (click)="deleteEvent()" class="ion-margin" color="danger" expand="block" shape="round">刪除活動</ion-button>
       </ng-container>
     </ng-container>

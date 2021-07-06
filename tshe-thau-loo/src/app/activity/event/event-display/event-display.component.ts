@@ -11,6 +11,10 @@ import { SweetAlertIcon } from '../../../enums/sweet-alert-icon.enum';
 import { NotificationService } from '../../../services/notification/notification.service';
 import { IServerError } from '../../../models/error/server-error.model';
 import { ModalService } from '../../../services/modal/modal.service';
+import { IDocument } from '../../../models/document/document.model';
+import { ActionSheetController } from '@ionic/angular';
+import { saveAs } from 'file-saver';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-event-display',
@@ -26,6 +30,7 @@ export class EventDisplayComponent implements OnInit {
   loadingError$ = new BehaviorSubject<boolean>(false);
   type = RoleType;
   canAttendee = false;
+  urlRoot = environment.apiUrl;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,7 +38,8 @@ export class EventDisplayComponent implements OnInit {
     public authService: AuthService,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
-    private modalService: ModalService) { }
+    private modalService: ModalService,
+    private actionSheetController: ActionSheetController) { }
 
   ngOnInit(): void {}
 
@@ -68,6 +74,61 @@ export class EventDisplayComponent implements OnInit {
     this.loading$.next(false);
   }
 
+  async option(data: IDocument): Promise<void> {
+    const options = {
+      translucent: true,
+      header: '一般活動附檔',
+      buttons: [
+        {
+          text: '下載',
+          handler: () => {
+            this.download(data.id, data.name+data.extension);
+          }
+        },
+        {
+          text: '預覽',
+          handler: () => {
+            const url = `https://docs.google.com/viewer?url=${this.urlRoot}/events/${this.eventId}/files/${data.id}`;
+            window.open(url, '_blank');
+          }
+        },
+        {
+          text: '取消',
+          icon: 'close',
+          role: 'cancel',
+        }
+      ]
+    };
+    const actionSheet = await this.actionSheetController.create(options);
+    await actionSheet.present();
+  }
+
+  async download(fileId: string, fileName: string): Promise<void> {
+    await this.loadingService.start('下載中...');
+    this.eventService.getEventFile(this.eventId, fileId).subscribe(
+      (res: Blob) => { this.downloadSuccess(res, fileName); },
+      (err: HttpErrorResponse) => { this.downloadFail(err); }
+    );
+  }
+
+  async downloadSuccess(res: Blob, fileName: string): Promise<void> {
+    await this.loadingService.end();
+    saveAs(res, fileName);
+    await this.notificationService.toast('下載成功', 2000, SweetAlertIcon.success);
+  }
+
+  async downloadFail(err: HttpErrorResponse): Promise<void> {
+    await this.loadingService.end();
+    switch (err.status) {
+      case 404:
+        await this.notificationService.toast('查無此檔案', 2000, SweetAlertIcon.error);
+        break;
+      case 400:
+        await this.notificationService.message('發生未知錯誤', SweetAlertIcon.error);
+        break;
+    }
+  }
+
   async showDeclaration(): Promise<boolean> {
     if (this.event.declaration !== null) {
       return await this.modalService.activityDeclaration(this.event.declaration);
@@ -79,7 +140,7 @@ export class EventDisplayComponent implements OnInit {
   async attendee(): Promise<void> {
     if (await this.showDeclaration()) {
       await this.loadingService.start('報名中...');
-      this.eventService.attendeeEvent(this.eventId).subscribe(
+      this.eventService.signUpEvent(this.eventId).subscribe(
         () => { this.attendeeSuccess(); },
         (err: HttpErrorResponse) => { this.attendeeFail(err); }
       );
@@ -99,7 +160,7 @@ export class EventDisplayComponent implements OnInit {
     await this.loadingService.end();
     if (err.status === 403) {
       const errors: IServerError = err.error;
-      this.notificationService.notify(errors.title, errors.detail, SweetAlertIcon.error).then();
+      await this.notificationService.notify(errors.title, errors.detail, SweetAlertIcon.error);
     }
   }
 

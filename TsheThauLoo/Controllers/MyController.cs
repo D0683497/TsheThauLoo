@@ -1,11 +1,15 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TsheThauLoo.Data;
+using TsheThauLoo.Dtos.Activity.MyEvent;
 using TsheThauLoo.Dtos.Company;
+using TsheThauLoo.Parameters;
 using TsheThauLoo.Utilities;
 
 namespace TsheThauLoo.Controllers
@@ -46,6 +50,58 @@ namespace TsheThauLoo.Controllers
                 return NotFound();
             }
             var dto = _mapper.Map<CompanyDto>(manager.Company);
+            return Ok(dto);
+        }
+        
+        [AuthAuthorize]
+        [HttpGet("events", Name = nameof(MyEvents))]
+        public async Task<ActionResult<IEnumerable<MyEventDto>>> MyEvents([FromQuery] PaginationResourceParameters parameters)
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var query = _dbContext.Events
+                .AsNoTracking()
+                .Include(x => x.EventAttendees.Where(attendee => attendee.ApplicationUserId == userId))
+                .Where(x => x.EventAttendees.Any(attendee => attendee.ApplicationUserId == userId));
+            var entities = await query
+                .OrderBy(x => x.StartTime)
+                .Skip(parameters.PageIndex * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToListAsync();
+            var dtos = _mapper.Map<IEnumerable<MyEventDto>>(entities);
+            
+            #region 分頁資訊
+
+            var length = await query.CountAsync();
+            var paginationMetadata = new
+            {
+                pageLength = length, // 總資料數
+                pageSize = parameters.PageSize, // 一頁的項目數
+                pageIndex = parameters.PageIndex, // 目前頁碼
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+            #endregion
+            
+            return Ok(dtos);
+        }
+        
+        [AuthAuthorize]
+        [HttpGet("events/{eventId}", Name = nameof(MyEvent))]
+        public async Task<ActionResult<MyEventDto>> MyEvent([FromRoute] string eventId)
+        {
+            var userId = User.Claims
+                .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+            var entity = await _dbContext.Events
+                .AsNoTracking()
+                .Include(x => x.EventAttendees.Where(attendee => attendee.ApplicationUserId == userId))
+                .Where(x => x.EventAttendees.Any(attendee => attendee.ApplicationUserId == userId))
+                .SingleOrDefaultAsync(x => x.EventId == eventId);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            var dto = _mapper.Map<MyEventDto>(entity);
             return Ok(dto);
         }
     }

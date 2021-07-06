@@ -13,6 +13,12 @@ import { EventEditComponent } from './event/event-edit/event-edit.component';
 import { EventDisplayComponent } from './event/event-display/event-display.component';
 import { ActivityFileEditComponent } from './activity-file-edit/activity-file-edit.component';
 import { ActivityDeclarationComponent } from './activity-declaration/activity-declaration.component';
+import { MyEventListComponent } from './my/my-event-list/my-event-list.component';
+import { MyEventComponent } from './my/my-event/my-event.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { ActivitySignInComponent } from './activity-sign-in/activity-sign-in.component';
+import { ActivityQrCodeComponent } from './activity-qr-code/activity-qr-code.component';
+import { EventParticipateComponent } from './event/event-participate/event-participate.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +28,12 @@ import { ActivityDeclarationComponent } from './activity-declaration/activity-de
     EventDisplayComponent,
     EventEditComponent,
     ActivityFileEditComponent,
-    ActivityDeclarationComponent
+    ActivityDeclarationComponent,
+    MyEventListComponent,
+    MyEventComponent,
+    ActivitySignInComponent,
+    ActivityQrCodeComponent,
+    EventParticipateComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +62,8 @@ import { ActivityDeclarationComponent } from './activity-declaration/activity-de
         implementation: QuillBlotFormatter.default,
         path: 'modules/blotFormatter'
       }],
-    })
+    }),
+    ZXingScannerModule
   ]
 })
 export class ActivityModule { }

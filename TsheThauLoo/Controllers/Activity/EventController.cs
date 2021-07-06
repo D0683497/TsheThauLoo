@@ -261,8 +261,8 @@ namespace TsheThauLoo.Controllers.Activity
         }
 
         [AuthAuthorize]
-        [HttpPost("{eventId}/attendee", Name = nameof(AttendeeEvent))]
-        public async Task<IActionResult> AttendeeEvent([FromRoute] string eventId)
+        [HttpPost("{eventId}/sign-up ", Name = nameof(SignUpEvent))]
+        public async Task<IActionResult> SignUpEvent([FromRoute] string eventId)
         {
             var userId = User.Claims
                 .Single(p => p.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
@@ -338,6 +338,86 @@ namespace TsheThauLoo.Controllers.Activity
             #endregion
 
             return NoContent();
+        }
+
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpPost("{eventId}/sign-in", Name = nameof(SignInEvent))]
+        public async Task<IActionResult> SignInEvent([FromRoute] string eventId, [FromBody] string userId)
+        {
+            var act = await _dbContext.Events
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.EventId == eventId);
+            if (act == null)
+            {
+                return NotFound();
+            }
+            
+            var now = DateTime.Now;
+            if (CompareDate(now, act.StartTime) != TimeComparisonStatus.Later)
+            {
+                return Problem(title: "簽到失敗", detail: "活動尚未開始", statusCode: 403);
+            }
+            if (CompareDate(now, act.EndTime) != TimeComparisonStatus.Earlier)
+            {
+                return Problem(title: "簽到失敗", detail: "活動已結束", statusCode: 403);
+            }
+
+            var user = await _dbContext.Users
+                .AnyAsync(x => x.Id == userId);
+            if (!user)
+            {
+                return Problem(title: "簽到失敗", detail: "無此使用者", statusCode: 403);
+            }
+
+            var attendee = await _dbContext.EventAttendees
+                .SingleOrDefaultAsync(x => x.EventId == eventId && x.ApplicationUserId == userId);
+            if (attendee == null)
+            {
+                return Problem(title: "簽到失敗", detail: "使用者尚未報名", statusCode: 403);
+            }
+
+            attendee.Status = AttendeeStatusType.SignInSuccess;
+            _dbContext.EventAttendees.Update(attendee);
+            await _dbContext.SaveChangesAsync();
+            
+            return NoContent();
+        }
+        
+        [AuthAuthorize(Roles = "Administrator")]
+        [HttpPost("{eventId}/participate", Name = nameof(ParticipateEvent))]
+        public async Task<IActionResult> ParticipateEvent([FromRoute] string eventId, [FromBody] EventParticipant dto)
+        {
+            EventParticipantValidator validator = new EventParticipantValidator();
+            ValidationResult result = await validator.ValidateAsync(dto);
+            
+            if (result.IsValid)
+            {
+                var act = await _dbContext.Events
+                    .Include(x => x.EventParticipants)
+                    .SingleOrDefaultAsync(x => x.EventId == eventId);
+                if (act == null)
+                {
+                    return NotFound();
+                }
+                
+                var now = DateTime.Now;
+                if (CompareDate(now, act.StartTime) != TimeComparisonStatus.Later)
+                {
+                    return Problem(title: "簽到失敗", detail: "活動尚未開始", statusCode: 403);
+                }
+                if (CompareDate(now, act.EndTime) != TimeComparisonStatus.Earlier)
+                {
+                    return Problem(title: "簽到失敗", detail: "活動已結束", statusCode: 403);
+                }
+
+                var entity = _mapper.Map<EventParticipant>(dto);
+                act.EventParticipants.Add(entity);
+                _dbContext.Events.Update(act);
+                await _dbContext.SaveChangesAsync();
+                return NoContent();
+            }
+
+            return BadRequest(result.Errors);
         }
         
         private TimeComparisonStatus CompareDate(DateTime firstDate, DateTime secondDate)

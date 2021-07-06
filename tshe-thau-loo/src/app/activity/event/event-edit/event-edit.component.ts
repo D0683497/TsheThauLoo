@@ -308,6 +308,15 @@ export class EventEditComponent implements OnInit {
     }
   }
 
+  async signInEvent(): Promise<void> {
+    await this.modalService.activitySignIn(this.eventId, ActivityType.event);
+  }
+
+  async participant(): Promise<void> {
+    const uri = window.location.href.replace('edit', 'participate');
+    await this.modalService.activityQRCode('活動現場報名', uri);
+  }
+
   segmentChanged = (ev: CustomEvent): void =>this.segment = ev.detail.value;
 
 }

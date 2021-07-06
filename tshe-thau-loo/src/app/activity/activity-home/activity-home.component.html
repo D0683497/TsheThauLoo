@@ -63,11 +63,11 @@
     <ion-list-header *ngIf="authService.isLogin()">
       <ion-label>我的活動</ion-label>
     </ion-list-header>
-    <ion-item *ngIf="authService.isLogin()" detail routerLink="/act/my/event" [queryParams]="{archive:true}">
+    <ion-item *ngIf="authService.isLogin()" detail routerLink="/act/my/event">
       <fa-icon [icon]="['fas', 'tag']" slot="start"></fa-icon>
       <ion-label>一般活動</ion-label>
     </ion-item>
-    <ion-item *ngIf="authService.isLogin()" detail routerLink="/act/my/campaign" [queryParams]="{archive:true}">
+    <ion-item *ngIf="authService.isLogin()" detail routerLink="/act/my/campaign">
       <fa-icon [icon]="['fas', 'tags']" slot="start"></fa-icon>
       <ion-label>系列活動</ion-label>
     </ion-item>

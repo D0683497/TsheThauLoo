@@ -20,6 +20,8 @@ import { ResumeFileEditComponent } from '../../resume/resume-file-edit/resume-fi
 import { ActivityFileEditComponent } from '../../activity/activity-file-edit/activity-file-edit.component';
 import { ActivityType } from '../../enums/activity-type.enum';
 import { ActivityDeclarationComponent } from '../../activity/activity-declaration/activity-declaration.component';
+import { ActivitySignInComponent } from '../../activity/activity-sign-in/activity-sign-in.component';
+import { ActivityQrCodeComponent } from '../../activity/activity-qr-code/activity-qr-code.component';
 
 @Injectable({
   providedIn: 'root'
@@ -125,6 +127,26 @@ export class ModalService {
     await this.modal.present();
     const { data } = await this.modal.onDidDismiss<boolean>();
     return data;
+  }
+
+  async activityQRCode(title: string, uri: string): Promise<boolean> {
+    this.modal = await this.modalController.create({
+      component: ActivityQrCodeComponent,
+      componentProps: {title, uri},
+      swipeToClose: true
+    });
+    await this.modal.present();
+    const { data } = await this.modal.onDidDismiss<boolean>();
+    return data;
+  }
+
+  async activitySignIn(activityId: string, type: ActivityType): Promise<void> {
+    this.modal = await this.modalController.create({
+      component: ActivitySignInComponent,
+      componentProps: {activityId, type},
+      swipeToClose: true
+    });
+    await this.modal.present();
   }
 
 }

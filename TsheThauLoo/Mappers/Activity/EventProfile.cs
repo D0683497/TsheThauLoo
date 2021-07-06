@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using TsheThauLoo.Dtos.Activity.Event;
+using TsheThauLoo.Dtos.Activity.MyEvent;
 using TsheThauLoo.Dtos.File;
 using TsheThauLoo.Entities.Activity;
 
@@ -155,6 +157,42 @@ namespace TsheThauLoo.Mappers.Activity
                     opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Extension,
                     opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+
+            #region Event 轉換成 MyEventDto
+
+            CreateMap<Event, MyEventDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.EventId))
+                .ForMember(dest => dest.Title,
+                    opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.RegistrationStartTime,
+                    opt => opt.MapFrom(src => src.RegistrationStartTime))
+                .ForMember(dest => dest.RegistrationEndTime,
+                    opt => opt.MapFrom(src => src.RegistrationEndTime))
+                .ForMember(dest => dest.StartTime,
+                    opt => opt.MapFrom(src => src.StartTime))
+                .ForMember(dest => dest.EndTime,
+                    opt => opt.MapFrom(src => src.EndTime))
+                .ForPath(dest => dest.Status,
+                    opt => opt.Ignore())
+                .AfterMap((src, dest) =>
+                {
+                    dest.Status = src.EventAttendees.First().Status;
+                });
+
+            #endregion
+
+            #region EventParticipantDto 轉換成 EventParticipant
+
+            CreateMap<EventParticipantDto, EventParticipant>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.ContactPhone,
+                    opt => opt.MapFrom(src => src.ContactPhone))
+                .ForMember(dest => dest.Remark,
+                    opt => opt.MapFrom(src => src.Remark));
 
             #endregion
         }

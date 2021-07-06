@@ -76,9 +76,19 @@ export class EventService {
     return this.http.delete<void>(url, this.httpOptions);
   }
 
-  attendeeEvent(eventId: string): Observable<void> {
-    const url = `${this.urlRoot}/events/${eventId}/attendee`;
+  signUpEvent(eventId: string): Observable<void> {
+    const url = `${this.urlRoot}/events/${eventId}/sign-up`;
     return this.http.post<void>(url, this.httpOptions);
+  }
+
+  signInEvent(eventId: string, userId: string): Observable<void> {
+    const url = `${this.urlRoot}/events/${eventId}/sign-in`;
+    return this.http.post<void>(url, {userId}, this.httpOptions);
+  }
+
+  participateEvent(eventId: string, data: {name: string; contactPhone: string; remark: string}): Observable<void> {
+    const url = `${this.urlRoot}/events/${eventId}/participate`;
+    return this.http.post<void>(url, data, this.httpOptions);
   }
 
 }
