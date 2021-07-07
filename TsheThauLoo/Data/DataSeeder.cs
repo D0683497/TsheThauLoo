@@ -28,6 +28,10 @@ namespace TsheThauLoo.Data
                     logger.LogInformation("開始創建角色及角色聲明");
                     await CreateRoleAsync(services, logger);
                     logger.LogInformation("創建角色及角色聲明完成");
+                    
+                    logger.LogInformation("開始創建使用者");
+                    await CreateUserAsync(services, logger);
+                    logger.LogInformation("創建使用者完成");
                 }
                 else
                 {
@@ -37,6 +41,139 @@ namespace TsheThauLoo.Data
                 logger.LogInformation("開始創建資料夾");
                 CreateFolder(logger);
             }
+        }
+
+        private static async Task CreateUserAsync(IServiceProvider services, ILogger<DataSeeder> logger)
+        {
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+            #region Administrator
+
+            for (int i = 1; i <= 10; i++)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = $"Administrator{i}",
+                    Email = $"Administrator{i}@Administrator.com",
+                    EmailConfirmed = true,
+                    IsEnable = true,
+                    Name = $"Administrator{i}",
+                    NationalVerify = new NationalVerify(),
+                    Administrator = new Administrator
+                    {
+                        AdministratorConfirmed = true,
+                        NetworkId = $"NetworkId{i}",
+                        Dept = $"Dept{i}",
+                    }
+                };
+                
+                #region 建立使用者
+
+                if (await userManager.CreateAsync(user, $"Administrator{i}") != IdentityResult.Success)
+                {
+                    throw new DbUpdateException();
+                }
+
+                #endregion
+                
+                #region 添加 Claim
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Sid, user.SecurityStamp)
+                };
+
+                if (await userManager.AddClaimsAsync(user, claims) != IdentityResult.Success)
+                {
+                    throw new DbUpdateException();
+                }
+
+                #endregion
+                
+                #region 添加角色
+
+                if (await userManager.AddToRoleAsync(user, "Administrator") != IdentityResult.Success)
+                {
+                    throw new DbUpdateException();
+                }
+
+                #endregion
+            }
+
+            #endregion
+
+            #region Manager
+            
+            for (int i = 1; i <= 5; i++)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = $"Manager{i}",
+                    Email = $"Manager{i}@Manager.com",
+                    EmailConfirmed = true,
+                    IsEnable = true,
+                    Name = $"Manager{i}",
+                    NationalVerify = new NationalVerify(),
+                    Manager = new Manager
+                    {
+                        ManagerConfirmed = true,
+                        DivisionName = $"DivisionName{i}",
+                        JobTitle = $"JobTitle{i}",
+                        ContactEmail = $"Manager{i}@Manager.com",
+                        ContactPhone = "04-24517250",
+                        ContactAddress = "台中市西屯區文華路100號",
+                        Substitute = new Substitute
+                        {
+                            Name = $"Substitute{i}",
+                            DivisionName = $"DivisionName{i}",
+                            JobTitle = $"JobTitle{i}",
+                            ContactEmail = $"Substitute{i}@Substitute.com",
+                            ContactPhone = "04-24517250",
+                            ContactAddress = "台中市西屯區文華路100號"
+                        }
+                    }
+                };
+                
+                #region 建立使用者
+
+                if (await userManager.CreateAsync(user, $"Manager{i}") != IdentityResult.Success)
+                {
+                    throw new DbUpdateException();
+                }
+
+                #endregion
+                
+                #region 添加 Claim
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Sid, user.SecurityStamp)
+                };
+
+                if (await userManager.AddClaimsAsync(user, claims) != IdentityResult.Success)
+                {
+                    throw new DbUpdateException();
+                }
+
+                #endregion
+                
+                #region 添加角色
+
+                if (await userManager.AddToRoleAsync(user, "Manager") != IdentityResult.Success)
+                {
+                    throw new DbUpdateException();
+                }
+
+                #endregion
+            }
+            
+            #endregion
         }
         
         private static async Task CreateRoleAsync(IServiceProvider services, ILogger<DataSeeder> logger)

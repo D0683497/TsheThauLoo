@@ -84,7 +84,10 @@ namespace TsheThauLoo.Controllers.Account
                 }
                 if (!string.IsNullOrEmpty(dto.NetworkId))
                 {
-                    if (await _userManager.Users.AnyAsync(x => x.Administrator.NetworkId == dto.NetworkId.ToUpper()))
+                    if (await _userManager.Users.AnyAsync(x => 
+                        x.Administrator.NetworkId == dto.NetworkId.ToUpper() || 
+                        x.Employee.NetworkId == dto.NetworkId.ToUpper() || 
+                        x.Student.NetworkId == dto.NetworkId.ToUpper()))
                     {
                         result.Errors.Add(new ValidationFailure("networkId", "證號已經被使用"));
                     }

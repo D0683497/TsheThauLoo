@@ -1,4 +1,5 @@
 using AutoMapper;
+using TsheThauLoo.Dtos.Account.Login;
 using TsheThauLoo.Dtos.Account.National;
 using TsheThauLoo.Entities.User;
 
@@ -73,6 +74,59 @@ namespace TsheThauLoo.Mappers.Account
             CreateMap<NationalEditVerifyDto, NationalVerify>()
                 .ForMember(dest => dest.Description,
                     opt => opt.MapFrom(src => src.Description));
+
+            #endregion
+            
+            #region NIDUserInfoDto 轉換成 ApplicationUser
+
+            CreateMap<NIDUserInfoDto, ApplicationUser>()
+                .ForMember(dest => dest.UserName,
+                    opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Email,
+                    opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.EmailConfirmed,
+                    opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.IsEnable,
+                    opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .AfterMap((src, dest) =>
+                {
+                    switch (src.Type)
+                    {
+                        case "學生":
+                            dest.Student = new Student
+                            {
+                                StudentConfirmed = true,
+                                NetworkId = src.Id,
+                                College = src.DeptName,
+                                Department = src.UnitName,
+                                Class = src.ClassName.Split(src.UnitName)[1],
+                                ApplicationUserId = dest.Id,
+                                ApplicationUser = dest
+                            };
+                            dest.Student.StudentVerify = new StudentVerify
+                            {
+                                StudentId = dest.Student.StudentId
+                            };
+                            break;
+                        case "教職員工":
+                            dest.Employee = new Employee
+                            {
+                                EmployeeConfirmed = true,
+                                NetworkId = src.Id,
+                                Dept = src.DeptName,
+                                Unit = src.UnitName,
+                                ApplicationUserId = dest.Id,
+                                ApplicationUser = dest
+                            };
+                            break;
+                    }
+                    dest.NationalVerify = new NationalVerify
+                    {
+                        ApplicationUserId = dest.Id
+                    };
+                });
 
             #endregion
         }

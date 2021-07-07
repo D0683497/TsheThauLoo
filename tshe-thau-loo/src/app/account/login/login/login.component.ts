@@ -18,7 +18,6 @@ import { IServerError } from '../../../models/error/server-error.model';
 export class LoginComponent implements OnInit {
 
   date = Date.now();
-  segment = 'general';
   loginForm: FormGroup;
 
   constructor(
@@ -85,6 +84,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  segmentChanged = (ev: CustomEvent): void =>this.segment = ev.detail.value;
+  nidUrl = (): string => this.accountService.nidLogin();
 
 }

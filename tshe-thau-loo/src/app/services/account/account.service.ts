@@ -43,6 +43,8 @@ export class AccountService {
     );
   }
 
+  nidLogin = (): string => `${this.urlRoot}/account/nid-login`;
+
   // 登出
   async logout(): Promise<void> {
     await this.authService.removeLoginStatus();

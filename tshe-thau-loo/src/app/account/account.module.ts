@@ -44,6 +44,7 @@ import { ForgetPasswordComponent } from './password/forget-password/forget-passw
 import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
 import { NationalEditComponent } from './national/national-edit/national-edit.component';
 import { NationalVerifyComponent } from './national/national-verify/national-verify.component';
+import { NidLoginComponent } from './login/nid-login/nid-login.component';
 
 
 @NgModule({
@@ -84,7 +85,8 @@ import { NationalVerifyComponent } from './national/national-verify/national-ver
     ForgetPasswordComponent,
     ResetPasswordComponent,
     NationalEditComponent,
-    NationalVerifyComponent
+    NationalVerifyComponent,
+    NidLoginComponent
   ],
   imports: [
     CommonModule,
