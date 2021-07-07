@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Text.Json.Serialization;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -69,9 +68,15 @@ namespace TsheThauLoo
             services.AddControllers()
                 .AddFluentValidation();
             
+            services.AddHttpClient("nid", c =>
+            {
+                c.BaseAddress = new Uri(Configuration["NIDSettings:NIDUrl"]);
+            });
+            
             #region Service
 
             services.AddSingleton<IMailService, MailService>();
+            services.AddScoped<IOAuthService, OAuthService>();
 
             #endregion
             

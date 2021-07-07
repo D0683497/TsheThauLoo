@@ -36,9 +36,16 @@ import { ForgetPasswordComponent } from './password/forget-password/forget-passw
 import { ResetPasswordComponent } from './password/reset-password/reset-password.component';
 import { NationalEditComponent } from './national/national-edit/national-edit.component';
 import { NationalVerifyComponent } from './national/national-verify/national-verify.component';
+import { NidLoginComponent } from './login/nid-login/nid-login.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent, pathMatch: 'full' },
+  {
+    path: 'login',
+    children: [
+      { path: '', component: LoginComponent, pathMatch: 'full' },
+      { path: 'nid', component: NidLoginComponent, pathMatch: 'full' }
+    ]
+  },
   {
     path: 'register',
     children: [
