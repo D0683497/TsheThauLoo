@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using AutoMapper;
 using TsheThauLoo.Dtos.File;
+using TsheThauLoo.Entities.Activity;
 using TsheThauLoo.Entities.Business;
 using TsheThauLoo.Entities.Resume;
 using TsheThauLoo.Entities.User;
@@ -248,6 +249,39 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Extension,
                     opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+            
+            #region EventFile 轉換成 FileDto
+
+            CreateMap<EventFile, FileDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.EventFileId))
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+            
+            #region FileCreateDto 轉換成 EventFile
+
+            CreateMap<FileCreateDto, EventFile>()
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .AfterMap((src, dest) =>
+                {
+                    var name = Path.GetFileNameWithoutExtension(src.Name);
+                    dest.Name = name;
+                    var extension = Path.GetExtension(src.Name);
+                    dest.Extension = extension == string.Empty ? null : extension;
+                    dest.Path = $@"wwwroot{Path.DirectorySeparatorChar}"+
+                                $"activities{Path.DirectorySeparatorChar}"+
+                                $"event{Path.DirectorySeparatorChar}"+
+                                $"{Path.GetRandomFileName()}";
+                });
 
             #endregion
         }

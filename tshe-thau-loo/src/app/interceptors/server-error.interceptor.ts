@@ -19,7 +19,6 @@ export class ServerErrorInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         switch (error.status) {
           case 401:
-            // TODO: 詳細訊息
             this.router.navigate(['/account/login']).then();
             this.notificationService.message('請先登入', SweetAlertIcon.warning).then();
             break;

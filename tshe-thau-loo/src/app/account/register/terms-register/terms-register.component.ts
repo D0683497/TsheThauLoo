@@ -12,7 +12,7 @@ export class TermsRegisterComponent implements OnInit {
 
   constructor(private modalController: ModalController) { }
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
   async dismiss(agree: boolean): Promise<void> {
     await this.modalController.dismiss(agree);

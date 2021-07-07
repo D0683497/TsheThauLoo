@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
 using TsheThauLoo.Data;
 using TsheThauLoo.Dtos.Account.Email;
 using TsheThauLoo.Entities.User;
@@ -113,12 +112,7 @@ namespace TsheThauLoo.Controllers.Account
                            $"?userId={Uri.EscapeDataString(user.Id)}" + 
                            $"&token={Uri.EscapeDataString(await _userManager.GenerateEmailConfirmationTokenAsync(user))}";
 
-                await _mailService.SendLinkEmailAsync(MessageImportance.High, user.Email, user.Email, 
-                    "用戶電子郵件驗證",
-                    "<p>請點擊下方按鈕驗證您的電子郵件</p>", 
-                    link, "立即驗證",
-                    $"<p>若您無法直接點擊連結，請複製以下網址，在瀏覽器網址列中貼上：</p>" +
-                    $"<p><a href=\"{link}\">{link}</a></p>");
+                await _mailService.SendEmailConfirmAsync(user.Email, user.Email, link, false);
 
                 #endregion
                 

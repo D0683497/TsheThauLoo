@@ -16,6 +16,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { AuthService } from './services/auth/auth.service';
 import { QuillModule } from 'ngx-quill';
 import * as QuillBlotFormatter from 'quill-blot-formatter';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
   declarations: [AppComponent],
@@ -48,7 +49,8 @@ import * as QuillBlotFormatter from 'quill-blot-formatter';
         implementation: QuillBlotFormatter.default,
         path: 'modules/blotFormatter'
       }],
-    })
+    }),
+    ZXingScannerModule
   ],
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
