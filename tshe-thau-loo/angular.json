@@ -46,7 +46,8 @@
               "quill-blot-formatter",
               "@dicebear/avatars",
               "@dicebear/avatars-jdenticon-sprites",
-              "@dicebear/avatars-identicon-sprites"
+              "@dicebear/avatars-identicon-sprites",
+              "qrcode"
             ],
             "aot": false,
             "vendorChunk": true,

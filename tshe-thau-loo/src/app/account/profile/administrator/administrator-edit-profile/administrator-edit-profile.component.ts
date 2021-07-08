@@ -110,7 +110,7 @@ export class AdministratorEditProfileComponent implements OnInit {
     }
   }
 
-  toggleShowAbout(value: CustomEvent): void {
+  toggleShowAbout(value: any): void {
     if (value.detail.checked) {
       // jobTitle
       this.editForm.get('jobTitle').setValidators([Validators.required, ...this.jobTitleValidators]);

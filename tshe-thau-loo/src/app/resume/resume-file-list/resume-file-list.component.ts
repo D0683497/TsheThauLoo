@@ -70,7 +70,8 @@ export class ResumeFileListComponent implements OnInit {
     this.loading$.next(false);
   }
 
-  async create(files: File[]): Promise<void> {
+  async create(event: any): Promise<void> {
+    const files = event.files;
     if (files.length > 0) {
       const file = files[0];
       if (file.size > 2147483647) {

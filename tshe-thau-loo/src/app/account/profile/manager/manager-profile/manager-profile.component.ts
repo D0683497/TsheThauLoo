@@ -74,7 +74,8 @@ export class ManagerProfileComponent implements OnInit {
 
   toggleNationalId = (): boolean => this.showNationalId = !this.showNationalId;
 
-  async upload(files: File[]): Promise<void> {
+  async upload(event: any): Promise<void> {
+    const files = event.files;
     if (files.length > 0) {
       const file = files[0];
       if (file.size > 2147483647) {
