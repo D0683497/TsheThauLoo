@@ -15,7 +15,7 @@
   </ion-toolbar>
 </ion-header>
 
-<input (change)="createFile($event.target.files)" class="ion-hide" type="file" #file>
+<input (change)="createFile($event.target)" class="ion-hide" type="file" #file>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
@@ -67,7 +67,7 @@
               <ion-label color="tertiary"><ion-text color="danger">*</ion-text>內容</ion-label>
             </ion-list-header>
             <div class="ion-margin">
-              <quill-editor formControlName="content" format="html" [styles]="{'height': '50vh'}" placeholder="內容" required></quill-editor>
+              <quill-editor formControlName="content" format="html" [styles]="{'height': '50vh'}" placeholder="內容" [required]="true"></quill-editor>
             </div>
             <div class="validation-errors">
               <ion-text color="danger" class="error-message" *ngIf="editForm.controls['content'].hasError('required') && (editForm.controls['content'].dirty || editForm.controls['content'].touched)">

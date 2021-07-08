@@ -112,7 +112,7 @@
             <ion-button (click)="file.click()" class="ion-margin" color="primary" expand="block" shape="round">立即上傳</ion-button>
           </ion-card>
         </ng-template>
-        <input (change)="upload($event.target.files)" class="ion-hide" type="file" #file>
+        <input (change)="upload($event.target)" class="ion-hide" type="file" #file>
       </ng-container>
       <ng-container *ngIf="segment === 'description'">
         <form [formGroup]="editForm" (ngSubmit)="onSubmit(editForm.value)" novalidate>

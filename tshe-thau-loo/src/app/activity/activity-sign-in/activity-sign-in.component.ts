@@ -135,7 +135,8 @@ export class ActivitySignInComponent implements OnInit {
     }
   }
 
-  onDeviceSelectChange(selected: string): void {
+  onDeviceSelectChange(event: any): void {
+    const selected = event.detail.value as string;
     const selectedStr = selected || '';
     if (this.deviceSelected === selectedStr) { return; }
     this.deviceSelected = selectedStr;

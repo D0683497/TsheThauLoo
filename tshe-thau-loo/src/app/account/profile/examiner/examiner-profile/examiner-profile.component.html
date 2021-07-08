@@ -33,7 +33,7 @@
           </ion-item>
         </ion-card-content>
         <ion-button *ngIf="!profile.hasPhoto" (click)="file.click()" class="ion-margin" color="primary" shape="round" expand="block">上傳</ion-button>
-        <input (change)="upload($event.target.files)" class="ion-hide" type="file" #file>
+        <input (change)="upload($event.target)" class="ion-hide" type="file" #file>
         <ion-button *ngIf="profile.hasPhoto" (click)="delete()" class="ion-margin" color="danger" shape="round" expand="block">刪除</ion-button>
       </ion-card>
       <ion-card>

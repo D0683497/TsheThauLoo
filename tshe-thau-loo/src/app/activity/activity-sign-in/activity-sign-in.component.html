@@ -34,7 +34,7 @@
   <ion-card color="medium" class="ion-no-margin ion-margin-bottom">
     <ion-item lines="none" color="medium">
       <ion-label>選擇裝置</ion-label>
-      <ion-select [value]="deviceSelected" interface="action-sheet" cancelText="取消" (ionChange)="onDeviceSelectChange($event.detail.value)">
+      <ion-select [value]="deviceSelected" interface="action-sheet" cancelText="取消" (ionChange)="onDeviceSelectChange($event)">
         <ion-select-option value="">未選擇裝置</ion-select-option>
         <ion-select-option *ngFor="let device of availableDevices" [value]="device.deviceId">{{device.label}}</ion-select-option>
       </ion-select>

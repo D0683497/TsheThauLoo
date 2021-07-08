@@ -105,7 +105,8 @@ export class NationalVerifyComponent implements OnInit {
     }
   }
 
-  async upload(files: File[]): Promise<void> {
+  async upload(event: any): Promise<void> {
+    const files = event.files;
     if (files.length > 0) {
       const file = files[0];
       if (file.size > 2147483647) {
@@ -211,7 +212,7 @@ export class NationalVerifyComponent implements OnInit {
     await this.router.navigate(['/']);
   }
 
-  segmentChanged = (ev: CustomEvent): void =>this.segment = ev.detail.value;
+  segmentChanged = (ev: any): void =>this.segment = ev.detail.value;
 
   toggleNationalId = (): boolean => this.showNationalId = !this.showNationalId;
 

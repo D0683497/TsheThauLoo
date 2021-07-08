@@ -168,7 +168,8 @@ export class EventEditComponent implements OnInit {
     await actionSheet.present();
   }
 
-  async createFile(files: File[]): Promise<void> {
+  async createFile(event: any): Promise<void> {
+    const files = event.files;
     if (files.length > 0) {
       const file = files[0];
       if (file.size > 2147483647) {
@@ -317,6 +318,6 @@ export class EventEditComponent implements OnInit {
     await this.modalService.activityQRCode('活動現場報名', uri);
   }
 
-  segmentChanged = (ev: CustomEvent): void =>this.segment = ev.detail.value;
+  segmentChanged = (ev: any): void =>this.segment = ev.detail.value;
 
 }
