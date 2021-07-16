@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'act',
     loadChildren: () => import('./activity/activity.module').then(m => m.ActivityModule)
   },
+  {
+    path: 'manage',
+    loadChildren: () => import('./manage/manage.module').then(m => m.ManageModule)
+  },
   { path: '**', redirectTo: 'page-not-found' }
 ];
 @NgModule({
