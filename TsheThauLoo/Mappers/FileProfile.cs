@@ -12,6 +12,8 @@ namespace TsheThauLoo.Mappers
     {
         public FileProfile()
         {
+            #region StudentVerifyFile
+
             #region StudentVerifyFile 轉換成 FileDto
 
             CreateMap<StudentVerifyFile, FileDto>()
@@ -55,7 +57,11 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Extension));
 
             #endregion
-            
+
+            #endregion
+
+            #region AlumnusVerifyFile
+
             #region AlumnusVerifyFile 轉換成 FileDto
 
             CreateMap<AlumnusVerifyFile, FileDto>()
@@ -99,6 +105,10 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Extension));
 
             #endregion
+
+            #endregion
+
+            #region NationalVerifyFile
 
             #region NationalVerifyFile 轉換成 FileDto
 
@@ -144,6 +154,10 @@ namespace TsheThauLoo.Mappers
 
             #endregion
 
+            #endregion
+
+            #region UserPhoto
+
             #region FileCreateDto 轉換成 UserPhoto
 
             CreateMap<FileCreateDto, UserPhoto>()
@@ -176,7 +190,11 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Extension));
 
             #endregion
-            
+
+            #endregion
+
+            #region CompanyLogo
+
             #region FileCreateDto 轉換成 CompanyLogo
 
             CreateMap<FileCreateDto, CompanyLogo>()
@@ -209,7 +227,11 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Extension));
 
             #endregion
+
+            #endregion
             
+            #region FileResume
+
             #region FileCreateDto 轉換成 FileResume
 
             CreateMap<FileCreateDto, FileResume>()
@@ -251,7 +273,11 @@ namespace TsheThauLoo.Mappers
                     opt => opt.MapFrom(src => src.Extension));
 
             #endregion
-            
+
+            #endregion
+
+            #region EventFile
+
             #region EventFile 轉換成 FileDto
 
             CreateMap<EventFile, FileDto>()
@@ -282,6 +308,65 @@ namespace TsheThauLoo.Mappers
                                 $"event{Path.DirectorySeparatorChar}"+
                                 $"{Path.GetRandomFileName()}";
                 });
+
+            #endregion
+            
+            #region FileEditDto 轉換成 EventFile
+
+            CreateMap<FileEditDto, EventFile>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+
+            #endregion
+
+            #region CampaignFile
+
+            #region CampaignFile 轉換成 FileDto
+
+            CreateMap<CampaignFile, FileDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.CampaignFileId))
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+            
+            #region FileCreateDto 轉換成 CampaignFile
+
+            CreateMap<FileCreateDto, CampaignFile>()
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .AfterMap((src, dest) =>
+                {
+                    var name = Path.GetFileNameWithoutExtension(src.Name);
+                    dest.Name = name;
+                    var extension = Path.GetExtension(src.Name);
+                    dest.Extension = extension == string.Empty ? null : extension;
+                    dest.Path = $@"wwwroot{Path.DirectorySeparatorChar}"+
+                                $"activities{Path.DirectorySeparatorChar}"+
+                                $"campaign{Path.DirectorySeparatorChar}"+
+                                $"{Path.GetRandomFileName()}";
+                });
+
+            #endregion
+            
+            #region FileEditDto 轉換成 CampaignFile
+
+            CreateMap<FileEditDto, CampaignFile>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
 
             #endregion
         }

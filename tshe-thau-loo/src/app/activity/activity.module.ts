@@ -19,6 +19,10 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ActivitySignInComponent } from './activity-sign-in/activity-sign-in.component';
 import { ActivityQrCodeComponent } from './activity-qr-code/activity-qr-code.component';
 import { EventParticipateComponent } from './event/event-participate/event-participate.component';
+import { CampaignCreateComponent } from './campaign/campaign-create/campaign-create.component';
+import { CampaignDisplayComponent } from './campaign/campaign-display/campaign-display.component';
+import { CampaignEditComponent } from './campaign/campaign-edit/campaign-edit.component';
+import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,11 @@ import { EventParticipateComponent } from './event/event-participate/event-parti
     MyEventComponent,
     ActivitySignInComponent,
     ActivityQrCodeComponent,
-    EventParticipateComponent
+    EventParticipateComponent,
+    CampaignCreateComponent,
+    CampaignDisplayComponent,
+    CampaignEditComponent,
+    CampaignListComponent
   ],
   imports: [
     CommonModule,

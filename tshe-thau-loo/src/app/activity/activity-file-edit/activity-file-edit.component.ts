@@ -11,6 +11,7 @@ import { SweetAlertIcon } from '../../enums/sweet-alert-icon.enum';
 import { IFormError } from '../../models/error/form-error.model';
 import { IServerError } from '../../models/error/server-error.model';
 import { EventService } from '../../services/activity/event/event.service';
+import { CampaignService } from '../../services/activity/campaign/campaign.service';
 
 @Component({
   selector: 'app-activity-file-edit',
@@ -30,7 +31,8 @@ export class ActivityFileEditComponent implements OnInit {
     private fb: FormBuilder,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
-    private eventService: EventService) { }
+    private eventService: EventService,
+    private campaignService: CampaignService) { }
 
   ngOnInit(): void {
     this.editForm = this.fb.group({
@@ -44,6 +46,12 @@ export class ActivityFileEditComponent implements OnInit {
     switch (this.type) {
       case ActivityType.event:
         this.eventService.editEventFile(this.activityId, this.file.id, data).subscribe(
+          (res: IDocument) => { this.editSuccess(res); },
+          (err: HttpErrorResponse) => { this.editFail(err); }
+        );
+        break;
+      case ActivityType.campaign:
+        this.campaignService.editCampaignFile(this.activityId, this.file.id, data).subscribe(
           (res: IDocument) => { this.editSuccess(res); },
           (err: HttpErrorResponse) => { this.editFail(err); }
         );

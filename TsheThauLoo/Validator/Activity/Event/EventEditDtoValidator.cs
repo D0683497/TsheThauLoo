@@ -61,12 +61,24 @@ namespace TsheThauLoo.Validator.Activity.Event
                 .WithMessage("{PropertyName}是必填的")
                 .OverridePropertyName("registrationEndTime")
                 .When(x => x.RegistrationEndDate != null || x.RegistrationStartTime != null);
+            RuleFor(x => x.StartDate)
+                .Cascade(CascadeMode.Stop)
+                .NotNull()
+                .WithName("開始日期")
+                .WithMessage("{PropertyName}是必填的")
+                .OverridePropertyName("startDate");
             RuleFor(x => x.StartTime)
                 .Cascade(CascadeMode.Stop)
                 .NotNull()
                 .WithName("開始時間")
                 .WithMessage("{PropertyName}是必填的")
                 .OverridePropertyName("startTime");
+            RuleFor(x => x.EndDate)
+                .Cascade(CascadeMode.Stop)
+                .NotNull()
+                .WithName("結束日期")
+                .WithMessage("{PropertyName}是必填的")
+                .OverridePropertyName("endDate");
             RuleFor(x => x.EndTime)
                 .Cascade(CascadeMode.Stop)
                 .NotNull()
