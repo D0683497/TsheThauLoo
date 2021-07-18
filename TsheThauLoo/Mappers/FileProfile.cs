@@ -369,6 +369,53 @@ namespace TsheThauLoo.Mappers
             #endregion
 
             #endregion
+
+            #region GeneralCampaignFile
+
+            #region GeneralCampaignFile 轉換成 FileDto
+
+            CreateMap<GeneralCampaignFile, FileDto>()
+                .ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.GeneralCampaignFileId))
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+            
+            #region FileCreateDto 轉換成 GeneralCampaignFile
+
+            CreateMap<FileCreateDto, GeneralCampaignFile>()
+                .ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type))
+                .AfterMap((src, dest) =>
+                {
+                    var name = Path.GetFileNameWithoutExtension(src.Name);
+                    dest.Name = name;
+                    var extension = Path.GetExtension(src.Name);
+                    dest.Extension = extension == string.Empty ? null : extension;
+                    dest.Path = $@"wwwroot{Path.DirectorySeparatorChar}"+
+                                $"activities{Path.DirectorySeparatorChar}"+
+                                $"general-campaign{Path.DirectorySeparatorChar}"+
+                                $"{Path.GetRandomFileName()}";
+                });
+
+            #endregion
+            
+            #region FileEditDto 轉換成 CampaignFile
+
+            CreateMap<FileEditDto, GeneralCampaignFile>()
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Extension,
+                    opt => opt.MapFrom(src => src.Extension));
+
+            #endregion
+
+            #endregion
         }
     }
 }

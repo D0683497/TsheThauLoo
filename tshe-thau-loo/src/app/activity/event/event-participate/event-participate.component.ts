@@ -34,7 +34,8 @@ export class EventParticipateComponent implements OnInit {
 
   async onSubmit(data: {name: string; contactPhone: string; remark: string}): Promise<void> {
     const uri = JSON.stringify({
-      activityId: this.eventId,
+      firstId: this.eventId,
+      secondId: null,
       type: ActivityType.event,
       action: ActivityActionType.participant,
       name: data.name,

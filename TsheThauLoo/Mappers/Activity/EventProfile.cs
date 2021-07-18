@@ -149,16 +149,6 @@ namespace TsheThauLoo.Mappers.Activity
                 });
 
             #endregion
-            
-            #region FileEditDto 轉換成 EventFile
-
-            CreateMap<FileEditDto, EventFile>()
-                .ForMember(dest => dest.Name,
-                    opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Extension,
-                    opt => opt.MapFrom(src => src.Extension));
-
-            #endregion
 
             #region Event 轉換成 MyEventDto
 

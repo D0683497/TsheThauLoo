@@ -23,6 +23,16 @@ import { CampaignCreateComponent } from './campaign/campaign-create/campaign-cre
 import { CampaignDisplayComponent } from './campaign/campaign-display/campaign-display.component';
 import { CampaignEditComponent } from './campaign/campaign-edit/campaign-edit.component';
 import { CampaignListComponent } from './campaign/campaign-list/campaign-list.component';
+import { GeneralCampaignCreateComponent } from './general-campaign/general-campaign-create/general-campaign-create.component';
+import { GeneralCampaignDisplayComponent } from './general-campaign/general-campaign-display/general-campaign-display.component';
+import { GeneralCampaignEditComponent } from './general-campaign/general-campaign-edit/general-campaign-edit.component';
+import { GeneralCampaignListComponent } from './general-campaign/general-campaign-list/general-campaign-list.component';
+// eslint-disable-next-line max-len
+import { GeneralCampaignParticipateComponent } from './general-campaign/general-campaign-participate/general-campaign-participate.component';
+import { ActivityInviteCompanyComponent } from './activity-invite-company/activity-invite-company.component';
+import { MyCampaignComponent } from './my/my-campaign/my-campaign.component';
+import { MyGeneralCampaignComponent } from './my/my-general-campaign/my-general-campaign.component';
+import { MyCampaignListComponent } from './my/my-campaign-list/my-campaign-list.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +51,16 @@ import { CampaignListComponent } from './campaign/campaign-list/campaign-list.co
     CampaignCreateComponent,
     CampaignDisplayComponent,
     CampaignEditComponent,
-    CampaignListComponent
+    CampaignListComponent,
+    GeneralCampaignCreateComponent,
+    GeneralCampaignDisplayComponent,
+    GeneralCampaignEditComponent,
+    GeneralCampaignListComponent,
+    GeneralCampaignParticipateComponent,
+    ActivityInviteCompanyComponent,
+    MyCampaignComponent,
+    MyGeneralCampaignComponent,
+    MyCampaignListComponent
   ],
   imports: [
     CommonModule,

@@ -63,7 +63,8 @@ export class MyEventComponent implements OnInit {
   async showQRCode(): Promise<void> {
     const uri = JSON.stringify({
       userId: this.authService.getUserId(),
-      activityId: this.eventId,
+      firstId: this.eventId,
+      secondId: null,
       type: ActivityType.event,
       action: ActivityActionType.attendee
     });

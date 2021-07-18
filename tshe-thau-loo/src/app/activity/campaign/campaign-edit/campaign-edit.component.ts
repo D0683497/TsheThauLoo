@@ -196,7 +196,7 @@ export class CampaignEditComponent implements OnInit {
   }
 
   async editFile(data: IDocument): Promise<void> {
-    const res = await this.modalService.editActivityFile(ActivityType.campaign, this.campaignId, data);
+    const res = await this.modalService.editActivityFile(ActivityType.campaign, this.campaignId, null, data);
     if (res !== undefined) {
       const index = this.campaign.files.findIndex(x => x.id === res.id);
       this.campaign.files[index] = res;

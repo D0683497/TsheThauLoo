@@ -12,6 +12,7 @@ import { IFormError } from '../../models/error/form-error.model';
 import { IServerError } from '../../models/error/server-error.model';
 import { EventService } from '../../services/activity/event/event.service';
 import { CampaignService } from '../../services/activity/campaign/campaign.service';
+import { GeneralCampaignService } from '../../services/activity/general-campaign/general-campaign.service';
 
 @Component({
   selector: 'app-activity-file-edit',
@@ -21,7 +22,8 @@ import { CampaignService } from '../../services/activity/campaign/campaign.servi
 export class ActivityFileEditComponent implements OnInit {
 
   @Input() type: ActivityType;
-  @Input() activityId: string;
+  @Input() firstId: string;
+  @Input() secondId: string;
   @Input() file: IDocument;
   date = Date.now();
   editForm: FormGroup;
@@ -32,7 +34,8 @@ export class ActivityFileEditComponent implements OnInit {
     private loadingService: LoadingService,
     private notificationService: NotificationService,
     private eventService: EventService,
-    private campaignService: CampaignService) { }
+    private campaignService: CampaignService,
+    private generalCampaignService: GeneralCampaignService) { }
 
   ngOnInit(): void {
     this.editForm = this.fb.group({
@@ -45,13 +48,19 @@ export class ActivityFileEditComponent implements OnInit {
     await this.loadingService.start('修改中...');
     switch (this.type) {
       case ActivityType.event:
-        this.eventService.editEventFile(this.activityId, this.file.id, data).subscribe(
+        this.eventService.editEventFile(this.firstId, this.file.id, data).subscribe(
           (res: IDocument) => { this.editSuccess(res); },
           (err: HttpErrorResponse) => { this.editFail(err); }
         );
         break;
       case ActivityType.campaign:
-        this.campaignService.editCampaignFile(this.activityId, this.file.id, data).subscribe(
+        this.campaignService.editCampaignFile(this.firstId, this.file.id, data).subscribe(
+          (res: IDocument) => { this.editSuccess(res); },
+          (err: HttpErrorResponse) => { this.editFail(err); }
+        );
+        break;
+      case ActivityType.generalCampaign:
+        this.generalCampaignService.editGeneralCampaignFile(this.firstId, this.secondId, this.file.id, data).subscribe(
           (res: IDocument) => { this.editSuccess(res); },
           (err: HttpErrorResponse) => { this.editFail(err); }
         );

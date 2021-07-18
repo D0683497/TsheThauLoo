@@ -53,6 +53,8 @@
         </ion-list>
       </ion-card>
       <ion-button *ngIf="authService.isLogin() && authService.getUserRole() === type.administrator" [routerLink]="['/act/campaign', campaign.id, 'edit']" class="ion-margin" shape="round" expand="block">編輯</ion-button>
+      <ion-button [routerLink]="['/act/campaign', campaignId, 'general', 'list']" class="ion-margin" shape="round" color="tertiary" expand="block">查看一般子活動</ion-button>
+      <ion-button [routerLink]="['/act/campaign', campaignId, 'recruitment', 'list']" class="ion-margin" color="secondary" shape="round" expand="block">查看徵才子活動</ion-button>
     </ng-container>
     <ng-template #error>
       <ion-card>

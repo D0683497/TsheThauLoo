@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { IServerError } from '../../models/error/server-error.model';
 import { IActivityAttendeeSignIn } from '../../models/activity/activity-attendee-sign-in.model';
 import { IActivityParticipantSignIn } from '../../models/activity/activity-participant-sign-in.model';
+import { GeneralCampaignService } from '../../services/activity/general-campaign/general-campaign.service';
 
 @Component({
   selector: 'app-activity-sign-in',
@@ -18,7 +19,8 @@ import { IActivityParticipantSignIn } from '../../models/activity/activity-parti
 })
 export class ActivitySignInComponent implements OnInit {
 
-  @Input() activityId: string;
+  @Input() firstId: string;
+  @Input() secondId: string;
   @Input() type: ActivityType;
   date = Date.now();
   hasDevices: boolean;
@@ -31,7 +33,8 @@ export class ActivitySignInComponent implements OnInit {
     private modalController: ModalController,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
-    private eventService: EventService) { }
+    private eventService: EventService,
+    private generalCampaignService: GeneralCampaignService) { }
 
   ngOnInit(): void {}
 
@@ -62,12 +65,7 @@ export class ActivitySignInComponent implements OnInit {
 
   checkQRCode(data: any): boolean {
     try {
-      if (this.activityId !== data.activityId) {
-        this.loadingService.end().then();
-        this.notificationService.message('QRCode 錯誤', SweetAlertIcon.error).then();
-        return false;
-      }
-      if (this.type !== data.type) {
+      if (this.firstId !== data.firstId || this.secondId !== data.secondId || this.type !== data.type) {
         this.loadingService.end().then();
         this.notificationService.message('QRCode 錯誤', SweetAlertIcon.error).then();
         return false;
@@ -84,7 +82,13 @@ export class ActivitySignInComponent implements OnInit {
     try {
       switch (this.type) {
         case ActivityType.event:
-          this.eventService.signInEvent(data.activityId, data.userId).subscribe(
+          this.eventService.signInEvent(data.firstId, data.userId).subscribe(
+            () => { this.signInSuccess(); },
+            (err: HttpErrorResponse) => { this.signInFail(err); }
+          );
+          break;
+        case ActivityType.generalCampaign:
+          this.generalCampaignService.signInGeneralCampaign(data.firstId, data.secondId, data.userId).subscribe(
             () => { this.signInSuccess(); },
             (err: HttpErrorResponse) => { this.signInFail(err); }
           );
@@ -100,7 +104,14 @@ export class ActivitySignInComponent implements OnInit {
     try {
       switch (this.type) {
         case ActivityType.event:
-          this.eventService.participateEvent(data.activityId,
+          this.eventService.participateEvent(data.firstId,
+            {name: data.name, contactPhone: data.contactPhone, remark: data.remark}).subscribe(
+            () => { this.signInSuccess(); },
+            (err: HttpErrorResponse) => { this.signInFail(err); }
+          );
+          break;
+        case ActivityType.generalCampaign:
+          this.generalCampaignService.participateGeneralCampaign(data.firstId, data.secondId,
             {name: data.name, contactPhone: data.contactPhone, remark: data.remark}).subscribe(
             () => { this.signInSuccess(); },
             (err: HttpErrorResponse) => { this.signInFail(err); }

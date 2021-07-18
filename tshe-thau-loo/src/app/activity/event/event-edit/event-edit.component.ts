@@ -205,7 +205,7 @@ export class EventEditComponent implements OnInit {
   }
 
   async editFile(data: IDocument): Promise<void> {
-    const res = await this.modalService.editActivityFile(ActivityType.event, this.eventId, data);
+    const res = await this.modalService.editActivityFile(ActivityType.event, this.eventId, null, data);
     if (res !== undefined) {
       const index = this.event.files.findIndex(x => x.id === res.id);
       this.event.files[index] = res;
@@ -310,7 +310,7 @@ export class EventEditComponent implements OnInit {
   }
 
   async signInEvent(): Promise<void> {
-    await this.modalService.activitySignIn(this.eventId, ActivityType.event);
+    await this.modalService.activitySignIn(this.eventId, null, ActivityType.event);
   }
 
   async participant(): Promise<void> {

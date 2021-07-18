@@ -22,6 +22,7 @@ import { ActivityType } from '../../enums/activity-type.enum';
 import { ActivityDeclarationComponent } from '../../activity/activity-declaration/activity-declaration.component';
 import { ActivitySignInComponent } from '../../activity/activity-sign-in/activity-sign-in.component';
 import { ActivityQrCodeComponent } from '../../activity/activity-qr-code/activity-qr-code.component';
+import { ActivityInviteCompanyComponent } from '../../activity/activity-invite-company/activity-invite-company.component';
 
 @Injectable({
   providedIn: 'root'
@@ -107,10 +108,10 @@ export class ModalService {
     return data;
   }
 
-  async editActivityFile(type: ActivityType, activityId: string, file: IDocument): Promise<IDocument> {
+  async editActivityFile(type: ActivityType, firstId: string, secondId: string, file: IDocument): Promise<IDocument> {
     this.modal = await this.modalController.create({
       component: ActivityFileEditComponent,
-      componentProps: {type, activityId, file},
+      componentProps: {type, firstId, secondId, file},
       swipeToClose: true
     });
     await this.modal.present();
@@ -140,13 +141,23 @@ export class ModalService {
     return data;
   }
 
-  async activitySignIn(activityId: string, type: ActivityType): Promise<void> {
+  async activitySignIn(firstId: string, secondId: string, type: ActivityType): Promise<void> {
     this.modal = await this.modalController.create({
       component: ActivitySignInComponent,
-      componentProps: {activityId, type},
+      componentProps: {firstId, secondId, type},
       swipeToClose: true
     });
     await this.modal.present();
+  }
+
+  async activityInviteCompany(): Promise<string> {
+    this.modal = await this.modalController.create({
+      component: ActivityInviteCompanyComponent,
+      swipeToClose: true
+    });
+    await this.modal.present();
+    const { data } = await this.modal.onDidDismiss<string>();
+    return data;
   }
 
 }

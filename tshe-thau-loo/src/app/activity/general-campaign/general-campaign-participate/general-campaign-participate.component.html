@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="returnUrl" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>一般子活動現場報名</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/account">
+        <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">一般子活動現場報名</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit(createForm.value)" novalidate>
+    <ion-list lines="full">
+      <ion-item lines="none" color="light">
+        <ion-label>
+          <ion-text color="danger">*</ion-text>為必填項目
+        </ion-label>
+      </ion-item>
+      <!-- name -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>姓名</ion-label>
+        <ion-input formControlName="name" type="text" inputmode="text" autocomplete="name" placeholder="姓名" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['name'].hasError('required') && (createForm.controls['name'].dirty || createForm.controls['name'].touched)">
+          姓名是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['name'].hasError('maxlength') && (createForm.controls['name'].dirty || createForm.controls['name'].touched)">
+          姓名<strong>最50位</strong>
+        </ion-text>
+      </div>
+      <!-- contactPhone -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>聯絡用電話號碼</ion-label>
+        <ion-input formControlName="contactPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="聯絡用電話號碼"></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['contactPhone'].hasError('required') && (createForm.controls['contactPhone'].dirty || createForm.controls['contactPhone'].touched)">
+          聯絡用電話號碼是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['contactPhone'].hasError('maxlength') && (createForm.controls['contactPhone'].dirty || createForm.controls['contactPhone'].touched)">
+          聯絡用電話號碼<strong>最多30位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['contactPhone'].hasError('phone') && (createForm.controls['contactPhone'].dirty || createForm.controls['contactPhone'].touched)">
+          聯絡用電話號碼<strong>格式錯誤</strong>
+        </ion-text>
+      </div>
+      <!-- remark -->
+      <ion-item>
+        <ion-label position="stacked">備註</ion-label>
+        <ion-textarea formControlName="remark" auto-grow="true" inputmode="text" placeholder="備註"></ion-textarea>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['remark'].hasError('maxlength') && (createForm.controls['remark'].dirty || createForm.controls['remark'].touched)">
+          備註<strong>最500位</strong>
+        </ion-text>
+      </div>
+    </ion-list>
+    <ion-button class="ion-margin" [disabled]="createForm.invalid" type="submit" shape="round" expand="block">產生 QR Code</ion-button>
+  </form>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>
