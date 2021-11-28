@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss(false)">不同意</ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-wrap">服務條款</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss(true)">同意</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">服務條款</ion-title>
+    </ion-toolbar>
+  </ion-header>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+  </ion-toolbar>
+</ion-footer>

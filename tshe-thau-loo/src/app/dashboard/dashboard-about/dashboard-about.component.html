@@ -1,0 +1,112 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>關於我們</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/notifications">
+        <ion-icon slot="icon-only" name="notifications"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">關於我們</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-sm="12" size-md="10" size-lg="8" size-xl="6">
+        <ion-card color="medium">
+          <ion-card-header>
+            <ion-card-subtitle>逢甲大學</ion-card-subtitle>
+            <ion-card-title>成就學生中心</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>你知道不論你未來要升學或就業，成就學生中心提供逢甲大學學生職涯諮詢、職涯課程及就業資訊，讓我們幫助您規劃您未來的職涯發展。</ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-sm="12" size-md="10" size-lg="8" size-xl="6">
+        <ng-container *ngIf="(loading$ | async) === false; else loading">
+          <ng-container *ngIf="(loadingError$ | async) === false">
+            <ion-card *ngIf="abouts.length !== 0">
+              <ion-card-header>
+                <ion-card-title>成員介紹</ion-card-title>
+              </ion-card-header>
+              <ion-row>
+                <ion-col *ngFor="let about of abouts" size-sm="12" size-md="6" size-lg="4">
+                  <ion-card color="medium" class="ion-no-margin ion-margin-top">
+                    <ion-card-header>
+                      <ion-card-subtitle>{{about.jobTitle}}</ion-card-subtitle>
+                      <ion-card-title>{{about.name}}</ion-card-title>
+                    </ion-card-header>
+                    <!-- TODO: image -->
+                    <ion-list class="ion-no-padding">
+                      <ion-item color="medium">
+                        <ion-icon name="mail" slot="start"></ion-icon>
+                        <ion-label class="ion-text-wrap">{{about.contactEmail}}</ion-label>
+                      </ion-item>
+                      <ion-item color="medium">
+                        <ion-icon name="call" slot="start"></ion-icon>
+                        <ion-label class="ion-text-wrap">04-24517250#{{about.extension}}</ion-label>
+                      </ion-item>
+                      <ion-list-header color="medium">負責業務</ion-list-header>
+                      <ion-item *ngFor="let responsibility of about.responsibilities; let i=index" color="medium">
+                        <ion-note slot="start" color="light">{{i+1}}.</ion-note>
+                        <ion-label class="ion-text-wrap">{{responsibility.description}}</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </ng-container>
+        </ng-container>
+        <ng-template #loading>
+          <ion-card>
+            <ion-progress-bar type="indeterminate"></ion-progress-bar>
+            <ion-card-header>
+              <ion-card-title>成員介紹</ion-card-title>
+            </ion-card-header>
+            <ion-card color="medium" class="ion-no-margin ion-margin-top">
+              <ion-card-header>
+                <ion-card-title>載入中...</ion-card-title>
+              </ion-card-header>
+              <ion-img src="assets/Loading-bro.svg" alt="載入中"></ion-img>
+            </ion-card>
+          </ion-card>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size-sm="12" size-md="10" size-lg="8" size-xl="6">
+        <ion-card color="medium">
+          <ion-card-header>
+            <ion-card-title>相關連結</ion-card-title>
+          </ion-card-header>
+          <ion-list>
+            <ion-item color="medium" detail detail-icon="open" lines="full" href="http://www.cdc.fcu.edu.tw/" target="_blank">
+              <ion-label class="ion-text-wrap">成就學生中心首頁</ion-label>
+            </ion-item>
+            <ion-item color="medium" detail detail-icon="open" lines="full" href="https://www.facebook.com/fcussc/" target="_blank">
+              <ion-icon name="logo-facebook" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">Facebook 粉絲專頁</ion-label>
+            </ion-item>
+            <ion-item color="medium" detail detail-icon="open" lines="none" href="https://sscucan.fcu.edu.tw/" target="_blank">
+              <ion-label class="ion-text-wrap">UCAN 大專院校就業職能平台</ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-card-content></ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-toolbar>
+    <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+  </ion-toolbar>
+</ion-content>

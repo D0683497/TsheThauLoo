@@ -1,0 +1,99 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/company" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>建立公司</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">建立公司</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit(createForm.value)" novalidate>
+    <ion-list lines="full">
+      <ion-item lines="none" color="light">
+        <ion-label>
+          <ion-text color="danger">*</ion-text>為必填項目
+        </ion-label>
+      </ion-item>
+      <!-- registrationNumber -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>統一編號</ion-label>
+        <ion-input formControlName="registrationNumber" type="text" inputmode="text" placeholder="統一編號" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['registrationNumber'].hasError('required') && (createForm.controls['registrationNumber'].dirty || createForm.controls['registrationNumber'].touched)">
+          統一編號是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['registrationNumber'].hasError('maxlength') && (createForm.controls['registrationNumber'].dirty || createForm.controls['registrationNumber'].touched)">
+          統一編號<strong>最10位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['registrationNumber'].hasError('registrationNumber') && (createForm.controls['registrationNumber'].dirty || createForm.controls['registrationNumber'].touched)">
+          統一編號<strong>格式錯誤</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['registrationNumber'].hasError('server') && (createForm.controls['registrationNumber'].dirty || createForm.controls['registrationNumber'].touched)">
+          {{ createForm.controls['registrationNumber'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- name -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>名稱</ion-label>
+        <ion-input formControlName="name" type="text" inputmode="text" placeholder="名稱" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['name'].hasError('required') && (createForm.controls['name'].dirty || createForm.controls['name'].touched)">
+          名稱是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['name'].hasError('maxlength') && (createForm.controls['name'].dirty || createForm.controls['name'].touched)">
+          名稱<strong>最100位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['name'].hasError('server') && (createForm.controls['name'].dirty || createForm.controls['name'].touched)">
+          {{ createForm.controls['name'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- introduction -->
+      <ion-list-header>
+        <ion-label color="tertiary">簡介</ion-label>
+      </ion-list-header>
+      <div class="ion-margin">
+        <quill-editor formControlName="introduction" format="html" [styles]="{'height': '50vh'}" placeholder="簡介"></quill-editor>
+      </div>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['introduction'].hasError('server') && (createForm.controls['introduction'].dirty || createForm.controls['introduction'].touched)">
+          {{ createForm.controls['introduction'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- website -->
+      <ion-item>
+        <ion-label position="stacked">網站</ion-label>
+        <ion-input formControlName="website" type="text" inputmode="url" placeholder="網站"></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['website'].hasError('pattern') && (createForm.controls['website'].dirty || createForm.controls['website'].touched)">
+          網站<strong>格式錯誤</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['website'].hasError('maxlength') && (createForm.controls['website'].dirty || createForm.controls['website'].touched)">
+          網站<strong>最300位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="createForm.controls['website'].hasError('server') && (createForm.controls['website'].dirty || createForm.controls['website'].touched)">
+          {{ createForm.controls['website'].getError('server') }}
+        </ion-text>
+      </div>
+    </ion-list>
+    <ion-button class="ion-margin" [disabled]="createForm.invalid" type="submit" shape="round" expand="block">建立</ion-button>
+  </form>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

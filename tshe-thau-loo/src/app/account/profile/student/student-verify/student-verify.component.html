@@ -1,0 +1,162 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account/profile/student" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>在校生驗證</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">在校生驗證</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ng-container *ngIf="(loading$ | async) === false; else loading">
+    <ng-container *ngIf="(loadingError$ | async) === false; else error">
+      <ion-item *ngIf="!verify.studentConfirmed" lines="none" color="warning">
+        <ion-label class="ion-text-wrap">請提供資訊以便管理員審核您的身份</ion-label>
+      </ion-item>
+      <ion-toolbar>
+        <ion-segment (ionChange)="segmentChanged($event)" value="info">
+          <ion-segment-button value="info">
+            <ion-label>資訊</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="files">
+            <ion-label>附檔</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="description">
+            <ion-label>說明</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-toolbar>
+      <ng-container *ngIf="segment === 'info'">
+        <ion-card>
+          <ion-item lines="none">
+            <ion-label>在校生資訊</ion-label>
+            <ion-badge [color]="verify.studentConfirmed ? 'success' : 'light'">
+              {{verify.studentConfirmed ? '已驗證' : '尚未驗證'}}
+            </ion-badge>
+          </ion-item>
+          <ion-card-content>
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-label>學號</ion-label>
+              </ion-item-divider>
+              <ion-item lines="none">
+                <ion-label class="ion-text-wrap">{{verify.networkId}}</ion-label>
+              </ion-item>
+              <ion-item-divider>
+                <ion-label>學院</ion-label>
+              </ion-item-divider>
+              <ion-item lines="none">
+                <ion-label class="ion-text-wrap">{{verify.college}}</ion-label>
+              </ion-item>
+              <ion-item-divider>
+                <ion-label>系所</ion-label>
+              </ion-item-divider>
+              <ion-item lines="none">
+                <ion-label class="ion-text-wrap">{{verify.department}}</ion-label>
+              </ion-item>
+              <ion-item-divider>
+                <ion-label>班級</ion-label>
+              </ion-item-divider>
+              <ion-item lines="none">
+                <ion-label class="ion-text-wrap">{{verify.class}}</ion-label>
+              </ion-item>
+            </ion-item-group>
+          </ion-card-content>
+          <ion-button *ngIf="!verify.studentConfirmed" routerLink="/account/profile/student/info" class="ion-margin" shape="round" expand="block">編輯</ion-button>
+        </ion-card>
+      </ng-container>
+      <ng-container *ngIf="segment === 'files'">
+        <ng-container *ngIf="verify.files.length !== 0; else empty">
+          <ion-list>
+            <ion-item lines="none">
+              <ion-label>驗證附檔</ion-label>
+              <ion-button *ngIf="!verify.studentConfirmed" (click)="file.click()" class="like-link" fill="clear" slot="end">上傳</ion-button>
+            </ion-item>
+            <ion-item *ngIf="!verify.studentConfirmed" lines="none" color="light">
+              <ion-label class="ion-text-wrap">
+                向右滑即可<strong>編輯</strong>檔案，向左滑即可<strong>刪除</strong>檔案
+              </ion-label>
+            </ion-item>
+            <ion-item-sliding *ngFor="let file of verify.files">
+              <ion-item-options *ngIf="!verify.studentConfirmed" side="start">
+                <ion-item-option (click)="editFile(file)" color="primary">編輯</ion-item-option>
+              </ion-item-options>
+              <ion-item>
+                <ion-label class="ion-text-wrap">{{file.name+file.extension}}</ion-label>
+                <ion-button (click)="download(file.id, file.name+file.extension)" fill="clear" slot="end">
+                  <ion-icon slot="icon-only" name="arrow-down-circle"></ion-icon>
+                </ion-button>
+              </ion-item>
+              <ion-item-options *ngIf="!verify.studentConfirmed" side="end">
+                <ion-item-option (click)="delete(file.id)" color="danger">刪除</ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </ng-container>
+        <ng-template #empty>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>無資料</ion-card-title>
+            </ion-card-header>
+            <ion-img src="assets/No-data-rafiki.svg" alt="無資料"></ion-img>
+            <ion-button (click)="file.click()" class="ion-margin" color="primary" expand="block" shape="round">立即上傳</ion-button>
+          </ion-card>
+        </ng-template>
+        <input (change)="upload($event.target)" class="ion-hide" type="file" #file>
+      </ng-container>
+      <ng-container *ngIf="segment === 'description'">
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit(editForm.value)" novalidate>
+          <ion-list lines="full">
+            <!-- description -->
+            <ion-item>
+              <ion-label position="stacked">說明</ion-label>
+              <ion-textarea formControlName="description" auto-grow="true" inputmode="text" placeholder="說明"></ion-textarea>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.get('description').hasError('maxlength') && (editForm.get('description').dirty || editForm.get('description').touched)">
+                說明<strong>最多500位</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.get('description').hasError('server') && (editForm.get('description').dirty || editForm.get('description').touched)">
+                {{ editForm.get('description').getError('server') }}
+              </ion-text>
+            </div>
+          </ion-list>
+          <ion-button *ngIf="!verify.studentConfirmed" class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>
+        </form>
+      </ng-container>
+    </ng-container>
+    <ng-template #error>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>發生錯誤</ion-card-title>
+        </ion-card-header>
+        <ion-img src="assets/Feeling-angry-amico.svg" alt="錯誤"></ion-img>
+        <ion-button (click)="getData()" class="ion-margin" color="primary" expand="block" shape="round">重新整理</ion-button>
+      </ion-card>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <ion-card>
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <ion-card-header>
+        <ion-card-title>載入中...</ion-card-title>
+      </ion-card-header>
+      <ion-img src="assets/Loading-bro.svg" alt="載入中"></ion-img>
+    </ion-card>
+  </ng-template>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

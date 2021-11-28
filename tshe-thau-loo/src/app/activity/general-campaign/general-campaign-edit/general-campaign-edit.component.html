@@ -1,0 +1,300 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/act" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>編輯一般子活動</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="segment !== 'file'" routerLink="/account">
+        <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="segment === 'file'" (click)="file.click()">
+        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<input (change)="createFile($event.target)" class="ion-hide" type="file" #file>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">編輯一般子活動</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-toolbar>
+    <ion-segment (ionChange)="segmentChanged($event)" value="info">
+      <ion-segment-button value="info">
+        <ion-label>活動資訊</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="file">
+        <ion-label>活動附檔</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="other">
+        <ion-label>其他</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  <ng-container *ngIf="(loading$ | async) === false; else loading">
+    <ng-container *ngIf="(loadingError$ | async) === false; else error">
+      <ng-container *ngIf="segment === 'info'">
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit(editForm.value)" novalidate>
+          <ion-list lines="full">
+            <ion-item lines="none" color="light">
+              <ion-label>
+                <ion-text color="danger">*</ion-text>為必填項目
+              </ion-label>
+            </ion-item>
+            <!-- title -->
+            <ion-item>
+              <ion-label position="stacked"><ion-text color="danger">*</ion-text>名稱</ion-label>
+              <ion-input formControlName="title" type="text" inputmode="text" placeholder="名稱" required></ion-input>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['title'].hasError('required') && (editForm.controls['title'].dirty || editForm.controls['title'].touched)">
+                名稱是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['title'].hasError('maxlength') && (editForm.controls['title'].dirty || editForm.controls['title'].touched)">
+                名稱<strong>最多50位</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['title'].hasError('server') && (editForm.controls['title'].dirty || editForm.controls['title'].touched)">
+                {{ editForm.controls['title'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- content -->
+            <ion-list-header>
+              <ion-label color="tertiary"><ion-text color="danger">*</ion-text>內容</ion-label>
+            </ion-list-header>
+            <div class="ion-margin">
+              <quill-editor formControlName="content" format="html" [styles]="{'height': '50vh'}" placeholder="內容" [required]="true"></quill-editor>
+            </div>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['content'].hasError('required') && (editForm.controls['content'].dirty || editForm.controls['content'].touched)">
+                內容是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['content'].hasError('server') && (editForm.controls['content'].dirty || editForm.controls['content'].touched)">
+                {{ editForm.controls['content'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- declaration -->
+            <ion-list-header>
+              <ion-label color="tertiary">
+                <h1>聲明</h1>
+                <p><ion-text color="medium">活動聲明會在用戶報名活動時展示出來</ion-text></p>
+              </ion-label>
+            </ion-list-header>
+            <div class="ion-margin">
+              <quill-editor formControlName="declaration" format="html" [styles]="{'height': '50vh'}" placeholder="聲明"></quill-editor>
+            </div>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['declaration'].hasError('server') && (editForm.controls['declaration'].dirty || editForm.controls['declaration'].touched)">
+                {{ editForm.controls['declaration'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- venue -->
+            <ion-item>
+              <ion-label position="stacked">地點</ion-label>
+              <ion-textarea formControlName="venue" auto-grow="true" inputmode="text" placeholder="地點"></ion-textarea>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['venue'].hasError('maxlength') && (editForm.controls['venue'].dirty || editForm.controls['venue'].touched)">
+                地點<strong>最多200位</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['venue'].hasError('server') && (editForm.controls['venue'].dirty || editForm.controls['venue'].touched)">
+                {{ editForm.controls['venue'].getError('server') }}
+              </ion-text>
+            </div>
+            <ion-list-header>
+              <ion-label color="tertiary">報名時間</ion-label>
+            </ion-list-header>
+            <!-- registrationStartDate -->
+            <ion-item>
+              <ion-label position="stacked">報名開始日期</ion-label>
+              <ion-datetime formControlName="registrationStartDate" [max]="editForm.controls['registrationEndDate'].value ? editForm.controls['registrationEndDate'].value : undefined" displayFormat="YYYY/MM/DD" done-text="完成" cancel-text="取消" placeholder="報名開始日期"></ion-datetime>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationStartDate'].hasError('required') && (editForm.controls['registrationStartDate'].dirty || editForm.controls['registrationStartDate'].touched)">
+                報名開始日期是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationStartDate'].hasError('server') && (editForm.controls['registrationStartDate'].dirty || editForm.controls['registrationStartDate'].touched)">
+                {{ editForm.controls['registrationStartDate'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- registrationStartTime -->
+            <ion-item>
+              <ion-label position="stacked">報名開始時間</ion-label>
+              <ion-datetime formControlName="registrationStartTime" displayFormat="HH:mm" done-text="完成" cancel-text="取消" placeholder="報名開始時間"></ion-datetime>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationStartTime'].hasError('required') && (editForm.controls['registrationStartTime'].dirty || editForm.controls['registrationStartTime'].touched)">
+                報名開始時間是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationStartTime'].hasError('server') && (editForm.controls['registrationStartTime'].dirty || editForm.controls['registrationStartTime'].touched)">
+                {{ editForm.controls['registrationStartTime'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- registrationEndDate -->
+            <ion-item>
+              <ion-label position="stacked">報名結束日期</ion-label>
+              <ion-datetime formControlName="registrationEndDate" [max]="editForm.controls['startDate'].value ? editForm.controls['startDate'].value : undefined" [min]="editForm.controls['registrationStartDate'].value ? editForm.controls['registrationStartDate'].value : undefined" displayFormat="YYYY/MM/DD" done-text="完成" cancel-text="取消" placeholder="報名結束日期"></ion-datetime>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationEndDate'].hasError('required') && (editForm.controls['registrationEndDate'].dirty || editForm.controls['registrationEndDate'].touched)">
+                報名結束日期是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationEndDate'].hasError('server') && (editForm.controls['registrationEndDate'].dirty || editForm.controls['registrationEndDate'].touched)">
+                {{ editForm.controls['registrationEndTime'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- registrationEndTime -->
+            <ion-item>
+              <ion-label position="stacked">報名結束時間</ion-label>
+              <ion-datetime formControlName="registrationEndTime" displayFormat="HH:mm" done-text="完成" cancel-text="取消" placeholder="報名結束時間"></ion-datetime>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationEndTime'].hasError('required') && (editForm.controls['registrationEndTime'].dirty || editForm.controls['registrationEndTime'].touched)">
+                報名結束時間是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationEndTime'].hasError('server') && (editForm.controls['registrationEndTime'].dirty || editForm.controls['registrationEndTime'].touched)">
+                {{ editForm.controls['registrationEndTime'].getError('server') }}
+              </ion-text>
+            </div>
+            <ion-list-header>
+              <ion-label color="tertiary"><ion-text color="danger">*</ion-text>活動時間</ion-label>
+            </ion-list-header>
+            <!-- startDate -->
+            <ion-item>
+              <ion-label position="stacked"><ion-text color="danger">*</ion-text>開始日期</ion-label>
+              <ion-datetime formControlName="startDate" [max]="editForm.controls['endDate'].value ? editForm.controls['endDate'].value : undefined" [min]="editForm.controls['registrationEndDate'].value ? editForm.controls['registrationEndDate'].value : undefined" displayFormat="YYYY/MM/DD" done-text="完成" cancel-text="取消" placeholder="開始日期"></ion-datetime>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['startDate'].hasError('required') && (editForm.controls['startDate'].dirty || editForm.controls['startDate'].touched)">
+                開始日期是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['startDate'].hasError('server') && (editForm.controls['startDate'].dirty || editForm.controls['startDate'].touched)">
+                {{ editForm.controls['startTime'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- startTime -->
+            <ion-item>
+              <ion-label position="stacked"><ion-text color="danger">*</ion-text>開始時間</ion-label>
+              <ion-datetime formControlName="startTime" displayFormat="HH:mm" done-text="完成" cancel-text="取消" placeholder="開始時間"></ion-datetime>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['startTime'].hasError('required') && (editForm.controls['startTime'].dirty || editForm.controls['startTime'].touched)">
+                開始時間是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['startTime'].hasError('server') && (editForm.controls['startTime'].dirty || editForm.controls['startTime'].touched)">
+                {{ editForm.controls['startTime'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- endDate -->
+            <ion-item>
+              <ion-label position="stacked"><ion-text color="danger">*</ion-text>結束日期</ion-label>
+              <ion-datetime formControlName="endDate" [min]="editForm.controls['startDate'].value ? editForm.controls['startDate'].value : undefined" displayFormat="YYYY/MM/DD" done-text="完成" cancel-text="取消" placeholder="結束日期"></ion-datetime>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['endDate'].hasError('required') && (editForm.controls['endDate'].dirty || editForm.controls['endDate'].touched)">
+                結束日期是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['endDate'].hasError('server') && (editForm.controls['endDate'].dirty || editForm.controls['endDate'].touched)">
+                {{ editForm.controls['endDate'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- endTime -->
+            <ion-item>
+              <ion-label position="stacked"><ion-text color="danger">*</ion-text>結束時間</ion-label>
+              <ion-datetime formControlName="endTime" displayFormat="HH:mm" done-text="完成" cancel-text="取消" placeholder="結束時間"></ion-datetime>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['endTime'].hasError('required') && (editForm.controls['endTime'].dirty || editForm.controls['endTime'].touched)">
+                結束時間是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['endTime'].hasError('server') && (editForm.controls['endTime'].dirty || editForm.controls['endTime'].touched)">
+                {{ editForm.controls['endTime'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- limitNumberOfPeople -->
+            <ion-item>
+              <ion-label position="stacked">
+                <ion-text color="danger">*</ion-text>人數限制
+                <p>若為 0 則為不限人數</p>
+              </ion-label>
+              <ion-input formControlName="limitNumberOfPeople" type="number" [min]="0" inputmode="numeric" placeholder="人數限制" required></ion-input>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['limitNumberOfPeople'].hasError('required') && (editForm.controls['limitNumberOfPeople'].dirty || editForm.controls['limitNumberOfPeople'].touched)">
+                人數限制是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['limitNumberOfPeople'].hasError('min') && (editForm.controls['limitNumberOfPeople'].dirty || editForm.controls['limitNumberOfPeople'].touched)">
+                人數限制<strong>最小為 0</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['limitNumberOfPeople'].hasError('server') && (editForm.controls['limitNumberOfPeople'].dirty || editForm.controls['limitNumberOfPeople'].touched)">
+                {{ editForm.controls['limitNumberOfPeople'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- enableVerify -->
+            <ion-item>
+              <ion-label>{{ editForm.controls['enableVerify'].value ? '啟用審核' : '關閉審核' }}</ion-label>
+              <ion-toggle formControlName="enableVerify"></ion-toggle>
+            </ion-item>
+            <!-- enableIdentityConfirmed -->
+            <ion-item>
+              <ion-label>{{ editForm.controls['enableIdentityConfirmed'].value ? '啟用實名制' : '關閉實名制' }}</ion-label>
+              <ion-toggle formControlName="enableIdentityConfirmed"></ion-toggle>
+            </ion-item>
+          </ion-list>
+          <ion-button class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>
+        </form>
+      </ng-container>
+      <ng-container *ngIf="segment === 'file'">
+        <ng-container *ngIf="generalCampaign.files.length !== 0; else empty">
+          <ion-list lines="full">
+            <ion-item *ngFor="let file of generalCampaign.files" (click)="option(file)" detail>
+              <ion-label class="ion-text-wrap">{{file.name+file.extension}}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ng-container>
+        <ng-template #empty>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>無資料</ion-card-title>
+            </ion-card-header>
+            <ion-img src="assets/No-data-rafiki.svg" alt="無資料"></ion-img>
+            <ion-button (click)="file.click()" class="ion-margin" color="primary" expand="block" shape="round">立即建立</ion-button>
+          </ion-card>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="segment === 'other'">
+        <ion-button *ngIf="generalCampaign.company === null" (click)="inviteCompany()" class="ion-margin" color="tertiary" expand="block" shape="round">邀請企業</ion-button>
+        <ion-button (click)="signInEvent()" class="ion-margin" expand="block" shape="round">活動簽到</ion-button>
+        <ion-button (click)="participant()" class="ion-margin" color="secondary" expand="block" shape="round">現場報名</ion-button>
+        <ion-button (click)="deleteEvent()" class="ion-margin" color="danger" expand="block" shape="round">刪除活動</ion-button>
+      </ng-container>
+    </ng-container>
+    <ng-template #error>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>發生錯誤</ion-card-title>
+        </ion-card-header>
+        <ion-img src="assets/Feeling-angry-amico.svg" alt="錯誤"></ion-img>
+        <ion-button (click)="getData()" class="ion-margin" color="primary" expand="block" shape="round">重新整理</ion-button>
+      </ion-card>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <ion-card>
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <ion-card-header>
+        <ion-card-title>載入中...</ion-card-title>
+      </ion-card-header>
+      <ion-img src="assets/Loading-bro.svg" alt="載入中"></ion-img>
+    </ion-card>
+  </ng-template>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

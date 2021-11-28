@@ -1,0 +1,194 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/company" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (loading$ | async)===false && (loadingError$ | async)===false ? company.name : "編輯公司" }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="segment !== 'sic'" (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="segment === 'sic'" (click)="create()">
+        <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        {{ (loading$ | async)===false && (loadingError$ | async)===false ? company.name : "編輯公司" }}
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-toolbar>
+    <ion-segment (ionChange)="segmentChanged($event)" value="info">
+      <ion-segment-button value="info">
+        <ion-label>公司資訊</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="sic">
+        <ion-label>產業類別</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="logo">
+        <ion-label>公司標識</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  <ng-container *ngIf="(loading$ | async) === false; else loading">
+    <ng-container *ngIf="(loadingError$ | async) === false; else error">
+      <div class="ion-text-center ion-margin">
+        <ion-badge [color]="company.companyConfirmed ? 'success' : 'medium'">
+          {{company.companyConfirmed ? '公司已驗證' : '公司尚未驗證'}}
+        </ion-badge>
+      </div>
+      <ng-container *ngIf="segment === 'info'">
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit(editForm.value)" novalidate>
+          <ion-list lines="full">
+            <ion-item lines="none" color="light">
+              <ion-label>
+                <ion-text color="danger">*</ion-text>為必填項目
+              </ion-label>
+            </ion-item>
+            <!-- registrationNumber -->
+            <ion-item>
+              <ion-label position="stacked"><ion-text color="danger">*</ion-text>統一編號</ion-label>
+              <ion-input formControlName="registrationNumber" type="text" inputmode="text" placeholder="統一編號" required></ion-input>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationNumber'].hasError('required') && (editForm.controls['registrationNumber'].dirty || editForm.controls['registrationNumber'].touched)">
+                統一編號是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationNumber'].hasError('maxlength') && (editForm.controls['registrationNumber'].dirty || editForm.controls['registrationNumber'].touched)">
+                統一編號<strong>最10位</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationNumber'].hasError('registrationNumber') && (editForm.controls['registrationNumber'].dirty || editForm.controls['registrationNumber'].touched)">
+                統一編號<strong>格式錯誤</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['registrationNumber'].hasError('server') && (editForm.controls['registrationNumber'].dirty || editForm.controls['registrationNumber'].touched)">
+                {{ editForm.controls['registrationNumber'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- name -->
+            <ion-item>
+              <ion-label position="stacked"><ion-text color="danger">*</ion-text>名稱</ion-label>
+              <ion-input formControlName="name" type="text" inputmode="text" placeholder="名稱" required></ion-input>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['name'].hasError('required') && (editForm.controls['name'].dirty || editForm.controls['name'].touched)">
+                名稱是<strong>必填的</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['name'].hasError('maxlength') && (editForm.controls['name'].dirty || editForm.controls['name'].touched)">
+                名稱<strong>最100位</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['name'].hasError('server') && (editForm.controls['name'].dirty || editForm.controls['name'].touched)">
+                {{ editForm.controls['name'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- introduction -->
+            <ion-list-header>
+              <ion-label color="tertiary">簡介</ion-label>
+            </ion-list-header>
+            <div class="ion-margin">
+              <quill-editor formControlName="introduction" format="html" [styles]="{'height': '50vh'}" placeholder="簡介"></quill-editor>
+            </div>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['introduction'].hasError('server') && (editForm.controls['introduction'].dirty || editForm.controls['introduction'].touched)">
+                {{ editForm.controls['introduction'].getError('server') }}
+              </ion-text>
+            </div>
+            <!-- website -->
+            <ion-item>
+              <ion-label position="stacked">網站</ion-label>
+              <ion-input formControlName="website" type="text" inputmode="url" placeholder="網站"></ion-input>
+            </ion-item>
+            <div class="validation-errors">
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['website'].hasError('pattern') && (editForm.controls['website'].dirty || editForm.controls['website'].touched)">
+                網站<strong>格式錯誤</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['website'].hasError('maxlength') && (editForm.controls['website'].dirty || editForm.controls['website'].touched)">
+                網站<strong>最300位</strong>
+              </ion-text>
+              <ion-text color="danger" class="error-message" *ngIf="editForm.controls['website'].hasError('server') && (editForm.controls['website'].dirty || editForm.controls['website'].touched)">
+                {{ editForm.controls['website'].getError('server') }}
+              </ion-text>
+            </div>
+          </ion-list>
+          <ion-button class="ion-margin" [disabled]="editForm.invalid" type="submit" shape="round" expand="block">修改</ion-button>
+        </form>
+      </ng-container>
+      <ng-container *ngIf="segment === 'sic'">
+        <ng-container *ngIf="company.industrialClassifications.length !== 0; else empty">
+          <ion-list lines="full">
+            <ion-item lines="none" color="light">
+              <ion-label>
+                向右滑<strong>編輯</strong>，向左滑<strong>刪除</strong>
+              </ion-label>
+            </ion-item>
+            <ion-item-sliding *ngFor="let sic of company.industrialClassifications; let i = index;">
+              <ion-item-options side="start">
+                <ion-item-option color="primary" (click)="editSIC(sic)">編輯</ion-item-option>
+              </ion-item-options>
+              <ion-item class="sic">
+                <ion-note slot="start">{{i+1 + '.'}}</ion-note>
+                <ion-label class="ion-text-wrap">{{sic.description}}</ion-label>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="deleteSIC(sic.id)">刪除</ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </ng-container>
+        <ng-template #empty>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>無資料</ion-card-title>
+            </ion-card-header>
+            <ion-img src="assets/No-data-rafiki.svg" alt="無資料"></ion-img>
+            <ion-button (click)="create()" class="ion-margin" color="primary" expand="block" shape="round">立即建立</ion-button>
+          </ion-card>
+        </ng-template>
+      </ng-container>
+      <ng-container *ngIf="segment === 'logo'">
+        <ion-card>
+          <ion-img *ngIf="company.hasLogo" src="{{urlRoot+'/companies/'+company.id+'/logo'}}"></ion-img>
+          <ion-img *ngIf="!company.hasLogo" [src]="createPhoto(company.id)"></ion-img>
+          <ion-card-content>
+            <ion-item *ngIf="company.hasLogo" lines="none" color="light">
+              <ion-label class="ion-text-wrap">若要編輯公司標識請先點擊刪除在上傳新的照片</ion-label>
+            </ion-item>
+          </ion-card-content>
+          <ion-button *ngIf="!company.hasLogo" (click)="file.click()" class="ion-margin" color="primary" shape="round" expand="block">上傳</ion-button>
+          <input (change)="upload($event.target)" class="ion-hide" type="file" #file>
+          <ion-button *ngIf="company.hasLogo" (click)="delete()" class="ion-margin" color="danger" shape="round" expand="block">刪除</ion-button>
+        </ion-card>
+      </ng-container>
+    </ng-container>
+    <ng-template #error>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>發生錯誤</ion-card-title>
+        </ion-card-header>
+        <ion-img src="assets/Feeling-angry-amico.svg" alt="錯誤"></ion-img>
+        <ion-button (click)="getData()" class="ion-margin" color="primary" expand="block" shape="round">重新整理</ion-button>
+      </ion-card>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <ion-card>
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <ion-card-header>
+        <ion-card-title>載入中...</ion-card-title>
+      </ion-card-header>
+      <ion-img src="assets/Loading-bro.svg" alt="載入中"></ion-img>
+    </ion-card>
+  </ng-template>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

@@ -1,0 +1,102 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/act/event/list" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (loading$ | async)===false && (loadingError$ | async)===false ? event.title : "一般活動" }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/account">
+        <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        {{ (loading$ | async)===false && (loadingError$ | async)===false ? event.title : "一般活動" }}
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ng-container *ngIf="(loading$ | async) === false; else loading">
+    <ng-container *ngIf="(loadingError$ | async) === false; else error">
+      <ion-card color="light">
+        <ion-list lines="none">
+          <ion-item *ngIf="event.registrationStartTime && event.registrationEndTime" color="light" lines="inset">
+            <ion-label>報名時間：</ion-label>
+          </ion-item>
+          <ion-item *ngIf="event.registrationStartTime && event.registrationEndTime" color="light">
+            <ion-label class="ion-text-wrap">{{event.registrationStartTime | date: 'yyyy/MM/dd HH:mm'}} ~ {{event.registrationEndTime | date: 'yyyy/MM/dd HH:mm'}}</ion-label>
+          </ion-item>
+          <ion-item color="light" lines="inset">
+            <ion-label>活動時間：</ion-label>
+          </ion-item>
+          <ion-item color="light">
+            <ion-label class="ion-text-wrap">{{event.startTime | date: 'yyyy/MM/dd HH:mm'}} ~ {{event.endTime | date: 'yyyy/MM/dd HH:mm'}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="event.venue" color="light" lines="inset">
+            <ion-label>活動地點：</ion-label>
+          </ion-item>
+          <ion-item *ngIf="event.venue" color="light">
+            <ion-label class="ion-text-wrap">{{event.venue}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card>
+      <ion-card color="light">
+        <ion-card-header>
+          <ion-card-title>活動內容</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <quill-view-html [content]="event.content"></quill-view-html>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="event.files.length !== 0" color="light">
+        <ion-card-header>
+          <ion-card-title>活動附檔</ion-card-title>
+        </ion-card-header>
+        <ion-list lines="full">
+          <ion-item color="light" *ngFor="let file of event.files" (click)="option(file)" detail>
+            <ion-label class="ion-text-wrap">{{file.name+file.extension}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card>
+      <ion-grid class="ion-margin-horizontal">
+        <ion-row *ngIf="authService.isLogin()">
+          <ion-col *ngIf="authService.getUserRole() === type.administrator">
+            <ion-button [routerLink]="['/act/event', event.id, 'edit']" color="secondary" shape="round" expand="block">編輯</ion-button>
+          </ion-col>
+          <ion-col *ngIf="canAttendee">
+            <ion-button (click)="attendee()" shape="round" expand="block">報名</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+    <ng-template #error>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>發生錯誤</ion-card-title>
+        </ion-card-header>
+        <ion-img src="assets/Feeling-angry-amico.svg" alt="錯誤"></ion-img>
+        <ion-button (click)="getData()" class="ion-margin" color="primary" expand="block" shape="round">重新整理</ion-button>
+      </ion-card>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <ion-card>
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <ion-card-header>
+        <ion-card-title>載入中...</ion-card-title>
+      </ion-card-header>
+      <ion-img src="assets/Loading-bro.svg" alt="載入中"></ion-img>
+    </ion-card>
+  </ng-template>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

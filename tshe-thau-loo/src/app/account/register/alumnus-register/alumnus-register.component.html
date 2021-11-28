@@ -1,0 +1,280 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account/register" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>校友註冊</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/account/login">登入</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">校友註冊</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm.value)" novalidate>
+    <ion-list lines="full">
+      <ion-item lines="none" color="light">
+        <ion-label>
+          <ion-text color="danger">*</ion-text>為必填項目
+        </ion-label>
+      </ion-item>
+      <ion-list-header>
+        <ion-label color="tertiary">基本資料</ion-label>
+      </ion-list-header>
+      <!-- userName -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>使用者名稱</ion-label>
+        <ion-input formControlName="userName" type="text" inputmode="text" autocomplete="username" placeholder="使用者名稱" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['userName'].hasError('required') && (registerForm.controls['userName'].dirty || registerForm.controls['userName'].touched)">
+          使用者名稱是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['userName'].hasError('maxlength') && (registerForm.controls['userName'].dirty || registerForm.controls['userName'].touched)">
+          使用者名稱<strong>最多100位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['userName'].hasError('pattern') && (registerForm.controls['userName'].dirty || registerForm.controls['userName'].touched)">
+          使用者名稱只能是<strong>字母或數字或<code>+ - = _ .</code></strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['userName'].hasError('server') && (registerForm.controls['userName'].dirty || registerForm.controls['userName'].touched)">
+          {{ registerForm.controls['userName'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- password -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>密碼</ion-label>
+        <ion-input formControlName="password" type="password" inputmode="text" autocomplete="current-password" placeholder="密碼" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['password'].hasError('required') && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)">
+          密碼是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['password'].hasError('minlength') && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)">
+          密碼<strong>最少須要8位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['password'].hasError('maxlength') && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)">
+          密碼<strong>最多64位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['password'].hasError('pattern') && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)">
+          密碼<strong>至少需要1位數字及1位小寫字母</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['password'].hasError('server') && (registerForm.controls['password'].dirty || registerForm.controls['password'].touched)">
+          {{ registerForm.controls['password'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- passwordConfirm -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>確認密碼</ion-label>
+        <ion-input formControlName="passwordConfirm" type="password" inputmode="text" autocomplete="current-password" placeholder="確認密碼" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && (registerForm.controls['passwordConfirm'].dirty || registerForm.controls['passwordConfirm'].touched)">
+          確認密碼是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['passwordConfirm'].hasError('minlength') && (registerForm.controls['passwordConfirm'].dirty || registerForm.controls['passwordConfirm'].touched)">
+          確認密碼<strong>最少須要8位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['passwordConfirm'].hasError('maxlength') && (registerForm.controls['passwordConfirm'].dirty || registerForm.controls['passwordConfirm'].touched)">
+          確認密碼<strong>最多64位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['passwordConfirm'].hasError('mustMatch') && (registerForm.controls['passwordConfirm'].dirty || registerForm.controls['passwordConfirm'].touched)">
+          確認密碼與密碼<strong>不相同</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['passwordConfirm'].hasError('server') && (registerForm.controls['passwordConfirm'].dirty || registerForm.controls['passwordConfirm'].touched)">
+          {{ registerForm.controls['passwordConfirm'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- email -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>電子郵件</ion-label>
+        <ion-input formControlName="email" type="email" inputmode="email" autocomplete="email" placeholder="電子郵件" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['email'].hasError('required') && (registerForm.controls['email'].dirty || registerForm.controls['email'].touched)">
+          電子郵件是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['email'].hasError('email') && (registerForm.controls['email'].dirty || registerForm.controls['email'].touched)">
+          電子郵件<strong>格式錯誤</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['email'].hasError('maxlength') && (registerForm.controls['email'].dirty || registerForm.controls['email'].touched)">
+          電子郵件<strong>最多320位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['email'].hasError('server') && (registerForm.controls['email'].dirty || registerForm.controls['email'].touched)">
+          {{ registerForm.controls['email'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- phoneNumber -->
+      <ion-item>
+        <ion-label position="stacked">手機號碼</ion-label>
+        <ion-input formControlName="phoneNumber" type="tel" inputmode="tel" autocomplete="tel" placeholder="手機號碼"></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['phoneNumber'].hasError('maxlength') && (registerForm.controls['phoneNumber'].dirty || registerForm.controls['phoneNumber'].touched)">
+          手機號碼<strong>最多30位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['phoneNumber'].hasError('phone') && (registerForm.controls['phoneNumber'].dirty || registerForm.controls['phoneNumber'].touched)">
+          手機號碼<strong>格式錯誤</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['phoneNumber'].hasError('server') && (registerForm.controls['phoneNumber'].dirty || registerForm.controls['phoneNumber'].touched)">
+          {{ registerForm.controls['phoneNumber'].getError('server') }}
+        </ion-text>
+      </div>
+      <ion-list-header>
+        <ion-label color="tertiary">個人資料</ion-label>
+      </ion-list-header>
+      <!-- nationalId -->
+      <ion-item>
+        <ion-label position="stacked">身分證字號</ion-label>
+        <ion-input formControlName="nationalId" type="text" inputmode="text" autocapitalize="on" placeholder="身分證字號"></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['nationalId'].hasError('maxlength') && (registerForm.controls['nationalId'].dirty || registerForm.controls['nationalId'].touched)">
+          身份證字號<strong>最多10位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['nationalId'].hasError('nationalId') && (registerForm.controls['nationalId'].dirty || registerForm.controls['nationalId'].touched)">
+          身份證字號<strong>格式錯誤</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['nationalId'].hasError('server') && (registerForm.controls['nationalId'].dirty || registerForm.controls['nationalId'].touched)">
+          {{ registerForm.controls['nationalId'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- name -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>姓名</ion-label>
+        <ion-input formControlName="name" type="text" inputmode="text" autocomplete="name" placeholder="姓名" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['name'].hasError('required') && (registerForm.controls['name'].dirty || registerForm.controls['name'].touched)">
+          姓名是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['name'].hasError('maxlength') && (registerForm.controls['name'].dirty || registerForm.controls['name'].touched)">
+          姓名<strong>最50位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['name'].hasError('server') && (registerForm.controls['name'].dirty || registerForm.controls['name'].touched)">
+          {{ registerForm.controls['name'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- gender -->
+      <ion-item lines="inset">
+        <ion-label>性別</ion-label>
+      </ion-item>
+      <ion-radio-group allowEmptySelection="true" formControlName="gender">
+        <ion-item lines="inset">
+          <ion-radio slot="start" [value]="0"></ion-radio>
+          <ion-label>女</ion-label>
+        </ion-item>
+        <ion-item lines="inset">
+          <ion-radio slot="start" [value]="1"></ion-radio>
+          <ion-label>男</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-radio slot="start" [value]="2"></ion-radio>
+          <ion-label>其他</ion-label>
+        </ion-item>
+      </ion-radio-group>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['gender'].hasError('server') && (registerForm.controls['gender'].dirty || registerForm.controls['gender'].touched)">
+          {{ registerForm.controls['gender'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- dateOfBirth -->
+      <ion-item>
+        <ion-label position="stacked">生日</ion-label>
+        <ion-datetime formControlName="dateOfBirth" displayFormat="YYYY/MM/DD" [max]="date" done-text="確認" cancel-text="取消" placeholder="請選取日期"></ion-datetime>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['dateOfBirth'].hasError('server') && (registerForm.controls['dateOfBirth'].dirty || registerForm.controls['dateOfBirth'].touched)">
+          {{ registerForm.controls['dateOfBirth'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- currentAddress -->
+      <ion-item>
+        <ion-label position="stacked">通訊地址</ion-label>
+        <ion-textarea formControlName="currentAddress" auto-grow="true" inputmode="text" placeholder="通訊地址"></ion-textarea>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['currentAddress'].hasError('maxlength') && (registerForm.controls['currentAddress'].dirty || registerForm.controls['currentAddress'].touched)">
+          通訊地址<strong>最200位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['currentAddress'].hasError('server') && (registerForm.controls['currentAddress'].dirty || registerForm.controls['currentAddress'].touched)">
+          {{ registerForm.controls['currentAddress'].getError('server') }}
+        </ion-text>
+      </div>
+      <ion-list-header>
+        <ion-label color="tertiary">校友資料</ion-label>
+      </ion-list-header>
+      <!-- dateOfGraduation -->
+      <ion-item>
+        <ion-label position="stacked">畢業年度</ion-label>
+        <ion-input formControlName="dateOfGraduation" type="text" inputmode="text" placeholder="畢業年度"></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['dateOfGraduation'].hasError('maxlength') && (registerForm.controls['dateOfGraduation'].dirty || registerForm.controls['dateOfGraduation'].touched)">
+          畢業年度<strong>最多10位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['dateOfGraduation'].hasError('server') && (registerForm.controls['dateOfGraduation'].dirty || registerForm.controls['dateOfGraduation'].touched)">
+          {{ registerForm.controls['dateOfGraduation'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- college -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>畢業學院</ion-label>
+        <ion-input formControlName="college" type="text" inputmode="text" placeholder="畢業學院" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['college'].hasError('required') && (registerForm.controls['college'].dirty || registerForm.controls['college'].touched)">
+          畢業學院是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['college'].hasError('maxlength') && (registerForm.controls['college'].dirty || registerForm.controls['college'].touched)">
+          畢業學院<strong>最多20位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['college'].hasError('server') && (registerForm.controls['college'].dirty || registerForm.controls['college'].touched)">
+          {{ registerForm.controls['college'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- department -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>畢業系所</ion-label>
+        <ion-input formControlName="department" type="text" inputmode="text" placeholder="畢業系所" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['department'].hasError('required') && (registerForm.controls['department'].dirty || registerForm.controls['department'].touched)">
+          畢業系所是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['department'].hasError('maxlength') && (registerForm.controls['department'].dirty || registerForm.controls['department'].touched)">
+          畢業系所<strong>最多20位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['department'].hasError('server') && (registerForm.controls['department'].dirty || registerForm.controls['department'].touched)">
+          {{ registerForm.controls['department'].getError('server') }}
+        </ion-text>
+      </div>
+      <!-- class -->
+      <ion-item>
+        <ion-label position="stacked"><ion-text color="danger">*</ion-text>畢業班級</ion-label>
+        <ion-input formControlName="class" type="text" inputmode="text" placeholder="畢業班級" required></ion-input>
+      </ion-item>
+      <div class="validation-errors">
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['class'].hasError('required') && (registerForm.controls['class'].dirty || registerForm.controls['class'].touched)">
+          畢業班級是<strong>必填的</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['class'].hasError('maxlength') && (registerForm.controls['class'].dirty || registerForm.controls['class'].touched)">
+          畢業班級<strong>最多20位</strong>
+        </ion-text>
+        <ion-text color="danger" class="error-message" *ngIf="registerForm.controls['class'].hasError('server') && (registerForm.controls['class'].dirty || registerForm.controls['class'].touched)">
+          {{ registerForm.controls['class'].getError('server') }}
+        </ion-text>
+      </div>
+    </ion-list>
+    <ion-button class="ion-margin" [disabled]="registerForm.invalid" type="submit" shape="round" expand="block">註冊</ion-button>
+  </form>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/act" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>職缺</ion-title>
+    <ion-buttons slot="end">
+      <ng-container [ngSwitch]="authService.getUserRole()">
+        <!-- administrator -->
+        <ng-container *ngSwitchCase="type.administrator">
+          <ion-button [routerLink]="['/act/campaign', campaignId, 'recruitment', recruitmentId, 'opening', 'create']">
+            <ion-icon slot="icon-only" name="add-circle"></ion-icon>
+          </ion-button>
+        </ng-container>
+        <!-- null -->
+        <ng-container *ngSwitchDefault>
+          <ion-button routerLink="/account">
+            <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+          </ion-button>
+        </ng-container>
+      </ng-container>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">職缺</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ng-container *ngIf="(loading$ | async) === false; else loading;">
+    <ng-container *ngIf="(loadingError$ | async) === false; else error">
+      <ng-container *ngIf="openings.length !== 0; else empty">
+        <ion-card *ngFor="let opening of openings" [routerLink]="['/act/campaign', campaignId, 'recruitment', recruitmentId, 'opening', opening.id]" color="light">
+          <ion-card-header>
+            <ion-card-title>{{opening.jobTitle}}</ion-card-title>
+            <ion-card-subtitle>{{opening.divisionName}}</ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ng-container>
+      <ng-template #empty>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>無資料</ion-card-title>
+          </ion-card-header>
+          <ion-img src="assets/No-data-rafiki.svg" alt="無資料"></ion-img>
+          <ion-button (click)="getData()" class="ion-margin" color="primary" expand="block" shape="round">重新整理</ion-button>
+        </ion-card>
+      </ng-template>
+    </ng-container>
+    <ng-template #error>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>發生錯誤</ion-card-title>
+        </ion-card-header>
+        <ion-img src="assets/Feeling-angry-amico.svg" alt="錯誤"></ion-img>
+        <ion-button (click)="getData()" class="ion-margin" color="primary" expand="block" shape="round">重新整理</ion-button>
+      </ion-card>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <ion-card>
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <ion-card-header>
+        <ion-card-title>載入中...</ion-card-title>
+      </ion-card-header>
+      <ion-img src="assets/Loading-bro.svg" alt="載入中"></ion-img>
+    </ion-card>
+  </ng-template>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

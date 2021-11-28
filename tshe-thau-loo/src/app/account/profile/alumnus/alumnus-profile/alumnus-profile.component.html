@@ -1,0 +1,218 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" text="返回"></ion-back-button>
+    </ion-buttons>
+    <ion-title>帳戶資訊</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">帳戶資訊</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ng-container *ngIf="(loading$ | async) === false; else loading">
+    <ng-container *ngIf="(loadingError$ | async) === false; else error">
+      <ion-card>
+        <ion-item lines="none">
+          <ion-label>使用者照片</ion-label>
+          <ion-avatar slot="end">
+            <ion-img src="{{photo}}"></ion-img>
+          </ion-avatar>
+        </ion-item>
+        <ion-card-content>
+          <ion-item *ngIf="profile.hasPhoto" lines="none" color="light">
+            <ion-label class="ion-text-wrap">若要編輯使用者照片請先點擊刪除在上傳新的照片</ion-label>
+          </ion-item>
+        </ion-card-content>
+        <ion-button *ngIf="!profile.hasPhoto" (click)="file.click()" class="ion-margin" color="primary" shape="round" expand="block">上傳</ion-button>
+        <input (change)="upload($event.target)" class="ion-hide" type="file" #file>
+        <ion-button *ngIf="profile.hasPhoto" (click)="delete()" class="ion-margin" color="danger" shape="round" expand="block">刪除</ion-button>
+      </ion-card>
+      <ion-card>
+        <ion-item lines="none">
+          <ion-label>基本資訊</ion-label>
+          <ion-badge slot="end" [color]="profile.isEnable ? 'success' : 'light'">
+            {{profile.isEnable ? '帳戶已啟用' : '帳戶尚未啟用'}}
+          </ion-badge>
+        </ion-item>
+        <ion-card-content>
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>使用者名稱</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none" routerLink="/account/username" detail>
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">{{profile.userName}}</ion-text>
+              </ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>電子郵件</ion-label>
+              <ion-badge slot="end" [color]="profile.emailConfirmed ? 'success' : 'light'">
+                {{profile.emailConfirmed ? '已驗證' : '尚未驗證'}}
+              </ion-badge>
+            </ion-item-divider>
+            <ion-item lines="none" routerLink="/account/email" detail>
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">{{profile.email}}</ion-text>
+              </ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>手機號碼</ion-label>
+              <ion-badge slot="end" [color]="profile.phoneNumberConfirmed ? 'success' : 'light'">
+                {{profile.phoneNumberConfirmed ? '已驗證' : '尚未驗證'}}
+              </ion-badge>
+            </ion-item-divider>
+            <ion-item lines="full" routerLink="/account/phone" detail>
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">{{profile.phoneNumber}}</ion-text>
+              </ion-label>
+            </ion-item>
+            <ion-item lines="none" routerLink="/account/password" detail>
+              <ion-label class="ion-text-wrap">
+                <ion-text class="like-link" color="primary">修改密碼</ion-text>
+              </ion-label>
+            </ion-item>
+          </ion-item-group>
+        </ion-card-content>
+      </ion-card>
+      <ion-card>
+        <ion-item lines="none">
+          <ion-label>個人資訊</ion-label>
+          <ion-badge [color]="profile.identityConfirmed ? 'success' : 'light'">
+            {{profile.identityConfirmed ? '已通過實名驗證' : '尚未通過實名驗證'}}
+          </ion-badge>
+        </ion-item>
+        <ion-card-content>
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>身份證字號</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{showNationalId ? profile.nationalId : '**********'}}</ion-label>
+              <ion-button (click)="toggleNationalId()" fill="clear" color="medium" slot="end">
+                <ion-icon slot="icon-only" [name]="showNationalId ? 'eye' : 'eye-off'"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>姓名</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{profile.name}}</ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>性別</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">
+                <ng-container [ngSwitch]="profile.gender">
+                  <ng-template [ngSwitchCase]="0">女性</ng-template>
+                  <ng-template [ngSwitchCase]="1">男性</ng-template>
+                  <ng-template [ngSwitchCase]="2">其他</ng-template>
+                </ng-container>
+              </ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>生日</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{profile.dateOfBirth | date: 'yyyy/MM/dd'}}</ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>通訊地址</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{profile.currentAddress}}</ion-label>
+            </ion-item>
+          </ion-item-group>
+        </ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngIf="!profile.identityConfirmed">
+              <ion-button routerLink="/account/national/verify" color="secondary" shape="round" expand="block">驗證</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button routerLink="/account/national" shape="round" expand="block">編輯</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+      <ion-card>
+        <ion-item lines="none">
+          <ion-label>校友資訊</ion-label>
+          <ion-badge [color]="profile.alumnusConfirmed ? 'success' : 'light'">
+            {{profile.alumnusConfirmed ? '已驗證' : '尚未驗證'}}
+          </ion-badge>
+        </ion-item>
+        <ion-card-content>
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>畢業年度</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{profile.dateOfGraduation}}</ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>畢業學院</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{profile.college}}</ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>畢業系所</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{profile.department}}</ion-label>
+            </ion-item>
+            <ion-item-divider>
+              <ion-label>畢業班級</ion-label>
+            </ion-item-divider>
+            <ion-item lines="none">
+              <ion-label class="ion-text-wrap">{{profile.class}}</ion-label>
+            </ion-item>
+          </ion-item-group>
+        </ion-card-content>
+        <ion-grid *ngIf="!profile.alumnusConfirmed">
+          <ion-row>
+            <ion-col>
+              <ion-button routerLink="/account/profile/alumnus/verify" color="secondary" shape="round" expand="block">驗證</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button routerLink="/account/profile/alumnus/info" shape="round" expand="block">編輯</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </ng-container>
+    <ng-template #error>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>發生錯誤</ion-card-title>
+        </ion-card-header>
+        <ion-img src="assets/Feeling-angry-amico.svg" alt="錯誤"></ion-img>
+        <ion-button (click)="getData()" class="ion-margin" color="primary" expand="block" shape="round">重新整理</ion-button>
+      </ion-card>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <ion-card>
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <ion-card-header>
+        <ion-card-title>載入中...</ion-card-title>
+      </ion-card-header>
+      <ion-img src="assets/Loading-bro.svg" alt="載入中"></ion-img>
+    </ion-card>
+  </ng-template>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" color="medium" size="small">Copyright &copy; {{ date | date: 'yyyy' }} TsheThauLoo.</ion-title>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>
