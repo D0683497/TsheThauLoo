@@ -1,0 +1,19 @@
+main {
+  padding: 80px 56px;
+}
+
+@media (max-width: 959px) {
+  main {
+    padding: 40px 28px;
+  }
+}
+
+#view-source {
+  position: fixed;
+  display: block;
+  right: 0;
+  bottom: 0;
+  margin-right: 40px;
+  margin-bottom: 40px;
+  z-index: 900;
+}

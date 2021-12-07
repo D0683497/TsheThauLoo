@@ -1,0 +1,26 @@
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.container {
+  margin-top: 64px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 720px) {
+  .container {
+    margin-top: 112px;
+    overflow-y: visible;
+  }
+}

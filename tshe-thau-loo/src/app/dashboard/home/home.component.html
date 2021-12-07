@@ -1,0 +1,36 @@
+<header class="jumbotron-background">
+  <div class="jumbotron-section">
+    <div class="jumbotron-headline">
+      <h1 class="mat-h1">成就人材發展系統</h1>
+      <h2>逢甲大學 - 成就學生中心</h2>
+    </div>
+    <div class="jumbotron-start">
+      <a mat-raised-button color="primary" routerLink="/">開始使用</a>
+    </div>
+  </div>
+</header>
+<main>
+  <mat-divider></mat-divider>
+  <!-- 隱私權 -->
+  <section class="privacy">
+    <h2>隱私權</h2>
+    <mat-nav-list>
+      <a routerLink="/privacy/statement" mat-list-item>
+        <span mat-line>逢甲大學 隱私權聲明</span>
+        <fa-icon [icon]="faChevronRight"></fa-icon>
+      </a>
+      <a routerLink="/privacy/protection" mat-list-item >
+        <span mat-line>逢甲大學 個人資料保護政策</span>
+        <fa-icon [icon]="faChevronRight"></fa-icon>
+      </a>
+      <a routerLink="/privacy/rights" mat-list-item>
+        <span mat-line>逢甲大學 個人資料權利行使</span>
+        <fa-icon [icon]="faChevronRight"></fa-icon>
+      </a>
+      <a routerLink="/privacy/announcement" mat-list-item>
+        <span mat-line>逢甲大學 個資保護宣導事項</span>
+        <fa-icon [icon]="faChevronRight"></fa-icon>
+      </a>
+    </mat-nav-list>
+  </section>
+</main>
