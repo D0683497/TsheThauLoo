@@ -1,0 +1,24 @@
+<mat-toolbar color="warn">在校師生請使用 NID 登入</mat-toolbar>
+<main>
+  <form [formGroup]="form" method="post">
+    <mat-card>
+      <mat-card-title>登入</mat-card-title>
+      <mat-card-content>
+        <mat-form-field class="full-width">
+          <mat-label>帳號</mat-label>
+          <input matInput formControlName="username" placeholder="請輸入帳號" type="text">
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>密碼</mat-label>
+          <input matInput formControlName="password" placeholder="請輸入密碼" type="password">
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit">登入</button>
+      </mat-card-actions>
+      <mat-card-footer>
+        <button mat-button color="primary">使用 NID 登入</button>
+      </mat-card-footer>
+    </mat-card>
+  </form>
+</main>

@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -20,7 +19,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     RouterModule,
     MatButtonModule,
     MatToolbarModule,
-    MatTooltipModule,
     FontAwesomeModule
   ],
   exports: [

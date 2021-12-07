@@ -30,15 +30,13 @@
   }
 }
 
+.jumbotron-start {
+  margin-top: 30px;
+}
+
 @media (max-width: 1200px) {
   .jumbotron-background {
     height: 330px;
-  }
-}
-
-@media (max-width: 720px) {
-  .jumbotron-start {
-    margin: 15px 0 0 0;
   }
 }
 
