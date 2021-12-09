@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TsheThauLoo.Data.EntityConfigurations;
 using TsheThauLoo.Entities.Identity;
+using TsheThauLoo.Entities.School;
 using TsheThauLoo.Entities.User;
 
 namespace TsheThauLoo.Data
@@ -29,11 +30,23 @@ namespace TsheThauLoo.Data
 
         #endregion
 
+        #region School
+
+        public DbSet<College> Colleges { get; set; } = null!;
+
+        public DbSet<Department> Departments { get; set; } = null!;
+
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             UserConfigurations.Relation(builder);
+
+            SchoolConfigurations.Relation(builder);
+
+            SchoolConfigurations.Initialize(builder);
         }
     }
 }
