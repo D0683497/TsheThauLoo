@@ -36,8 +36,9 @@ namespace TsheThauLoo.Entities.School
         [ForeignKey("CollegeId")]
         public virtual College College { get; set; } = null!;
 
-        public Department(string name, DegreeType degree, string collegeId)
+        public Department(string id, string name, DegreeType degree, string collegeId)
         {
+            Id = id;
             Name = name;
             Degree = degree;
             CollegeId = collegeId;

@@ -252,7 +252,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colleges");
+                    b.ToTable("Colleges", (string)null);
 
                     b.HasData(
                         new
@@ -330,7 +330,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.HasIndex("CollegeId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
 
                     b.HasData(
                         new
@@ -1255,7 +1255,7 @@ namespace TsheThauLoo.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Alumni");
+                    b.ToTable("Alumni", (string)null);
                 });
 
             modelBuilder.Entity("TsheThauLoo.Entities.User.Employee", b =>
@@ -1284,7 +1284,7 @@ namespace TsheThauLoo.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("TsheThauLoo.Entities.User.Staff", b =>
@@ -1317,7 +1317,7 @@ namespace TsheThauLoo.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Staffs");
+                    b.ToTable("Staffs", (string)null);
                 });
 
             modelBuilder.Entity("TsheThauLoo.Entities.User.Student", b =>
@@ -1351,7 +1351,7 @@ namespace TsheThauLoo.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationRoleClaim", b =>
@@ -1447,7 +1447,7 @@ namespace TsheThauLoo.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("TsheThauLoo.Entities.User.Substitute", "Substitute", b1 =>
+                    b.OwnsOne("TsheThauLoo.Entities.User.Employee.Substitute#TsheThauLoo.Entities.User.Substitute", "Substitute", b1 =>
                         {
                             b1.Property<string>("EmployeeId")
                                 .HasColumnType("TEXT");
@@ -1484,7 +1484,7 @@ namespace TsheThauLoo.Data.Migrations
 
                             b1.HasKey("EmployeeId");
 
-                            b1.ToTable("Employees");
+                            b1.ToTable("Employees", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("EmployeeId");

@@ -26,8 +26,9 @@ namespace TsheThauLoo.Entities.School
         /// </summary>
         public virtual ICollection<Department> Departments { get; set; } = null!;
 
-        public College(string name)
+        public College(string id, string name)
         {
+            Id = id;
             Name = name;
         }
     }
