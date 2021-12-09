@@ -48,6 +48,67 @@ namespace TsheThauLoo.Data.EntityConfigurations
                     .HasForeignKey(rc => rc.RoleId)
                     .IsRequired();
             });
+
+            builder.Entity<ApplicationUser>(b =>
+            {
+                b.Property(x => x.Id)
+                    .HasMaxLength(36);
+
+                b.HasOne(b => b.Alumnus)
+                    .WithOne(a => a.User)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(b => b.Employee)
+                    .WithOne(e => e.User)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(b => b.Staff)
+                    .WithOne(s => s.User)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(b => b.Student)
+                    .WithOne(s => s.User)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<ApplicationUserClaim>(b =>
+            {
+                b.Property(x => x.Id)
+                    .HasMaxLength(36);
+
+                b.Property(x => x.UserId)
+                    .HasMaxLength(36);
+            });
+
+            builder.Entity<ApplicationRole>()
+                .Property(b => b.Id)
+                .HasMaxLength(36);
+
+            builder.Entity<ApplicationRoleClaim>(b =>
+            {
+                b.Property(x => x.Id)
+                    .HasMaxLength(36);
+
+                b.Property(x => x.RoleId)
+                    .HasMaxLength(36);
+            });
+
+            builder.Entity<ApplicationUserRole>(b =>
+            {
+                b.Property(x => x.UserId)
+                    .HasMaxLength(36);
+
+                b.Property(x => x.RoleId)
+                    .HasMaxLength(36);
+            });
+
+            builder.Entity<ApplicationUserLogin>()
+                .Property(b => b.UserId)
+                .HasMaxLength(36);
+
+            builder.Entity<ApplicationUserToken>()
+                .Property(b => b.UserId)
+                .HasMaxLength(36);
         }
     }
 }

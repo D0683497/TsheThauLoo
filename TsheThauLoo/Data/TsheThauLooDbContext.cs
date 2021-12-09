@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TsheThauLoo.Data.EntityConfigurations;
 using TsheThauLoo.Entities.Identity;
+using TsheThauLoo.Entities.User;
 
 namespace TsheThauLoo.Data
 {
@@ -15,6 +16,18 @@ namespace TsheThauLoo.Data
         {
 
         }
+
+        #region User
+
+        public DbSet<Alumnus> Alumni { get; set; } = null!;
+
+        public DbSet<Employee> Employees { get; set; } = null!;
+
+        public DbSet<Staff> Staffs { get; set; } = null!;
+
+        public DbSet<Student> Students { get; set; } = null!;
+
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
