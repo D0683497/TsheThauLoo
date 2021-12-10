@@ -5,48 +5,47 @@ using TsheThauLoo.Entities.Identity;
 using TsheThauLoo.Entities.School;
 using TsheThauLoo.Entities.User;
 
-namespace TsheThauLoo.Data
+namespace TsheThauLoo.Data;
+
+public class TsheThauLooDbContext 
+    : IdentityDbContext<
+        ApplicationUser, ApplicationRole, string, 
+        ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, 
+        ApplicationRoleClaim, ApplicationUserToken>
 {
-    public class TsheThauLooDbContext 
-        : IdentityDbContext<
-            ApplicationUser, ApplicationRole, string, 
-            ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, 
-            ApplicationRoleClaim, ApplicationUserToken>
+    public TsheThauLooDbContext(DbContextOptions<TsheThauLooDbContext> options) : base(options)
     {
-        public TsheThauLooDbContext(DbContextOptions<TsheThauLooDbContext> options) : base(options)
-        {
 
-        }
+    }
 
-        #region User
+    #region User
 
-        public DbSet<Alumnus> Alumni { get; set; } = null!;
+    public DbSet<Alumnus> Alumni { get; set; } = null!;
 
-        public DbSet<Employee> Employees { get; set; } = null!;
+    public DbSet<Employee> Employees { get; set; } = null!;
 
-        public DbSet<Staff> Staffs { get; set; } = null!;
+    public DbSet<Staff> Staffs { get; set; } = null!;
 
-        public DbSet<Student> Students { get; set; } = null!;
+    public DbSet<Student> Students { get; set; } = null!;
 
-        #endregion
+    #endregion
 
-        #region School
+    #region School
 
-        public DbSet<College> Colleges { get; set; } = null!;
+    public DbSet<College> Colleges { get; set; } = null!;
 
-        public DbSet<Department> Departments { get; set; } = null!;
+    public DbSet<Department> Departments { get; set; } = null!;
 
-        #endregion
+    #endregion
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
 
-            UserConfigurations.Relation(builder);
+        UserConfigurations.Relation(builder);
 
-            SchoolConfigurations.Relation(builder);
+        SchoolConfigurations.Relation(builder);
 
-            SchoolConfigurations.Initialize(builder);
-        }
+        SchoolConfigurations.Initialize(builder);
     }
 }

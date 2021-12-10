@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace TsheThauLoo.Entities.Identity
+namespace TsheThauLoo.Entities.Identity;
+
+public class ApplicationRoleClaim : IdentityRoleClaim<string>
 {
-    public class ApplicationRoleClaim : IdentityRoleClaim<string>
-    {
-        public virtual ApplicationRole Role { get; set; } = null!;
-    }
+    public virtual ApplicationRole Role { get; set; } = null!;
 }

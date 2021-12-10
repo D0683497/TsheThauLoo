@@ -2,46 +2,50 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using TsheThauLoo.Enums;
 
-namespace TsheThauLoo.Entities.School
+namespace TsheThauLoo.Entities.School;
+
+/// <summary>
+/// 系所
+/// </summary>
+public class Department
 {
     /// <summary>
-    /// 系所
+    /// 識別碼
     /// </summary>
-    public class Department
+    [Key]
+    [MaxLength(25)]
+    public string Id { get; set; }
+
+    /// <summary>
+    /// 名稱
+    /// </summary>
+    [Required]
+    [MaxLength(30)]
+    public string Name { get; set; } = null!;
+
+    /// <summary>
+    /// 學位
+    /// </summary>
+    [Required]
+    public DegreeType Degree { get; set; }
+
+    [Required]
+    [MaxLength(25)]
+    public string CollegeId { get; set; } = null!;
+
+    [ForeignKey("CollegeId")]
+    public virtual College College { get; set; } = null!;
+
+    public Department()
     {
-        /// <summary>
-        /// 識別碼
-        /// </summary>
-        [Key]
-        [MaxLength(25)]
-        public string Id { get; set; } = Nanoid.Nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 25);
+        Id = Nanoid.Nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 25);
+    }
 
-        /// <summary>
-        /// 名稱
-        /// </summary>
-        [Required]
-        [MaxLength(30)]
-        public string Name { get; set; } = null!;
-
-        /// <summary>
-        /// 學位
-        /// </summary>
-        [Required]
-        public DegreeType Degree { get; set; }
-
-        [Required]
-        [MaxLength(25)]
-        public string CollegeId { get; set; } = null!;
-
-        [ForeignKey("CollegeId")]
-        public virtual College College { get; set; } = null!;
-
-        public Department(string id, string name, DegreeType degree, string collegeId)
-        {
-            Id = id;
-            Name = name;
-            Degree = degree;
-            CollegeId = collegeId;
-        }
+    public Department(string id, string name, DegreeType degree, string collegeId)
+    {
+        Id = id;
+        Name = name;
+        Degree = degree;
+        CollegeId = collegeId;
     }
 }
