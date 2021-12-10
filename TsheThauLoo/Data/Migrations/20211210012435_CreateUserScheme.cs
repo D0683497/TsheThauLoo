@@ -47,11 +47,11 @@ namespace TsheThauLoo.Data.Migrations
                 name: "Alumni",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
+                    Id = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
                     DateOfGraduation = table.Column<string>(type: "TEXT", maxLength: 7, nullable: false),
                     College = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Department = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,7 +68,7 @@ namespace TsheThauLoo.Data.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
+                    Id = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
                     Title = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Division = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Substitute_Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
@@ -77,7 +77,7 @@ namespace TsheThauLoo.Data.Migrations
                     Substitute_Address = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false),
                     Substitute_Title = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Substitute_Division = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,11 +94,11 @@ namespace TsheThauLoo.Data.Migrations
                 name: "Staffs",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
+                    Id = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
                     NetworkId = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
                     Dept = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Unit = table.Column<string>(type: "TEXT", maxLength: 30, nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,11 +115,11 @@ namespace TsheThauLoo.Data.Migrations
                 name: "Students",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false),
+                    Id = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false),
                     NetworkId = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
                     College = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Department = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
-                    UserId = table.Column<string>(type: "TEXT", maxLength: 36, nullable: false)
+                    UserId = table.Column<string>(type: "TEXT", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {

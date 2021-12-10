@@ -65,5 +65,12 @@ namespace TsheThauLoo.Entities.Identity
         public virtual ICollection<ApplicationUserToken> Tokens { get; set; } = null!;
 
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = null!;
+
+        public ApplicationUser()
+        {
+            Id = Nanoid.Nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 25);
+            SecurityStamp = Nanoid.Nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 25);
+            ConcurrencyStamp = Nanoid.Nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 25);
+        }
     }
 }

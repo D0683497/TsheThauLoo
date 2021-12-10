@@ -11,7 +11,7 @@ using TsheThauLoo.Data;
 namespace TsheThauLoo.Data.Migrations
 {
     [DbContext(typeof(TsheThauLooDbContext))]
-    [Migration("20211209032809_CreateUserScheme")]
+    [Migration("20211210012435_CreateUserScheme")]
     partial class CreateUserScheme
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -30,10 +30,12 @@ namespace TsheThauLoo.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -50,18 +52,19 @@ namespace TsheThauLoo.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(36)
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimValue")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -74,7 +77,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
@@ -86,6 +89,8 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DateOfBirth")
@@ -93,6 +98,7 @@ namespace TsheThauLoo.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -118,6 +124,7 @@ namespace TsheThauLoo.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -135,6 +142,8 @@ namespace TsheThauLoo.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
+                        .IsRequired()
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -160,18 +169,19 @@ namespace TsheThauLoo.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(36)
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimValue")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -194,7 +204,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("LoginProvider", "ProviderKey");
@@ -207,11 +217,11 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationUserRole", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RoleId")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId", "RoleId");
@@ -224,7 +234,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationUserToken", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
@@ -244,7 +254,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.User.Alumnus", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("College")
@@ -264,7 +274,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -278,7 +288,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.User.Employee", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Division")
@@ -293,7 +303,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -307,7 +317,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.User.Staff", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Dept")
@@ -326,7 +336,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -340,7 +350,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.User.Student", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("College")
@@ -360,7 +370,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

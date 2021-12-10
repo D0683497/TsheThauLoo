@@ -11,7 +11,7 @@ using TsheThauLoo.Data;
 namespace TsheThauLoo.Data.Migrations
 {
     [DbContext(typeof(TsheThauLooDbContext))]
-    [Migration("20211209064045_CreateSchoolScheme")]
+    [Migration("20211210015115_CreateSchoolScheme")]
     partial class CreateSchoolScheme
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -30,10 +30,12 @@ namespace TsheThauLoo.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -50,18 +52,19 @@ namespace TsheThauLoo.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(36)
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimValue")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -74,7 +77,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
@@ -86,6 +89,8 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DateOfBirth")
@@ -93,6 +98,7 @@ namespace TsheThauLoo.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -118,6 +124,7 @@ namespace TsheThauLoo.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
@@ -135,6 +142,8 @@ namespace TsheThauLoo.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
+                        .IsRequired()
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -160,18 +169,19 @@ namespace TsheThauLoo.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(36)
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimValue")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -194,7 +204,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("LoginProvider", "ProviderKey");
@@ -207,11 +217,11 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationUserRole", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RoleId")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId", "RoleId");
@@ -224,7 +234,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.Identity.ApplicationUserToken", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
@@ -244,7 +254,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.School.College", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -259,52 +269,52 @@ namespace TsheThauLoo.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Name = "工程與科學學院"
                         },
                         new
                         {
-                            Id = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Name = "商學院"
                         },
                         new
                         {
-                            Id = "a89c9f64-6562-44b9-b744-fc1050c575e5",
+                            Id = "ZJQvZKxgdLSVgeAjnIBNkLUoD",
                             Name = "經營管理學院"
                         },
                         new
                         {
-                            Id = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "Bem4x4ONNKfMVLge333K97tpP",
                             Name = "人文社會學院"
                         },
                         new
                         {
-                            Id = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Name = "資訊電機學院"
                         },
                         new
                         {
-                            Id = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "QGqpVsNzjcusLw2lisuECLEaT",
                             Name = "建設學院"
                         },
                         new
                         {
-                            Id = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Name = "金融學院"
                         },
                         new
                         {
-                            Id = "227f18d6-d050-4147-aedd-ba775a71a292",
+                            Id = "9xP6LTPTAcSWkRF6cx9Iq7cDv",
                             Name = "國際科技與管理學院"
                         },
                         new
                         {
-                            Id = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Name = "建築專業學院"
                         },
                         new
                         {
-                            Id = "3041f226-9230-4756-935d-8e0fc1ed112d",
+                            Id = "ggRSStSxsHsmiT3yvftunUmCm",
                             Name = "創能學院"
                         });
                 });
@@ -312,12 +322,12 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.School.Department", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CollegeId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Degree")
@@ -337,890 +347,890 @@ namespace TsheThauLoo.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "54a533be-ab21-4c64-8d4c-98b8f65ef77b",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "E4TLO6Rlk845z2oUdcY4Iv06m",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "機械與電腦輔助工程學系"
                         },
                         new
                         {
-                            Id = "4ab35fc1-d012-44ae-a3a7-aa5f9333ab91",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "Ef1eMd6LtaZP03ZpODKQnkPrr",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "纖維與複合材料學系"
                         },
                         new
                         {
-                            Id = "efdd3c62-e7d0-4ba4-bb60-a5868ecc95f5",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "1aVlra0qikcAV2JRV7TMRp7iI",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "工業工程與系統管理學系"
                         },
                         new
                         {
-                            Id = "4d969aab-d6fc-4ca3-be20-5f71fd3e22ba",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "lziprhEYXoNTIaifDM1jg2aDl",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "化學工程學系"
                         },
                         new
                         {
-                            Id = "e38a5833-4636-4ebf-944c-eb235568b05f",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "V2mx0chIIFPm47C9QShaDcOse",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "應用數學系"
                         },
                         new
                         {
-                            Id = "86bc1a5e-0543-48a4-9d88-786e5e49b5b5",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "t6iTp3drNHeKklGvntaCj4Y3x",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "航太與系統工程學系"
                         },
                         new
                         {
-                            Id = "829d2e71-7b53-4080-ba86-b82defea9099",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "jipCkuWAE0Du3bpRCRx8bsh6a",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "環境工程與科學學系"
                         },
                         new
                         {
-                            Id = "577e5175-c71b-4b17-890a-0f2733a4ca7c",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "qqt2F3NiHmRZC3JQ2swBtlkAU",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "材料科學與工程學系"
                         },
                         new
                         {
-                            Id = "5684f51e-7506-43d4-9253-c8b60912653d",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "hpp8lWqxvHlO4UL5Jv8vIiyGV",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "光電科學與工程學系"
                         },
                         new
                         {
-                            Id = "da19b793-5507-4363-9c82-c8779cad9a98",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "M7uQ44lkDMXGUXTVIllFHIu0U",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 0,
                             Name = "精密系統設計學士學位學程"
                         },
                         new
                         {
-                            Id = "119e1c67-f803-4dc3-959b-a0673220c71c",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "W7hjovei6RLK2AL7i1wZAFaDM",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "機械與電腦輔助工程學系"
                         },
                         new
                         {
-                            Id = "e74167e7-bfe8-49f1-96d0-60bd76cb346c",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "O9obZd6NxvP91r0V1HizlRmzx",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "纖維與複合材料學系"
                         },
                         new
                         {
-                            Id = "de446c35-bc1b-4df8-a471-f46ef2f7df27",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "vmfuonsJ6lEsGrfg1zor4wgjT",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "工業工程與系統管理學系"
                         },
                         new
                         {
-                            Id = "c9e56c0e-2cff-459d-90ad-9efea62403e2",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "Td6VsS8gaAJJFiqqG9rYtb8Ka",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "化學工程學系"
                         },
                         new
                         {
-                            Id = "e3c5d5cf-14ee-4019-92ee-11300a5572c6",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "ShJZ82POiUdB5PCThigo9NHCJ",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "數據科學碩士學位學程"
                         },
                         new
                         {
-                            Id = "4b70a8b9-55cc-4c59-961a-3e2e45205001",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "MzTRWWzVUx4We6TIkh4N6UxzH",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "航太與系統工程學系"
                         },
                         new
                         {
-                            Id = "593441cb-d226-4a17-9f44-f43ed4ad3304",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "8Qxn6SnBisKk0zL5ZaCNHzHNU",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "環境工程與科學學系"
                         },
                         new
                         {
-                            Id = "4bd31f0a-0e32-42bc-bd3d-369b2734e4d6",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "wftcQpHOTzWoLLrA43mbVuSij",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "材料科學與工程學系"
                         },
                         new
                         {
-                            Id = "56582cf6-842d-47bb-a584-cb116e913690",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "ELz9CQQsBKPWDhP8dblVbBF6A",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "光電科學與工程學系"
                         },
                         new
                         {
-                            Id = "dfb33024-0039-4abc-ba22-4f33c5f541b7",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "E5JhN19uEM9iT39gupupFtKqb",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "電聲碩士學位學程"
                         },
                         new
                         {
-                            Id = "9f7b6093-a30c-43f6-9b80-e65b919c26ae",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "mZItIEcOqGsf2D1CDB75ATNNb",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "綠色能源科技碩士學位學程"
                         },
                         new
                         {
-                            Id = "0753a654-47eb-417d-ace0-9e8ebd6a814c",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "z2GeW6JHLUxUyZp6ej88KdJ2z",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "智能製造與工程管理碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "3f07e6c0-36ea-4b4d-8793-74dcb1cadb7e",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "27kTZ7FpUueqEEXZYr5VFvjaS",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 1,
                             Name = "應用數學系"
                         },
                         new
                         {
-                            Id = "36d94909-69ac-4f83-a541-54e5c02edd5f",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "alfxjGB18v40cO9P1exRs9bch",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 2,
                             Name = "材料科學與工程學系"
                         },
                         new
                         {
-                            Id = "7701b7ae-1dfa-459b-9490-129b6ea80f7f",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "7FSHfS7OyuHS5Dz0BoHkNvXSN",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 2,
                             Name = "化學工程學系"
                         },
                         new
                         {
-                            Id = "8a40ac5d-f752-41ec-8546-2d320515e62b",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "hclqd3Hyx4ibaMgdNbj4eWqwu",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 2,
                             Name = "纖維與複合材料學系"
                         },
                         new
                         {
-                            Id = "0aec387a-093b-4dc0-a9b8-21a684c94d95",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "fHZZYLLRYQfq5zVpWYw2loUei",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 2,
                             Name = "環境工程與科學學系"
                         },
                         new
                         {
-                            Id = "0a05fc3d-08a2-42e0-aeda-1efac68e94b5",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "ZIt17vZJhZYKuNu8uip8mpL4k",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 2,
                             Name = "機械與航空工程博士學位學程"
                         },
                         new
                         {
-                            Id = "5894f2e6-09c3-4808-83fe-f28b170bc9ca",
-                            CollegeId = "3e22a96f-c909-4c79-a903-8c0fef6c789a",
+                            Id = "ZMbKwvFHC8uItgeEHlBXvEHKU",
+                            CollegeId = "orgyTzqhLxdCWYZrjnfNMwE88",
                             Degree = 2,
                             Name = "工業工程與系統管理學系"
                         },
                         new
                         {
-                            Id = "266c7fd6-474e-43dc-8897-ea3bc31a8e0d",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "CsgftORomoxhN0uKAtYU7smKM",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "會計學系"
                         },
                         new
                         {
-                            Id = "4e1cd01d-94bd-42de-807b-2db5ad803059",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "cvje3HNALJWaFcUJfhOv1BT7f",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "企業管理學系"
                         },
                         new
                         {
-                            Id = "f9f38b0b-a95c-41a7-afb4-14bcfc3b00ae",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "DqV7WwMlTC5QCzi5rCvIh6hIm",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "國際經營與貿易學系"
                         },
                         new
                         {
-                            Id = "fd6d4884-2a28-4184-97ef-5af41f91aab6",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "DZCrDRmTMETLmS41PoVLReTcT",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "財稅學系"
                         },
                         new
                         {
-                            Id = "1faab6e3-45e9-4f2a-b9c6-d515a80ee74e",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "JdbXmSGoUw4piAV9Ytx2AHq6G",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "統計學系"
                         },
                         new
                         {
-                            Id = "14f08a09-0f6d-4a8c-aa7a-31999d32ab94",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "0yn8nTHeTq33d7r8HGT972YKf",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "經濟學系"
                         },
                         new
                         {
-                            Id = "567323ad-82f1-4531-b430-c6d0efb4b3dd",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "YB0mkKPStKJuB1LIxf7YW1ZPf",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "合作經濟暨社會事業經營學系"
                         },
                         new
                         {
-                            Id = "1d50af56-b8e1-4aef-b19f-b6954e3223c5",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "6hqWk2IvTqFH56Ul0UCmptGmu",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "行銷學系"
                         },
                         new
                         {
-                            Id = "86f378ce-6114-4808-952c-07668dbaf9fd",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "q3nlnIpsjsxXYpgNKlMttHXea",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "國際企業管理全英語學士學位學程"
                         },
                         new
                         {
-                            Id = "45436abe-74f2-45f2-a2f5-93c931cdf121",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "SJNlUG18aLT02IvfQgsXTuK2H",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "商學進修學士學位學程"
                         },
                         new
                         {
-                            Id = "b64bc109-a3c4-4aee-b581-5d6cdcb3ab0d",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "de1Jnf9QD3gvMTPRwz4NxhVDw",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 0,
                             Name = "商學進修學士班"
                         },
                         new
                         {
-                            Id = "bbb9d4b7-bc53-4385-8ce5-a2913be97bcc",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "JkL8NFfUSTFriQGFfhftPkmpO",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "會計學系"
                         },
                         new
                         {
-                            Id = "cc3a263f-efff-4abc-8088-281a61a9c571",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "1KMvherE36HxeETXr3xse9HZk",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "企業管理學系"
                         },
                         new
                         {
-                            Id = "4777fce8-c37d-43a4-9428-60abafbeb128",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "leYi4G3rCzMLNDkQuA2F4DcH1",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "國際經營與貿易學系"
                         },
                         new
                         {
-                            Id = "037122b4-04e7-4666-a9f4-4cbaf3b1790a",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "JlZcnZDK4kpGlRLUPr6fk9xzb",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "財稅學系"
                         },
                         new
                         {
-                            Id = "6046654d-8b50-4915-ba2b-e649ea32913f",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "DlcGMcK0dUdA5gRwdxmbM7oZG",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "統計學系"
                         },
                         new
                         {
-                            Id = "70488f20-cd2d-4b88-90e3-93cbab0c46a2",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "fhbrQBPIlbOHqqDpVel1bofqj",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "經濟學系"
                         },
                         new
                         {
-                            Id = "49cac5bf-6920-4b47-a3a4-ba794f692515",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "DEH5ixlYgCzxPcE1Npro3xXef",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "合作經濟暨社會事業經營學系"
                         },
                         new
                         {
-                            Id = "57de29ef-f94c-4ade-bf49-3148c6668b72",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "WWW1UII5bCGy6mZYliLWqTb3Y",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "行銷學系"
                         },
                         new
                         {
-                            Id = "51b58c88-e5e6-4112-a2ea-f3ffd5018669",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "DMYlpsYuNEgYb49p4pQpqa89V",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "財經法律研究所"
                         },
                         new
                         {
-                            Id = "08392375-344e-472d-a4e1-e0dce298f3b5",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "qDSwwlratoGaz84ii6LibEFs2",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "科技管理碩士學位學程"
                         },
                         new
                         {
-                            Id = "675390ab-fcad-4817-9868-a77bdf6b2e78",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "5IhwNG2y1wlsaIfty7gyggsuL",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "商學專業碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "2daa2f2f-c287-473b-b0cf-05fa1ffb7e13",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "WRxZ6INKBMk3Luk9pdlxWVbD8",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 1,
                             Name = "商學院商學專業碩士在職專班"
                         },
                         new
                         {
-                            Id = "de2fa011-c6d4-4fe3-8f09-4f3bbc8c476f",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "IgGhCciiJgrkqhSlPwFAURR2A",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 2,
                             Name = "統計學系"
                         },
                         new
                         {
-                            Id = "e203228a-8b3a-4e80-9272-349513e60b5d",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "Gl9ruZax8lgwKo8FrscM7G9wy",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 2,
                             Name = "經濟學系"
                         },
                         new
                         {
-                            Id = "c0e7ee82-ca03-4327-93c3-cfa7af9f69b7",
-                            CollegeId = "13c57893-16db-478f-9b65-264ccb4898e6",
+                            Id = "d0tSW85jXda65OgJG7QvJqA87",
+                            CollegeId = "0dI3qiJ4paEsZAffJarvrZtL3",
                             Degree = 2,
                             Name = "商學博士學位學程"
                         },
                         new
                         {
-                            Id = "5aa9154a-de0a-4e15-8d73-855f570a8517",
-                            CollegeId = "a89c9f64-6562-44b9-b744-fc1050c575e5",
+                            Id = "a8qq4y4du8qQFQ1E47zkSxRFj",
+                            CollegeId = "ZJQvZKxgdLSVgeAjnIBNkLUoD",
                             Degree = 1,
                             Name = "經營管理碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "f0b0b676-0117-4fa3-921b-f075f694dff5",
-                            CollegeId = "a89c9f64-6562-44b9-b744-fc1050c575e5",
+                            Id = "vaGAaenkbRlrHWXbU6GanCA2a",
+                            CollegeId = "ZJQvZKxgdLSVgeAjnIBNkLUoD",
                             Degree = 1,
                             Name = "經營管理碩士在職專班"
                         },
                         new
                         {
-                            Id = "2d3d53f4-2f7c-481c-b6bb-6813839a69eb",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "wdVJDbdDmhz27blrxFLKIELqj",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 0,
                             Name = "中國文學系"
                         },
                         new
                         {
-                            Id = "ed0b6594-3e17-4c5a-8b61-232b2eb5d15d",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "7CoXdHz2bWFuTk7xE4jD3O626",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 0,
                             Name = "外國語文學系"
                         },
                         new
                         {
-                            Id = "6ae91071-ab05-4eca-94d5-fd2f89362e53",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "Z3JpsBrwJF8BnPjrLnKyB1oHs",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 0,
                             Name = "人文社會學士學位學程"
                         },
                         new
                         {
-                            Id = "9af2920a-888b-4d66-8ba8-79816b4cf9a8",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "fDaJWG0j4tZKJD7LZxf84ERNh",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 1,
                             Name = "中國文學系"
                         },
                         new
                         {
-                            Id = "5f683b1e-ffa1-48d3-a8bc-43740a755505",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "quIjrAqQ12NKLW2LL0DIDbMdS",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 1,
                             Name = "外國語文學系"
                         },
                         new
                         {
-                            Id = "236e7e9d-dc6c-441a-96b1-7f89a42293e5",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "XqGWrO7VR16BZRlJBbOixhfAz",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 1,
                             Name = "歷史與文物研究所"
                         },
                         new
                         {
-                            Id = "a8fe8fe4-fecf-427d-8599-5150354cbb5a",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "VTUjz812ZDfz7dcl6oNf8yHqJ",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 1,
                             Name = "公共事務與社會創新研究所"
                         },
                         new
                         {
-                            Id = "e6b2f684-37ef-43ee-a166-edd71f4cdd9c",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "Dh4oZEA9zkc3ACZaRM9VtdQBH",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 1,
                             Name = "文化與社會創新碩士學位學程"
                         },
                         new
                         {
-                            Id = "9aa5dd68-26e8-4abe-959a-340539a4603a",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "2Ao6OxweQUKatNTwLqL1SWUIx",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 1,
                             Name = "公共事務與社會創新碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "42946f30-e417-4347-b93e-f8fdfb8a34ad",
-                            CollegeId = "d8458f4f-6a6a-4bad-97ee-6d1ce9aaf93a",
+                            Id = "OYM5tHafmDVssmZLQHtK5Sit2",
+                            CollegeId = "Bem4x4ONNKfMVLge333K97tpP",
                             Degree = 2,
                             Name = "中國文學系"
                         },
                         new
                         {
-                            Id = "b40215ab-2609-4464-b24e-bdfbc5d3ed2b",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "oW8SWY9EukV5Ywid5WrxTVHau",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 0,
                             Name = "資訊工程學系"
                         },
                         new
                         {
-                            Id = "2bbc4650-a47f-45a9-a220-b41f976011e5",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "90GsDYOXGVH4l3KVGxYol1W2o",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 0,
                             Name = "電子工程學系"
                         },
                         new
                         {
-                            Id = "f89178cf-ab6c-4a6c-b5f0-b3d2f2a4aaa7",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "rxjYhZnZzLRGlbkWdLbRpGCgD",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 0,
                             Name = "電機工程學系"
                         },
                         new
                         {
-                            Id = "f2d5a4bd-df73-44eb-8383-7fccfafa6307",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "HZToLVKBIxKg1pcG4s8YqT3eo",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 0,
                             Name = "自動控制工程學系"
                         },
                         new
                         {
-                            Id = "658b7def-5592-45c5-9059-5628034e3d59",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "RLi7RVRW3IUQCOCLQQZIUrfIs",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 0,
                             Name = "通訊工程學系"
                         },
                         new
                         {
-                            Id = "621e0eb8-1bd2-4669-b6e7-43eed1596a1c",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "HjMLEuFapCEXLd1M1TUxLd9sL",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 0,
                             Name = "資訊電機學院學士班"
                         },
                         new
                         {
-                            Id = "367992b7-f691-4337-aade-f02336ea9859",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "5kPtkwk26CsmYF92Yjm7eFS25",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "資訊工程學系"
                         },
                         new
                         {
-                            Id = "5f3f21fb-3adf-4ca4-aef0-4cfd968c1f57",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "nONXyEz08bBBJdn66Cvq3oMIt",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "電子工程學系"
                         },
                         new
                         {
-                            Id = "ebdfb8e8-7a8d-495c-9429-12333ed77008",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "5zNvuPL5SJVEYi3a10zPEQO8p",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "電機工程學系"
                         },
                         new
                         {
-                            Id = "47f0dab8-4507-491a-8871-f057d856c55e",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "2L99Mx5zbL0nVEVZ5SQwrdvPp",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "自動控制工程學系"
                         },
                         new
                         {
-                            Id = "d77a826e-736f-49b6-8987-f4df06a71cf7",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "dPxcwXdkxCCGd02FuI0mhswrG",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "通訊工程學系"
                         },
                         new
                         {
-                            Id = "05d8034e-7a32-4244-af88-a8e82885c002",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "oJ9mWh0t2QzrKyVbqOKy6Uxla",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "生醫資訊暨生醫工程碩士學位學程"
                         },
                         new
                         {
-                            Id = "bc526bfb-6db9-44c0-bb88-44641663c933",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "PZBs3lnNWZ1KJKiC91m09gRwG",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "光電能源與視覺科技碩士在職專班"
                         },
                         new
                         {
-                            Id = "52629b36-cb7c-4c34-af93-0f5b34110bd2",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "5BMNEb4vjpRMSBwQZP3zCDnpB",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "視光科技碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "b404fded-a6bd-4648-93ff-32568b51c8b3",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "E21Gz0eq5OnXxHgLXGJsYIKmn",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "資訊電機工程碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "de8c85e8-e2e2-4b66-850d-6559189448dc",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "5mecRMeCuQzDF9PrBjSUsCDtc",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 1,
                             Name = "資訊電機工程碩士在職專班"
                         },
                         new
                         {
-                            Id = "0db86b82-81ca-42ed-bc5f-a18ebbab6924",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "12Hz7QGyAnqdqT7hMVpIX3ouB",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 2,
                             Name = "資訊工程學系"
                         },
                         new
                         {
-                            Id = "ddde37e7-e11d-4006-9255-684e21ae97dd",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "ZOog2nEV9O1zrMv4DVRyQU55I",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 2,
                             Name = "電機與通訊工程博士學位學程"
                         },
                         new
                         {
-                            Id = "b33110d1-3c0d-491f-9cc3-a05bdff11f4d",
-                            CollegeId = "fa044fea-06d3-4f0e-a354-f335d761e2cb",
+                            Id = "6AEGePPNeOcgGUdevl7XD9v69",
+                            CollegeId = "if0gyRKzbTjqNb2BCn89dAVfA",
                             Degree = 2,
                             Name = "智慧聯網產業博士學位學程"
                         },
                         new
                         {
-                            Id = "825646bc-8423-46ce-af79-169660dd2571",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "QxgyniralF6EKpnroqXQdcCtS",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 0,
                             Name = "土木工程學系"
                         },
                         new
                         {
-                            Id = "e04de454-4806-4537-b90d-efee36d7e9cc",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "3qR46zhPrQyWVkMfXVWT5ikFs",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 0,
                             Name = "水利工程與資源保育學系"
                         },
                         new
                         {
-                            Id = "629fd6d4-f81e-43f3-951c-d63e5ab9a78d",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "9cQA7y6zMOXj4VrpoNbukepq3",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 0,
                             Name = "運輸與物流學系"
                         },
                         new
                         {
-                            Id = "eaec0302-ce47-4e35-9a64-13e4c34cb289",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 0,
                             Name = "都市計畫與空間資訊學系"
                         },
                         new
                         {
-                            Id = "49635313-4992-4e22-b1a6-192127777ee6",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "AhS7F9gUmxfbQ45agBzV6ZqyK",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 0,
                             Name = "土地管理學系"
                         },
                         new
                         {
-                            Id = "e9001f5e-88a5-4aea-9acc-d3e5c471c306",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "qlJ5WI3YfX90fA4NKrt3EKXzI",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "土木工程學系"
                         },
                         new
                         {
-                            Id = "3d788520-2708-433c-ab8a-9ffbd647faf5",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "mroQH0gDaaGHw3B31MDeWX2cO",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "水利工程與資源保育學系"
                         },
                         new
                         {
-                            Id = "bb7be155-823c-4337-90d3-1db9a587cb3e",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "OD1yUIm1w5q3rV5VKxKZY6aJg",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "運輸與物流學系"
                         },
                         new
                         {
-                            Id = "2bbeb586-7c3f-4e17-ad2f-4d94b6adc796",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "8CDofLpCA2z33Y4pXEKpPmCrf",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "都市計畫與空間資訊學系"
                         },
                         new
                         {
-                            Id = "e3efe1d5-cc62-4b76-bab4-23597d6e73e4",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "rm3BkevoEpzLf1eMVqE5Yo0ce",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "土地管理學系"
                         },
                         new
                         {
-                            Id = "6ff1a064-845c-4ca5-840a-ca29694592c5",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "117awZ9RQvBTaStkYBP3jk9qL",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "景觀與遊憩碩士學位學程"
                         },
                         new
                         {
-                            Id = "0ebdf6ea-88f1-499f-88ae-f6d3646d92af",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "WucZWrsuYrvozv4TWeWJW61IU",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "專案管理碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "86e3f7a6-b12c-4c08-8733-aa125de779b9",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "C3ps4hxYL8vu0hl6hpAcRYL7i",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "建設學院專案管理碩士在職專班"
                         },
                         new
                         {
-                            Id = "f25888dc-8728-40a3-bd08-23f7e048a1d7",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "zYc5qrrI7ZTyUdEY8mmOX2aN8",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "建設碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "b1bae1c5-6b9f-41de-b42f-cd82a7dad8f2",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "J3ppFIMFhj8EuCGUOOmCP0bL6",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "智慧城市碩士學位學程"
                         },
                         new
                         {
-                            Id = "576d232b-0660-4156-918f-a55e24c9ca99",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "Iw4sxzEHJ2ohiitIGz8RAPpoA",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 1,
                             Name = "西班牙薩拉戈薩大學物流供應鏈管理與創新創業雙碩士學位學程"
                         },
                         new
                         {
-                            Id = "c134861a-3f57-4f83-a0b0-ea79024a96c8",
-                            CollegeId = "f07974ca-3ef4-4166-a5ea-60b19980c05e",
+                            Id = "cbKctLMMlvmtYSLCDezoMWaDx",
+                            CollegeId = "QGqpVsNzjcusLw2lisuECLEaT",
                             Degree = 2,
                             Name = "土木水利工程與建設規劃博士學位學程"
                         },
                         new
                         {
-                            Id = "db06de5e-6308-4d04-a10e-aa174e32d17d",
-                            CollegeId = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "UvKL9QK7ThPRzLH7V8Zrp1Chu",
+                            CollegeId = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Degree = 0,
                             Name = "風險管理與保險學系"
                         },
                         new
                         {
-                            Id = "2ccfe6b4-06fc-47d9-9c1b-82a501fa1058",
-                            CollegeId = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "z4sSzyyUCZGGcmj2hvL9y8XCf",
+                            CollegeId = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Degree = 0,
                             Name = "財務金融學系"
                         },
                         new
                         {
-                            Id = "4f8e93da-b82e-48da-b543-f3a524d6113c",
-                            CollegeId = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "i5Fj90mDet7rvSsNYDPY5YU24",
+                            CollegeId = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Degree = 0,
                             Name = "財務工程與精算學士學位學程"
                         },
                         new
                         {
-                            Id = "fad8311c-37be-4e8a-a31b-81b0323db9c9",
-                            CollegeId = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "jKDRVp3ZfjFQsTIho96YUFmAj",
+                            CollegeId = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Degree = 1,
                             Name = "風險管理與保險學系"
                         },
                         new
                         {
-                            Id = "41496773-ee83-4cdf-b60d-bacc7689b9c0",
-                            CollegeId = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "PAkm3KYC60qsMU9o9xuczaz65",
+                            CollegeId = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Degree = 1,
                             Name = "財務金融學系"
                         },
                         new
                         {
-                            Id = "db431a07-9a7b-412c-9fb2-9ddbf7f29ac1",
-                            CollegeId = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "pel3fUEJ3dUuTmhngqXuMARH7",
+                            CollegeId = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Degree = 1,
                             Name = "金融碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "76b83e56-7c5b-4595-97b1-49ea6106d2cf",
-                            CollegeId = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "o7HQY0mdOG2FCCMfPv3A0eiyU",
+                            CollegeId = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Degree = 1,
                             Name = "金融碩士在職專班"
                         },
                         new
                         {
-                            Id = "08dd0723-8c09-4b5c-b4e4-86d48b8bb144",
-                            CollegeId = "1ce0231c-283c-4636-979b-ba143fa42b62",
+                            Id = "b7Qo0Z5zzhREULXvVgAsQbawy",
+                            CollegeId = "iQJHwPwg4VAFwjXDJPVH2wtE0",
                             Degree = 2,
                             Name = "金融博士學位學程"
                         },
                         new
                         {
-                            Id = "c742d386-401e-44aa-8b3e-892f407ee6fc",
-                            CollegeId = "227f18d6-d050-4147-aedd-ba775a71a292",
+                            Id = "ZGSzhoQ0SYpxasVopp9KRZha7",
+                            CollegeId = "9xP6LTPTAcSWkRF6cx9Iq7cDv",
                             Degree = 0,
                             Name = "澳洲墨爾本皇家理工大學商學與創新雙學士學位學程"
                         },
                         new
                         {
-                            Id = "335b234b-d7d4-4c55-840e-0e83d57da5cb",
-                            CollegeId = "227f18d6-d050-4147-aedd-ba775a71a292",
+                            Id = "YX6zcrayVMdPrflcZBZVF58BR",
+                            CollegeId = "9xP6LTPTAcSWkRF6cx9Iq7cDv",
                             Degree = 0,
                             Name = "美國普渡大學電機資訊雙學士學位學程"
                         },
                         new
                         {
-                            Id = "8cbe768c-3397-4251-b784-49dd8e6e99cf",
-                            CollegeId = "227f18d6-d050-4147-aedd-ba775a71a292",
+                            Id = "AawwxbqguYo02vgUmruY8q1H5",
+                            CollegeId = "9xP6LTPTAcSWkRF6cx9Iq7cDv",
                             Degree = 0,
                             Name = "美國加州聖荷西州立大學商學大數據分析雙學士學位學程"
                         },
                         new
                         {
-                            Id = "0b4046c5-ff28-4b77-bd47-262b7def018d",
-                            CollegeId = "227f18d6-d050-4147-aedd-ba775a71a292",
+                            Id = "0IAQg7YRS9A2v1yDs3V6DS3fE",
+                            CollegeId = "9xP6LTPTAcSWkRF6cx9Iq7cDv",
                             Degree = 0,
                             Name = "美國加州聖荷西州立大學工程雙學士學位學程"
                         },
                         new
                         {
-                            Id = "dc259920-dee3-48bd-8867-0a385abbadbe",
-                            CollegeId = "227f18d6-d050-4147-aedd-ba775a71a292",
+                            Id = "mB10Nk6FneHFt04XuF84iJKc7",
+                            CollegeId = "9xP6LTPTAcSWkRF6cx9Iq7cDv",
                             Degree = 0,
                             Name = "美國加州舊金山州立大學資訊工程雙學士學位學程"
                         },
                         new
                         {
-                            Id = "30b602f3-6586-4f43-99ae-bdef268d0b64",
-                            CollegeId = "227f18d6-d050-4147-aedd-ba775a71a292",
+                            Id = "a6VsUoLnqqvOYVFOOYZXP9vW6",
+                            CollegeId = "9xP6LTPTAcSWkRF6cx9Iq7cDv",
                             Degree = 0,
                             Name = "國際雙學士學位學程"
                         },
                         new
                         {
-                            Id = "21879ce1-3894-4d02-97d3-b222a21b439c",
-                            CollegeId = "227f18d6-d050-4147-aedd-ba775a71a292",
+                            Id = "Lxx5OqarnVEwetnl8RCX4oAdy",
+                            CollegeId = "9xP6LTPTAcSWkRF6cx9Iq7cDv",
                             Degree = 1,
                             Name = "國際經營管理碩士學位學程"
                         },
                         new
                         {
-                            Id = "599a3556-ba31-460e-9922-ba345f9b83e6",
-                            CollegeId = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "nzgPilWPhn1M0OWMU3dirxo0P",
+                            CollegeId = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Degree = 0,
                             Name = "建築專業學院學士班"
                         },
                         new
                         {
-                            Id = "5336690e-f31c-4c33-837a-8be30a4a7ceb",
-                            CollegeId = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "yRkkVDq2xMAOV6meUnmb1O4iV",
+                            CollegeId = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Degree = 0,
                             Name = "建築學士學位學程"
                         },
                         new
                         {
-                            Id = "9dfcf85b-65da-4691-a864-ea1e478ec960",
-                            CollegeId = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "aBP9gqZAzXx56nmIgKvFnDz3O",
+                            CollegeId = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Degree = 0,
                             Name = "創新設計學士學位學程"
                         },
                         new
                         {
-                            Id = "0b7b6c54-59c8-4eb7-a47d-477572bf464c",
-                            CollegeId = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "IKoM8CjCMFhQIkxBq3VPnMMp9",
+                            CollegeId = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Degree = 0,
                             Name = "室內設計學士學位學程"
                         },
                         new
                         {
-                            Id = "e67f99e3-92de-441c-b60b-9bea2901dad4",
-                            CollegeId = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "TpmRpkDFfhrtlg14kuI55C29i",
+                            CollegeId = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Degree = 0,
                             Name = "室內設計進修學士班"
                         },
                         new
                         {
-                            Id = "6b9b4a9c-22bd-4deb-86b7-c7bc1705703d",
-                            CollegeId = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "yXJHEN90oBLQmE5rmnVgFP88G",
+                            CollegeId = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Degree = 1,
                             Name = "建築碩士學位學程"
                         },
                         new
                         {
-                            Id = "fc45c859-3016-494d-b878-257e8c4007a2",
-                            CollegeId = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "oQnr4w8CM9SqRcM75XIOJhfNc",
+                            CollegeId = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Degree = 1,
                             Name = "建築碩士在職學位學程"
                         },
                         new
                         {
-                            Id = "03492289-e244-4aa9-90ff-58190616ab12",
-                            CollegeId = "8f0bd676-a08b-43e1-a4bb-4f32dbf8174f",
+                            Id = "Dm3w09uagkM33e8ZrKJjWyk1p",
+                            CollegeId = "woYRzMjOYVT0LlwVEvqarGaoS",
                             Degree = 1,
                             Name = "創意設計碩士學位學程"
                         },
                         new
                         {
-                            Id = "25c0ee9a-c2fe-480b-9526-61f01f68d527",
-                            CollegeId = "3041f226-9230-4756-935d-8e0fc1ed112d",
+                            Id = "4d9tHiUYHz5Xe7Wzepc6RShZ7",
+                            CollegeId = "ggRSStSxsHsmiT3yvftunUmCm",
                             Degree = 0,
                             Name = "人工智慧技術與應用學士學位學程"
                         });
@@ -1229,7 +1239,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.User.Alumnus", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("College")
@@ -1249,7 +1259,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -1263,7 +1273,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.User.Employee", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Division")
@@ -1278,7 +1288,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -1292,7 +1302,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.User.Staff", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Dept")
@@ -1311,7 +1321,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -1325,7 +1335,7 @@ namespace TsheThauLoo.Data.Migrations
             modelBuilder.Entity("TsheThauLoo.Entities.User.Student", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("College")
@@ -1345,7 +1355,7 @@ namespace TsheThauLoo.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(25)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

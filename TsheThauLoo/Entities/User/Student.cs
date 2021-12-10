@@ -13,8 +13,8 @@ namespace TsheThauLoo.Entities.User
         /// 識別碼
         /// </summary>
         [Key]
-        [MaxLength(36)]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        [MaxLength(25)]
+        public string Id { get; set; } = Nanoid.Nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 25);
 
         /// <summary>
         /// 學號
@@ -38,7 +38,7 @@ namespace TsheThauLoo.Entities.User
         public string Department { get; set; } = null!;
 
         [Required]
-        [MaxLength(36)]
+        [MaxLength(25)]
         public string UserId { get; set; } = null!;
 
         [ForeignKey("UserId")]

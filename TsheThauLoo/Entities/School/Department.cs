@@ -13,8 +13,8 @@ namespace TsheThauLoo.Entities.School
         /// 識別碼
         /// </summary>
         [Key]
-        [MaxLength(36)]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        [MaxLength(25)]
+        public string Id { get; set; } = Nanoid.Nanoid.Generate("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 25);
 
         /// <summary>
         /// 名稱
@@ -30,7 +30,7 @@ namespace TsheThauLoo.Entities.School
         public DegreeType Degree { get; set; }
 
         [Required]
-        [MaxLength(36)]
+        [MaxLength(25)]
         public string CollegeId { get; set; } = null!;
 
         [ForeignKey("CollegeId")]
