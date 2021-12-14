@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TsheThauLoo.Entities.Identity;
 
 namespace TsheThauLoo.Data.EntityConfigurations;
@@ -61,6 +62,8 @@ public static class UserConfigurations
 
             b.Property(x => x.NormalizedEmail).IsRequired();
 
+            b.Property(x => x.PhoneNumber).HasMaxLength(30);
+
             b.HasOne(x => x.Alumnus).WithOne(a => a.User);
 
             b.HasOne(x => x.Employee).WithOne(e => e.User);
@@ -111,5 +114,30 @@ public static class UserConfigurations
         builder.Entity<ApplicationUserToken>()
             .Property(b => b.UserId)
             .HasMaxLength(25);
+    }
+
+    public static void Initialize(ModelBuilder builder)
+    {
+        var admin = new ApplicationRole("eHEKw9koyc1UahKDJmN2kaYu4", "Admin", "zgOFXPEuCBj0oYx7wcVOxPjuT");
+        var alumnus = new ApplicationRole("yu0ZAukYcdagLeUttlGA2dx0i", "Alumnus", "BHdn3idxWd6CxVJbUiZdFizIG");
+        var employee = new ApplicationRole("iVslkwN8bQq58oq6Xh7BUT8mE", "Employee", "vm2O6QewMjb46zCjkzfS8WgYX");
+        var staff = new ApplicationRole("YLWMXCM7aq6kUbrzBLNBV7edb", "Staff", "9ZOtm2qcp9BU1V45CvjpzbwP0");
+        var student = new ApplicationRole("22mrI3gVYA8zWHTw0R0IHPLBy", "Student", "2ptmL3x5IWVQ4DRcV19AS0jfh");
+        builder.Entity<ApplicationRole>().HasData(admin, alumnus, employee, staff, student);
+
+        var hasher = new PasswordHasher<ApplicationUser>();
+        var user = new ApplicationUser
+        {
+            UserName = "admin",
+            NormalizedUserName = "admin".Replace('\\', '/').ToUpperInvariant(),
+            Email = "admin@gmail.com",
+            NormalizedEmail = "admin@gmail.com".Replace('\\', '/').ToUpperInvariant(),
+            EmailConfirmed = true,
+            Name = "管理員"
+        };
+        user.PasswordHash = hasher.HashPassword(user, "password1234");
+        builder.Entity<ApplicationUser>().HasData(user);
+        
+        builder.Entity<ApplicationUserRole>().HasData(new ApplicationUserRole { UserId = user.Id, RoleId = admin.Id });
     }
 }

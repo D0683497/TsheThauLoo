@@ -7,7 +7,7 @@ namespace TsheThauLoo.Models.School;
 /// <summary>
 /// 建立系所
 /// </summary>
-public class CreateDepartmentDto
+public record CreateDepartmentDto
 {
     /// <summary>
     /// 名稱

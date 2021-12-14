@@ -6,7 +6,7 @@ namespace TsheThauLoo.Models.School;
 /// <summary>
 /// 系所
 /// </summary>
-public class DepartmentDto
+public record DepartmentDto
 {
     /// <summary>
     /// 識別碼

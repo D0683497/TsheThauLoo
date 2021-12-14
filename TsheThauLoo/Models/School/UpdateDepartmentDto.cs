@@ -7,7 +7,7 @@ namespace TsheThauLoo.Models.School;
 /// <summary>
 /// 更新系所
 /// </summary>
-public class UpdateDepartmentDto
+public record UpdateDepartmentDto
 {
     /// <summary>
     /// 名稱

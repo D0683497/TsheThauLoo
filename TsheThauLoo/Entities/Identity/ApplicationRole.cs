@@ -19,4 +19,12 @@ public class ApplicationRole : IdentityRole
         Name = roleName;
         NormalizedName = roleName.Replace('\\', '/').ToUpperInvariant();
     }
+
+    public ApplicationRole(string id, string roleName, string concurrencyStamp)
+    {
+        Id = id;
+        Name = roleName;
+        NormalizedName = roleName.Replace('\\', '/').ToUpperInvariant();
+        ConcurrencyStamp = concurrencyStamp;
+    }
 }

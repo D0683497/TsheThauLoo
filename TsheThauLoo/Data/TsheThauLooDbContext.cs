@@ -44,6 +44,8 @@ public class TsheThauLooDbContext
 
         UserConfigurations.Relation(builder);
 
+        UserConfigurations.Initialize(builder);
+
         SchoolConfigurations.Relation(builder);
 
         SchoolConfigurations.Initialize(builder);

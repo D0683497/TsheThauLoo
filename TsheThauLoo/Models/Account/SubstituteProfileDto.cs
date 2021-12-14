@@ -1,53 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Text.Json.Serialization;
 
-namespace TsheThauLoo.Entities.User;
+namespace TsheThauLoo.Models.Account;
 
-/// <summary>
-/// 職務代理人
-/// </summary>
-[Owned]
-public class Substitute
+public record SubstituteProfileDto
 {
     /// <summary>
     /// 姓名
     /// </summary>
-    [Required]
-    [MaxLength(50)]
+    [JsonPropertyName("name")]
     public string Name { get; set; } = null!;
 
     /// <summary>
     /// 電子郵件
     /// </summary>
-    [Required]
-    [MaxLength(256)]
+    [JsonPropertyName("email")]
     public string Email { get; set; } = null!;
 
     /// <summary>
     /// 電話號碼
     /// </summary>
-    [Required]
-    [MaxLength(30)]
+    [JsonPropertyName("phonenumber")]
     public string PhoneNumber { get; set; } = null!;
 
     /// <summary>
     /// 地址
     /// </summary>
-    [Required]
-    [MaxLength(256)]
+    [JsonPropertyName("address")]
     public string Address { get; set; } = null!;
 
     /// <summary>
     /// 職稱
     /// </summary>
-    [Required]
-    [MaxLength(20)]
+    [JsonPropertyName("title")]
     public string Title { get; set; } = null!;
 
     /// <summary>
     /// 部門
     /// </summary>
-    [Required]
-    [MaxLength(20)]
+    [JsonPropertyName("division")]
     public string Division { get; set; } = null!;
 }

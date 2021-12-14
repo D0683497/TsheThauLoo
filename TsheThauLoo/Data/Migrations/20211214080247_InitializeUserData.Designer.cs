@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TsheThauLoo.Data;
 
@@ -10,9 +11,10 @@ using TsheThauLoo.Data;
 namespace TsheThauLoo.Data.Migrations
 {
     [DbContext(typeof(TsheThauLooDbContext))]
-    partial class TsheThauLooDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211214080247_InitializeUserData")]
+    partial class InitializeUserData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");

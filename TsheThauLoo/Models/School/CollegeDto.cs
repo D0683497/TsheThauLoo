@@ -5,7 +5,7 @@ namespace TsheThauLoo.Models.School;
 /// <summary>
 /// 學院
 /// </summary>
-public class CollegeDto
+public record CollegeDto
 {
     /// <summary>
     /// 識別碼
